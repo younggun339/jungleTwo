@@ -1,0 +1,123 @@
+body{
+  background-color: white;
+  background-image: url('../../public/images/bg.webp');
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center;
+}
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-signin{
+  --bg: #fff;
+  --text: #382b22;
+  --light-pink: #ffffff;
+  --pink: #ffe9e9;
+  --dark-pink: #f9c4d2;
+  --pink-border: #b18597;
+  --pink-shadow: #ffe3e2;
+  text-align: center;
+  width: 550px;
+  line-height: 2.5;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  padding: 1.25em 2em;
+  background: var(--light-pink);
+  border: 2px solid var(--pink-border);
+  border-radius: 10em;
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
+}
+.form-signin::before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--dark-pink);
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--pink-border), 0 0.625em 0 0 var(--pink-shadow);
+  transform: translate3d(0, 0.75em, -1em);
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+}
+.Cute{
+  width: 100%;
+}
+@media (max-width: 1600px) {
+
+  .form-signin {
+    width: 40%;
+  }
+  .Logo{
+    width: 80%;
+  }
+  .Cute{
+    width: 90%;
+  }
+}
+
+/* Room.js용 */
+.box {
+  width: 300px;
+  height: 400px;
+  background-color: white;
+  margin: 0 10px; /* 여백 조절 */
+  margin-top: 10px;
+}
+.round {
+  margin-top: 5px;
+  margin-left: 48%;
+  display: flex;
+  align-items: center; /* 수직 가운데 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 10px;
+  font-size: 25px;
+  font-weight: bold;
+}
+.timer {
+  margin-top: 10px;
+  margin-left: 46%;
+  display: flex;
+  align-items: center; /* 수직 가운데 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  width: 100px;
+  height: 50px;
+  background-color: white;
+  border-radius: 10px;
+  font-size: 25px;
+  font-weight: bold;
+  color: red;
+}
+.click-box {
+  position: absolute;
+  top: 50%; /* 화면 세로 중앙 */
+  left: 50%; /* 화면 가로 중앙 */
+  transform: translate(-50%, -50%); /* 가운데 정렬 */
+  z-index: 2; /* container보다 위로 */
+  display: flex;
+  align-items: center; /* 수직 가운데 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  width: 500px;
+  height: 300px;
+  background-color: white;
+  border-radius: 10px;
+  border: solid black;
+  font-size: 20px;
+  font-weight: bold;
+}
+.click-box:hover {
+  background-color: #f0f0f0; /* 호버 시 배경색 변경 */
+  border-color: #999; /* 호버 시 테두리 색 변경 */
+  cursor: pointer;
+}
