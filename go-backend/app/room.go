@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"slices"
 )
 
 type RoomState struct {
@@ -24,21 +25,24 @@ func MakeNewRoom(w http.ResponseWriter, r *http.Request) {
 	var newRoom RoomState
 	json.Unmarshal(body, &newRoom)
 
-	fmt.Println(newRoom.RoomMaster)
+	if newRoom.RoomName == "" {
+		fmt.Println("의미없는 방 제목")
+		return
+	}
 
 	if newRoom.RoomMaster == "" {
-		fmt.Println("Not login user")
+		fmt.Println("로그인 하지 않은 유저")
 		return
 	}
 
 	CreateRoom(mySQL, newRoom)
 
-	fmt.Println("방 생성 완료")
+	fmt.Println("방 생성 완료: " + newRoom.RoomName + "/ " + newRoom.RoomMaster)
 }
 
 func GetRoomList(w http.ResponseWriter, r *http.Request) {
 	roomList := GetRoom(mySQL)
-
+	slices.Reverse(roomList)
 	jsonData, err := json.Marshal(roomList)
 
 	if err != nil {

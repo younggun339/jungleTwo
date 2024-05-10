@@ -19,10 +19,6 @@ const CreateRoom = ({ user_name }) => {
       passWord = event.currentTarget.elements.password.value;
     }
 
-    if (roomName === "") {
-      return;
-    }
-
     fetch("http://zzrot.store/room/new", {
       method: 'POST',
       headers: {
@@ -34,7 +30,10 @@ const CreateRoom = ({ user_name }) => {
         console.error('Error:', error);
     });
     
-    roomClear()
+    document.getElementById('roomName').value = '';
+    if (showPasswordInput) {
+      document.getElementById('password').value = '';
+    }
   };
 
   const refreshRoom = () => {
@@ -55,20 +54,13 @@ const CreateRoom = ({ user_name }) => {
   const togglePasswordInput = () => {
     setShowPasswordInput(!showPasswordInput);
   };
-  
-  const roomClear = () => {
-    document.getElementById('roomName').value = '';
-    if (showPasswordInput) {
-      document.getElementById('password').value = '';
-    }
-  }
 
   const logout = () => {
     fetch("http://zzrot.store/logout")
       .catch(error => {
         console.error('Error:', error);
       });
-
+      location.reload()
     }
     
   const login = () => {

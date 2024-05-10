@@ -7,13 +7,14 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"golang.org/x/oauth2"
 )
 
 var kakaoOauthConfig = oauth2.Config{
-	ClientID: "79fa79831d26014a575e03055d588817",
+	ClientID: os.Getenv("KAKAO_CLIENT_ID"),
 	Endpoint: oauth2.Endpoint{
 		AuthURL:  "https://kauth.kakao.com/oauth/authorize",
 		TokenURL: "https://kauth.kakao.com/oauth/token",
@@ -24,7 +25,6 @@ var kakaoOauthConfig = oauth2.Config{
 func KakaoLoginHandler(w http.ResponseWriter, r *http.Request) {
 	state := generateStateOauthCookie(w)
 	url := kakaoOauthConfig.AuthCodeURL(state, oauth2.AccessTypeOffline)
-	fmt.Println("실행")
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
@@ -53,7 +53,7 @@ func KakaoAuthCallback(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-
+	fmt.Println("유저 로그인: " + idString)
 	http.Redirect(w, r, "http://zzrot.store/create-room", http.StatusSeeOther)
 }
 

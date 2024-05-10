@@ -45,11 +45,12 @@ const RoomModal = ({ room }) => {
   return (
     <div>
       <button className="roomButton2" onClick={openModal} >
-        <img src="/images/mouse.webp" alt="mouse" /> 
-        <div className="roomButtonText">
+          <img src="/images/mouse.webp" alt="mouse" /> 
+          <div className='roomButtonText'>
           <h3>{room.room_name}</h3>
           <h5>{room.room_master}</h5>
-        </div>
+          </div>
+          {room.room_pw != "" && <img src="/images/jamkka.png"alt="room image" className='Lock'/>}
       </button>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <h2>방 정보</h2>

@@ -2,7 +2,7 @@
   "name": "all",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://43.203.149.244:5000",
+  "proxy": "http://43.203.29.69:5000",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

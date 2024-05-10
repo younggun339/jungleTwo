@@ -52,6 +52,7 @@ func GoogleAuthCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("유저 로그인: " + userInfo.ID.(string))
 	http.Redirect(w, r, "http://zzrot.store/create-room", http.StatusSeeOther)
 }
 

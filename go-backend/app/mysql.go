@@ -99,8 +99,8 @@ func CreateRoom(db *sql.DB, room RoomState) {
 	}
 }
 
-func GetRoom(db *sql.DB) []map[string]string {
-	roomList := []map[string]string{}
+func GetRoom(db *sql.DB) []RoomState {
+	roomList := []RoomState{}
 
 	rows, err := db.Query("SELECT * FROM room_table")
 	if err != nil {
@@ -110,28 +110,12 @@ func GetRoom(db *sql.DB) []map[string]string {
 	defer rows.Close()
 
 	for rows.Next() {
-		roomData := map[string]string{
-			"room_id":     "",
-			"room_name":   "",
-			"room_master": "",
-			"room_pw":     "",
-		}
+		var roomData RoomState
 
-		var roomId string
-		var roomName string
-		var roomMaster string
-		var roomPW string
-
-		// 각 행의 데이터를 변수에 스캔합니다.
-		if err := rows.Scan(&roomId, &roomName, &roomMaster, &roomPW); err != nil {
+		if err := rows.Scan(&roomData.RoomId, &roomData.RoomName, &roomData.RoomMaster, &roomData.RoomPW); err != nil {
 			fmt.Println("Error scanning row:", err)
 			return roomList
 		}
-		roomData["room_id"] = roomId
-		roomData["room_name"] = roomName
-		roomData["room_master"] = roomMaster
-		roomData["room_pw"] = roomPW
-
 		roomList = append(roomList, roomData)
 	}
 

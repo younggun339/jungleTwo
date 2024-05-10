@@ -185,7 +185,6 @@ body{
 }
 .roomButtonText{
   font-size: 17px;
-  margin-left: 5%;
   padding-top: 15px;
 }
 button.roomButton2{
@@ -383,9 +382,10 @@ button.refreshRoom:active::before {
     img{
       width: 80pt;
     }
+    display: flex;
+    justify-content: space-between;
   }
   .RoomListContainerButtons{
-    border: solid black;
     display: flex;
     justify-content: center;
     button.refreshRoom{
@@ -393,15 +393,19 @@ button.refreshRoom:active::before {
       height: 3rem;
       margin: 10px;
     }
+    margin-bottom: 10px;
   }
   .hi{
     h1{
       font-size: 1.8em;
     }
     width:100%;
-    border : solid black;
     display: flex;
     flex-direction:column;
     align-items: center;
   }
+  .Lock{
+    width: 2rem !important;
+  }
+
 }

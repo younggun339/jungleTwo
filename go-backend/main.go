@@ -3,12 +3,20 @@ package main
 import (
 	"net/http"
 	"nmm/go-backend/app"
+	"os"
+	"strconv"
 
 	"github.com/gorilla/pat"
+	"github.com/joho/godotenv"
 	"github.com/urfave/negroni"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		panic("Error loading .env file")
+	}
+
 	db, stmt := app.OpenSql("project")
 	defer db.Close()
 
@@ -30,5 +38,10 @@ func main() {
 	n := negroni.Classic()
 	n.UseHandler(mux)
 
-	http.ListenAndServe(":8787", mux)
+	port, err := strconv.Atoi(os.Getenv("GO_PORT"))
+	if err != nil {
+		port = 8787
+	}
+
+	http.ListenAndServe(":"+strconv.Itoa(port), mux)
 }

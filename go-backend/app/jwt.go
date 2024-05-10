@@ -161,7 +161,6 @@ func CheckLogin(w http.ResponseWriter, r *http.Request) {
 	if accessTokenBool {
 		userData["user_id"] = userId
 		userData["user_name"] = userName
-		fmt.Println("accessToken", accessTokenBool)
 	} else {
 		refreshTokenBool, userId, userName := CheckRefreshToken(GetRefreshToken(r))
 		if refreshTokenBool {
@@ -171,8 +170,6 @@ func CheckLogin(w http.ResponseWriter, r *http.Request) {
 
 			userData["user_id"] = userId
 			userData["user_name"] = userName
-
-			fmt.Println("refreshToken", refreshTokenBool)
 		}
 	}
 
@@ -181,7 +178,6 @@ func CheckLogin(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(string(jsonData))
 	fmt.Fprint(w, string(jsonData))
 }
 

@@ -22,6 +22,7 @@ export class SimulationGateway implements OnModuleDestroy {
     
     this.intervalId = setInterval(() => {
       Matter.Body.applyForce(mouseRef, { x: mouseRef.position.x, y: mouseRef.position.y }, { x: 0.1, y: 0 });
+      console.log("mouse x: ", mouseRef.position.x);
       this.server.emit('mouse-journey', {
         mousePos: mouseRef.position,
         bombPos: bombRef.position,
