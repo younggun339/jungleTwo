@@ -41,7 +41,7 @@ const Game2: React.FC = () => {
   const { peers, indexRef } = useWebRTC(nestjsSocketRef, "game2", leftArmLeftRef, rightHand1RightRef, rightHand2RightRef, canvasSize) as WebRTCResult;
 
   useEffect(() => {
-    nestjsSocketRef.current = io("http://192.168.1.37:8080");
+    nestjsSocketRef.current = io("http://43.203.29.69:8080/");
   }, []);
 
   const [showModal, setShowModal] = useState(true);

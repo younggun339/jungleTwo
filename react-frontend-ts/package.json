@@ -2,6 +2,7 @@
   "name": "react-frontend-ts",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@mediapipe/camera_utils": "^0.3.1675466862",
@@ -53,6 +54,7 @@
     "@types/matter-js": "^0.19.6",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
-    "@types/simple-peer": "^9.11.8"
+    "@types/simple-peer": "^9.11.8",
+    "@types/uuid": "^9.0.8"
   }
 }
