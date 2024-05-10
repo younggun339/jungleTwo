@@ -117,7 +117,7 @@ def handle_image_capture(data):
 
 @socketio.on('image-capture-R')
 def handle_image_capture(data):
-    print("Received image data")
+    # print("Received image data")
     image_data = data['image'].split(",")[1]  # "data:image/jpeg;base64," 부분 제거
     # print("Decoded Image Data:", image_data[:100])  # 이미지 데이터가 매우 길 수 있으므로 처음 100자만 출력
 
@@ -171,10 +171,11 @@ socket_to_room = {}
 
 @socketio.on("join-room")
 def join_room(room_id):
+    print("join room!")
     if room_id in users:
         room = users[room_id]
         if len(room) == 2:
-            emit("room full")
+            emit("room-full")
             return
         else:
             room.append(request.sid)
@@ -188,13 +189,15 @@ def join_room(room_id):
 
 @socketio.on("sending-signal")
 def sending_signal(data):
+    print("sending-signal")
     user_to_signal = data["userToSignal"]
     signal = data["signal"]
     caller_id = data["callerID"]
-    emit("user joined", {"signal": signal, "callerID": caller_id}, room=user_to_signal)
+    emit("user-joined", {"signal": signal, "callerID": caller_id}, room=user_to_signal)
 
 @socketio.on("returning-signal")
 def returning_signal(data):
+    print("returning-signal")
     signal = data["signal"]
     caller_id = data["callerID"]
     emit("receiving-returned-signal", {"signal": signal, "id": request.sid}, room=caller_id)
@@ -211,6 +214,7 @@ def start_game():
 
 @socketio.on("disconnect")
 def disconnect():
+    print("disconnect")
     room_id = socket_to_room.get(request.sid)
     if room_id:
         room = users.get(room_id)

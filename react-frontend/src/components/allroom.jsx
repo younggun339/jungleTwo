@@ -14,10 +14,11 @@ const Video = (props) => {
   const ref = useRef(null);
   useEffect(() => {
     const peer = props.peer;
-
+    console.log("peer: ",peer)
     peer.on("stream", stream => {
       ref.current.srcObject = stream;
-  
+      console.log(stream);
+      console.log(ref.current.srcObject);
       startCapturing(stream, props.flaskSocketRef, props.canvasRef, props.indexRef);
     });
 
@@ -57,6 +58,7 @@ function Game2() {
   const [countdown, setCountdown] = useState(3);
   
   const { userVideo, peers, indexRef } = useWebRTC(flaskSocketRef, "game2", canvasRef, setIsGoalReached, setCountdown, setIsGameStarted, setShowModal);
+  console.log("peer info:", peers);
   useMatterSetup(
     {
       canvasSize,
