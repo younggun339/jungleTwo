@@ -4,12 +4,12 @@ import "../styles/room.css";
 import RoomModal from "./MakeModal"
 import ChangeName from "./ChangeName"
 
-const CreateRoom = ({ user_name }) => {
+const CreateRoom = ({ user_name, createRoom }) => {
   const [rooms, setRooms] = useState([]);
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const isLoggedIn = user_name !== "";
 
-  const createRoom = (event) => {
+  const handleCreateRoom = (event) => {
     event.preventDefault(); // 기본 제출 행동 방지
 
     const newRoomId = uuid(); // 방 ID 생성
@@ -18,6 +18,8 @@ const CreateRoom = ({ user_name }) => {
     if(showPasswordInput){
       passWord = event.currentTarget.elements.password.value;
     }
+
+    createRoom({ roomId: newRoomId });
 
     fetch("http://zzrot.store/room/new", {
       method: 'POST',
@@ -77,7 +79,7 @@ const CreateRoom = ({ user_name }) => {
             </p>
             <img src="/images/lattadoit.png" alt="Team Logo" className="Logo"/>
             <div className="CreateRoom2">
-              <form onSubmit={createRoom}>
+              <form onSubmit={handleCreateRoom}>
                 <h1>새로운 방 만들기</h1>
                 <div className="inputGroup">
                   <input

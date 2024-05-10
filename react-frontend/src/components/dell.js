@@ -1,5 +1,5 @@
 // allroom.jsx
-import React, { useEffect, useRef, useState, useParams  } from "react";
+import React, { useEffect, useRef, useState, useParams } from "react";
 import { Engine, Body } from "matter-js";
 import io from "socket.io-client";
 import useMatterSetup from "../hooks/useMatterSetup";
@@ -11,7 +11,6 @@ import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 import "../styles/game.css";
 import nestWebSocket from './NestWebSocket';  // NestWebSocket 모듈을 가져옵니다.
 
-
 const Video = (props) => {
   const ref = useRef(null);
   useEffect(() => {
@@ -21,7 +20,7 @@ const Video = (props) => {
       ref.current.srcObject = stream;
       console.log(stream);
       console.log(ref.current.srcObject);
-      startCapturing(stream, props.flaskSocketRef, props.canvasRef, props.indexRef);
+    //   startCapturing(stream, props.flaskSocketRef, props.canvasRef, props.indexRef);
     });
 
     return () => {
@@ -37,7 +36,8 @@ const Video = (props) => {
 
 
 function Game2() {
-  const flaskSocketRef = useRef(null);
+  let { roomId } = useParams();
+//   const flaskSocketRef = useRef(null);
   const nestjsSocketRef = useRef(null);
 
   const sceneRef = useRef(null);
@@ -50,12 +50,12 @@ function Game2() {
   const bombRef = useRef(null);
   const canvasRef = useRef(null); // 캔버스 태그 참조
 
-  
+  console.log(roomId)
 
 
   useEffect(() => {
-    flaskSocketRef.current = io("http://43.203.29.69/socket.io");
-    nestjsSocketRef.current = io("http://43.203.29.69/mouse-journey", {path :"/mouse-journey"});
+    // flaskSocketRef.current = io("http://43.203.29.69/socket.io");
+    nestjsSocketRef.current = io("http://43.203.29.69/mouse-journey");
     nestjsSocketRef.current.emit("test", "test");
     console.log("test!")
   }, []);
@@ -88,7 +88,7 @@ function Game2() {
   const [isGoalReached, setIsGoalReached] = useState(false);
   const [countdown, setCountdown] = useState(3);
   
-  const { userVideo, peers, indexRef } = useWebRTC(flaskSocketRef, "game2", canvasRef, setIsGoalReached, setCountdown, setIsGameStarted, setShowModal);
+//   const { userVideo, peers, indexRef } = useWebRTC(flaskSocketRef, "game2", canvasRef, setIsGoalReached, setCountdown, setIsGameStarted, setShowModal);
   console.log("peer info:", peers);
   useMatterSetup(
     {
@@ -100,7 +100,7 @@ function Game2() {
       rightHand2RightRef,
       mouseRef,
       bombRef,
-      flaskSocketRef,
+    //   flaskSocketRef,
       nestjsSocketRef
     }
   );
@@ -117,16 +117,16 @@ function Game2() {
     };
 
     if (!isSimStarted) {
-      flaskSocketRef.current.on("body-coords-L", handleLeftsideBodyCoords);
-      flaskSocketRef.current.on("body-coords-R", handleRightsideBodyCoords);
+    //   flaskSocketRef.current.on("body-coords-L", handleLeftsideBodyCoords);
+    //   flaskSocketRef.current.on("body-coords-R", handleRightsideBodyCoords);
     } else {
-      flaskSocketRef.current.off("body-coords-L", handleLeftsideBodyCoords);
-      flaskSocketRef.current.off("body-coords-R", handleRightsideBodyCoords);
+    //   flaskSocketRef.current.off("body-coords-L", handleLeftsideBodyCoords);
+    //   flaskSocketRef.current.off("body-coords-R", handleRightsideBodyCoords);
     }
 
     return () => {
-      flaskSocketRef.current.off("body-coords-L", handleLeftsideBodyCoords);
-      flaskSocketRef.current.off("body-coords-R", handleRightsideBodyCoords);
+    //   flaskSocketRef.current.off("body-coords-L", handleLeftsideBodyCoords);
+    //   flaskSocketRef.current.off("body-coords-R", handleRightsideBodyCoords);
     };
   }, [isSimStarted]);
 
@@ -215,7 +215,7 @@ function Game2() {
   }, [isGameStarted, countdown]);
 
   const startGame = () => {
-    flaskSocketRef.current.emit("start-game");
+    // flaskSocketRef.current.emit("start-game");
     setIsGoalReached(false);
     setCountdown(3);
     setIsGameStarted(true);
@@ -237,19 +237,19 @@ function Game2() {
   return (
     <div className="App">
       <div id="matter-container" ref={sceneRef}></div>
-      {
+      {/* {
         peers.slice(0, indexRef.current).map((peer, index) => (
             <Video key={`${peer.peerID}-${index}`} peer={peer.peer} canvasRef={canvasRef.current} myIndexRef={indexRef.current} flaskSocketRef={flaskSocketRef.current}/>
-        ))}
+        ))} */}
       
       {
           <video id={indexRef.current === 0 ? 'video-container-1' : 'video-container-2'} muted ref={userVideo} autoPlay playsInline style={{ order: indexRef.current }} />
       }
       <canvas ref={canvasRef} style={{ display: 'none' }} />
-      {
+      {/* {
         peers.slice(indexRef.current).map((peer, index) => (
             <Video key={`${peer.peerID}-${index}`} peer={peer.peer} canvasRef={canvasRef.current} myIndexRef={indexRef.current} flaskSocketRef={flaskSocketRef.current}/>
-        ))}
+        ))} */}
       {isGameStarted && countdown > 0 && (
         <div id="countdown">{countdown}</div>
       )}

@@ -165,56 +165,41 @@ def handle_image_capture(data):
 # 	return jsonify(response)
 
 
-#region webrtc
 users = {}
 socket_to_room = {}
 
-@socketio.on("join-room")
+@socketio.on("join room")
 def join_room(room_id):
-    print("join room!")
     if room_id in users:
         room = users[room_id]
         if len(room) == 2:
-            emit("room-full")
+            emit("room full")
             return
         else:
             room.append(request.sid)
     else:
         users[room_id] = [request.sid]
-    
+
     socket_to_room[request.sid] = room_id
     users_in_this_room = [sid for sid in users[room_id] if sid != request.sid]
-    
-    emit("all-users", users_in_this_room, room=request.sid)
 
-@socketio.on("sending-signal")
+    emit("all users", users_in_this_room, room=request.sid)
+
+@socketio.on("sending signal")
 def sending_signal(data):
-    print("sending-signal")
     user_to_signal = data["userToSignal"]
     signal = data["signal"]
     caller_id = data["callerID"]
-    emit("user-joined", {"signal": signal, "callerID": caller_id}, room=user_to_signal)
+    emit("user joined", {"signal": signal, "callerID": caller_id}, room=user_to_signal)
 
-@socketio.on("returning-signal")
+@socketio.on("returning signal")
 def returning_signal(data):
-    print("returning-signal")
     signal = data["signal"]
     caller_id = data["callerID"]
-    emit("receiving-returned-signal", {"signal": signal, "id": request.sid}, room=caller_id)
-    
-@socketio.on("start-game")
-def start_game():
-    room_id = socket_to_room.get(request.sid)
-    if room_id:
-        room = users.get(room_id)
-        if room:
-            for sid in room:
-                if sid != request.sid:
-                    emit("game-started", room=sid)
+    emit("receiving returned signal", {"signal": signal, "id": request.sid}, room=caller_id)
 
 @socketio.on("disconnect")
 def disconnect():
-    print("disconnect")
     room_id = socket_to_room.get(request.sid)
     if room_id:
         room = users.get(room_id)
@@ -223,8 +208,8 @@ def disconnect():
             users[room_id] = room
             if not room:
                 del users[room_id]
-    emit("user-left", request.sid, broadcast=True)
-#endregion webrtc
+    emit("user left", request.sid, broadcast=True)
+
 
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=5000)

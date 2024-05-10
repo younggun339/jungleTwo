@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import CreateRoom from "./components/CreateRoom";
-import Game1 from "./components/Game1";
 import Game2 from "./components/allroom";
 import Room from "./components/Room";
 import LoginCheck from "./components/LoginCheck";
@@ -17,16 +16,25 @@ import "./styles/home.css";
  */
 function App() {
   const [user_name, setUserName] = useState(null);
-
+  const [routes, setRoutes] = useState([]);
+  
+  const createRoom = (roomData) => {
+    const newRoom = (
+      <Route key={roomData.roomId} exact path={`/game/${roomData.roomId}`} element={<Game2 />} />
+    );
+    console.log(newRoom)
+    setRoutes((prevRoutes) => [...prevRoutes, newRoom]);
+  };
+  
   return (
     <Router>
       <LoginCheck user_name={user_name} setUserName={setUserName}/>
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/create-room" element={<CreateRoom user_name={user_name}/>} />
-        <Route exact path="/game1" element={<Game1 />} />
-        <Route path="/game" element={<Game2 />} />
+        <Route exact path="/create-room" element={<CreateRoom user_name={user_name} createRoom={createRoom}/>} />
         <Route exact path="/room" element={<Room />} />
+        <Route exact path="/game" element={<Game2 />} />
+        {routes}
       </Routes>
     </Router>
   );

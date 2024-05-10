@@ -1,5 +1,5 @@
 // Game2.jsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState  } from "react";
 import { Engine, Body, Events } from "matter-js";
 import io from "socket.io-client";
 import useMatterSetup from "../hooks/useMatterSetup";
@@ -8,6 +8,7 @@ import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 import "../styles/game.css";
 
 function Game2() {
+
   const sceneRef = useRef(null);
   const videoRef = useRef(null);
   const engineRef = useRef(Engine.create());

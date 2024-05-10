@@ -50,7 +50,11 @@ const RoomModal = ({ room }) => {
           <h3>{room.room_name}</h3>
           <h5>{room.room_master}</h5>
           </div>
-          {room.room_pw != "" && <img src="/images/jamkka.png"alt="room image" className='Lock'/>}
+          {room.room_pw !== "" ? (
+            <img src="/images/jamkka.png" alt="room image" className='Lock' />
+            ) : (
+            <div></div>
+          )}
       </button>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <h2>방 정보</h2>
