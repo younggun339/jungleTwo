@@ -26,9 +26,10 @@ func main() {
 	mux.HandleFunc("/check", app.CheckLogin)
 	mux.HandleFunc("/logout", app.Logout)
 	mux.HandleFunc("/update", app.UpdateUserSql)
+	mux.HandleFunc("/game/{gameRoomID}", app.PassRoom)
 
 	n := negroni.Classic()
 	n.UseHandler(mux)
 
-	http.ListenAndServe(":8787", mux)
+	http.ListenAndServe(":8787", n)
 }

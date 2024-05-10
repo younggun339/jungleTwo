@@ -170,6 +170,7 @@ socket_to_room = {}
 
 @socketio.on("join room")
 def join_room(room_id):
+    print("join room!")
     if room_id in users:
         room = users[room_id]
         if len(room) == 2:

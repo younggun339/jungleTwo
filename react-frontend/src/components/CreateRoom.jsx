@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { v1 as uuid } from "uuid";
 import "../styles/room.css";
 import RoomModal from "./MakeModal"
 import ChangeName from "./ChangeName"
 
-const CreateRoom = ({ user_name, createRoom }) => {
+const CreateRoom = ({ user_name }) => {
   const [rooms, setRooms] = useState([]);
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const isLoggedIn = user_name !== "";
@@ -12,15 +11,22 @@ const CreateRoom = ({ user_name, createRoom }) => {
   const handleCreateRoom = (event) => {
     event.preventDefault(); // 기본 제출 행동 방지
 
-    const newRoomId = uuid(); // 방 ID 생성
+    const generateRandomString = (num) => {
+      const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      let result = '';
+      const charactersLength = characters.length;
+      for (let i = 0; i < num; i++) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+    
+      return result;
+    }
+    const newRoomId = generateRandomString(8)
     const roomName = event.currentTarget.elements.roomName.value;
     let passWord = null;
     if(showPasswordInput){
       passWord = event.currentTarget.elements.password.value;
     }
-
-    createRoom({ roomId: newRoomId });
-
     fetch("http://zzrot.store/room/new", {
       method: 'POST',
       headers: {

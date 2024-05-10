@@ -77,3 +77,7 @@ func CheckRoomPW(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprint(w, string(jsonData))
 }
+
+func PassRoom(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("hi")
+}

@@ -20,14 +20,14 @@ const useWebRTC = (flaskSocketRef, roomName, canvasRef) => {
         userVideo.current.srcObject = stream;
         startCapturing(stream, userVideo,canvasRef, flaskSocketRef, indexRef.current);
         console.log("befor join room");
-        flaskSocketRef.current.emit("join-room", roomName);
+        flaskSocketRef.current.emit("join room", roomName);
         console.log("after join room");
-        flaskSocketRef.current.on("room-full", () => {
+        flaskSocketRef.current.on("room full", () => {
           alert("Room is full!");
           window.location.href = "/";
         });
 
-        flaskSocketRef.current.on("all-users", (users) => {
+        flaskSocketRef.current.on("all users", (users) => {
           console.log("all users!");
           const peers = [];
           users.forEach((userID) => {
@@ -41,19 +41,19 @@ const useWebRTC = (flaskSocketRef, roomName, canvasRef) => {
           console.log("indexRef!", indexRef.current);
         });
 
-        flaskSocketRef.current.on("user-joined", (payload) => {
+        flaskSocketRef.current.on("user joined", (payload) => {
           const peer = addPeer(payload.signal, payload.callerID, stream);
           const peerObj = { peer, peerID: payload.callerID };
           peersRef.current.push(peerObj);
           setPeers((users) => [...users, peerObj]);
         });
 
-        flaskSocketRef.current.on("receiving-returned-signal", (payload) => {
+        flaskSocketRef.current.on("receiving returned signal", (payload) => {
           const item = peersRef.current.find((p) => p.peerID === payload.id);
           item.peer.signal(payload.signal);
         });
 
-        flaskSocketRef.current.on("user-left", (id) => {
+        flaskSocketRef.current.on("user left", (id) => {
           const peerObj = peersRef.current.find((p) => p.peerID === id);
           if (peerObj) peerObj.peer.destroy();
           const peers = peersRef.current.filter((p) => p.peerID !== id);
@@ -72,7 +72,7 @@ const useWebRTC = (flaskSocketRef, roomName, canvasRef) => {
     });
 
     peer.on("signal", (signal) => {
-      flaskSocketRef.current.emit("sending-signal", {
+      flaskSocketRef.current.emit("sending signal", {
         userToSignal,
         callerID,
         signal,
@@ -91,7 +91,7 @@ const useWebRTC = (flaskSocketRef, roomName, canvasRef) => {
     });
 
     peer.on("signal", (signal) => {
-      flaskSocketRef.current.emit("returning-signal", { signal, callerID });
+      flaskSocketRef.current.emit("returning signal", { signal, callerID });
     });
 
     peer.signal(incomingSignal);
