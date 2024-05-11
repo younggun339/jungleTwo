@@ -1,25 +1,31 @@
 import React, { useEffect, useRef } from "react";
 import Peer from "simple-peer";
+import { PeerObject } from '../hooks/useWebRTC';
 
 interface VideoProps {
   peer: Peer.Instance;
+  peers: PeerObject[];
   myIndexRef: number;
+  onLoaded?: () => void;
 }
 
-const Video: React.FC<VideoProps> = ({ peer, myIndexRef }) => {
+const Video: React.FC<VideoProps> = ({ peer, peers, myIndexRef, onLoaded }) => {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     peer.on("stream", (stream: MediaStream) => {
       if (ref.current) {
         ref.current.srcObject = stream;
+        if (onLoaded) {
+          onLoaded();
+        }
       }
     });
 
     return () => {
       peer.removeAllListeners("stream");
     };
-  }, [peer]);
+  }, [peer, peers]);
 
   return (
     <video

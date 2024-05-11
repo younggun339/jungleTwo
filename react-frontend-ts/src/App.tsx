@@ -18,7 +18,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <LoginCheck setUserName={setUserName} />
+      {/* <LoginCheck setUserName={setUserName} /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create-room" element={<CreateRoom user_name={user_name} />} />

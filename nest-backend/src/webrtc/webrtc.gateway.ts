@@ -41,6 +41,8 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleJoinRoom(client: Socket, roomId: string) {
     if (this.users[roomId]) {
       const room = this.users[roomId];
+      console.log('Client joined:', client.id);
+      console.log('Joined room:', roomId);
       if (room.length === 2) {
         client.emit('room-full');
         return;
@@ -58,30 +60,26 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('sending-signal')
   handleSendingSignal(client: Socket, payload: { userToSignal: string; signal: any; callerID: string }) {
+    console.log(`Sending signal from ${client.id} to ${payload.userToSignal}`);
     this.server.to(payload.userToSignal).emit('user-joined', { signal: payload.signal, callerID: payload.callerID });
   }
 
   @SubscribeMessage('returning-signal')
   handleReturningSignal(client: Socket, payload: { callerID: string; signal: any }) {
+    console.log(`Returning signal to ${payload.callerID} from ${client.id}`);
     this.server.to(payload.callerID).emit('receiving-returned-signal', { signal: payload.signal, id: client.id });
   }
 
-  @SubscribeMessage('send-left-hand-joint')
-  handleSendLeftHandJoint(client: Socket, payload: { joint1Start: any; joint1End: any; receiverID: string }) {
-    this.server.to(payload.receiverID).emit('send-left-hand-joint', {
-      joint1Start: payload.joint1Start,
-      joint1End: payload.joint1End,
-      senderID: client.id,
-    });
-  }
-
-  @SubscribeMessage('send-right-hand-joint')
-  handleSendRightHandJoint(client: Socket, payload: { joint1: any; joint2: any; joint3: any; receiverID: string }) {
-    this.server.to(payload.receiverID).emit('send-right-hand-joint', {
-      joint1: payload.joint1,
-      joint2: payload.joint2,
-      joint3: payload.joint3,
-      senderID: client.id,
-    });
+  @SubscribeMessage('start-game')
+  handleStartGame(client: Socket, payload: { roomId: string }) {
+    console.log("someone started game in room:", payload.roomId);
+    // 방의 모든 사용자에게 게임 시작 이벤트를 전송
+    const usersInThisRoom = this.users[payload.roomId].filter((id) => id !== client.id);
+    if (usersInThisRoom) {
+      usersInThisRoom.forEach(userId => {
+        console.log(`Emitting game-started to user: ${userId}`);
+        this.server.to(userId).emit('game-started');
+      });
+    }
   }
 }

@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState, MutableRefObject } from "react";
 import { Body } from "matter-js";
-import Peer from "simple-peer";
 import { Socket } from "socket.io-client";
+import Peer from "simple-peer";
 import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
 import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
+
+// 추가: Polyfill import
+import 'process/browser';
+import { Buffer } from 'buffer';
 
 const pcConfig = {
   iceServers: [
@@ -15,29 +19,31 @@ const pcConfig = {
   ],
 };
 
-interface PeerObject {
-  peerID: string;
-  peer: Peer.Instance;
-}
-
-interface WebRTCResult {
-  userVideo: React.MutableRefObject<HTMLVideoElement | null>;
-  peers: PeerObject[];
-  indexRef: MutableRefObject<number>;
-}
-
 const useWebRTC = (
   nestjsSocketRef: MutableRefObject<Socket | null>,
   roomName: string,
   leftArmLeftRef: MutableRefObject<Body | null>,
   rightHand1RightRef: MutableRefObject<Body | null>,
   rightHand2RightRef: MutableRefObject<Body | null>,
-  canvasSize: { x: number; y: number }
+  canvasSize: { x: number; y: number },
+  startGame: () => void
 ): WebRTCResult => {
   const userVideo = useRef<HTMLVideoElement | null>(null);
   const peersRef = useRef<PeerObject[]>([]);
   const [peers, setPeers] = useState<PeerObject[]>([]);
   const indexRef = useRef(0);
+
+  const sendLeftHandJoint = (data: any) => {
+    peersRef.current.forEach((peerObj) => {
+      peerObj.peer.send(JSON.stringify({ type: 'left-hand-joint', data }));
+    });
+  };
+
+  const sendRightHandJoint = (data: any) => {
+    peersRef.current.forEach((peerObj) => {
+      peerObj.peer.send(JSON.stringify({ type: 'right-hand-joint', data }));
+    });
+  };
 
   useEffect(() => {
     navigator.mediaDevices
@@ -56,25 +62,30 @@ const useWebRTC = (
           });
 
           nestjsSocketRef.current.on("all-users", (users: string[]) => {
-            console.log("All users received: ", users); // 콘솔에 모든 사용자 출력
+            console.log("All users received: ", users);
             const peers: PeerObject[] = [];
             users.forEach((userID) => {
               const peer = createPeer(userID, nestjsSocketRef.current!.id!, stream);
               const peerObj: PeerObject = { peerID: userID, peer };
+              peer.on("data", handleIncomingData);
+              peer.on("error", (err) => console.error("Peer error:", err));
               peersRef.current.push(peerObj);
               peers.push(peerObj);
             });
             setPeers(peers);
             indexRef.current = users.length;
-            console.log("Peers updated: ", peers); // peers 업데이트된 내용 출력
+            console.log("Peers updated: ", peers);
+            console.log("Peers index: ", indexRef.current);
           });
 
           nestjsSocketRef.current.on("user-joined", (payload: { signal: any; callerID: string }) => {
             const peer = addPeer(payload.signal, payload.callerID, stream);
             const peerObj: PeerObject = { peer, peerID: payload.callerID };
+            peer.on("data", handleIncomingData);
+            peer.on("error", (err) => console.error("Peer error:", err));
             peersRef.current.push(peerObj);
             setPeers((users) => [...users, peerObj]);
-            console.log("User joined: ", payload.callerID); // 새 사용자 joined
+            console.log("User joined: ", payload.callerID);
           });
 
           nestjsSocketRef.current.on("receiving-returned-signal", (payload: { id: string; signal: any }) => {
@@ -88,19 +99,12 @@ const useWebRTC = (
             const peers = peersRef.current.filter((p) => p.peerID !== id);
             peersRef.current = peers;
             setPeers(peers);
-            console.log("User left: ", id); // 사용자 left
+            console.log("User left: ", id);
           });
 
-          nestjsSocketRef.current.on("send-left-hand-joint", (data: any) => {
-            if (indexRef.current === 1) {
-              handleReceivedLeftHandJoint(data);
-            }
-          });
-
-          nestjsSocketRef.current.on("send-right-hand-joint", (data: any) => {
-            if (indexRef.current === 0) {
-              handleReceivedRightHandJoint(data);
-            }
+          nestjsSocketRef.current!.on("game-started", () => {
+            console.log("Game started signal received", {  });
+            startGame();
           });
         }
       });
@@ -112,6 +116,10 @@ const useWebRTC = (
       trickle: false,
       stream,
       config: pcConfig,
+      channelConfig: {
+        ordered: false, // UDP-like behavior
+        maxRetransmits: 0,
+      },
     });
 
     peer.on("signal", (signal) => {
@@ -131,6 +139,10 @@ const useWebRTC = (
       trickle: false,
       stream,
       config: pcConfig,
+      channelConfig: {
+        ordered: false, // UDP-like behavior
+        maxRetransmits: 0,
+      },
     });
 
     peer.on("signal", (signal) => {
@@ -141,18 +153,34 @@ const useWebRTC = (
     return peer;
   };
 
-  const handleReceivedLeftHandJoint = (data: any) => {
-    const { joint1Start, joint1End } = data;
-    updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
+  const handleIncomingData = (data: any) => {
+    const parsedData = JSON.parse(data);
+
+    if (parsedData.type === 'left-hand-joint') {
+      const { joint1Start, joint1End } = parsedData.data;
+      updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
+
+    } else if (parsedData.type === 'right-hand-joint') {
+      const { joint1, joint2, joint3 } = parsedData.data;
+      updateRsideSkeleton(rightHand1RightRef, joint1, joint2, canvasSize);
+      updateRsideSkeleton(rightHand2RightRef, joint2, joint3, canvasSize);
+    }
   };
 
-  const handleReceivedRightHandJoint = (data: any) => {
-    const { joint1, joint2, joint3 } = data;
-    updateRsideSkeleton(rightHand1RightRef, joint1, joint2, canvasSize);
-    updateRsideSkeleton(rightHand2RightRef, joint2, joint3, canvasSize);
-  };
-
-  return { userVideo, peers, indexRef };
+  return { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint };
 };
+
+export interface PeerObject {
+  peerID: string;
+  peer: Peer.Instance;
+}
+
+export interface WebRTCResult {
+  userVideo: React.MutableRefObject<HTMLVideoElement | null>;
+  peers: PeerObject[];
+  indexRef: MutableRefObject<number>;
+  sendLeftHandJoint: (data: any) => void;
+  sendRightHandJoint: (data: any) => void;
+}
 
 export default useWebRTC;
