@@ -1,4 +1,5 @@
 // Game2.tsx
+
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { Engine, Body } from "matter-js";
@@ -24,8 +25,10 @@ const Game2: React.FC = () => {
   const bombRef = useRef<Body | null>(null);
   const webcamRef = useRef<HTMLVideoElement | null>(null);
   // TODO: userParam으로 "game/"+id 이렇게 바꿔야댐
-  const gameRoomId = "game";
-  // const { gameRoomID } = useParams<string | null>();
+  // const gameRoomId = "game";
+  const { gameRoomID } = useParams<{ gameRoomID: string }>();
+  const gameRoomId = "game/" + gameRoomID;
+  console.log(gameRoomId);
 
   useEffect(() => {
     nestjsSocketRef.current = io("http://43.203.29.69:8080/");

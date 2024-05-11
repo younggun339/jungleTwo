@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-// import RoomModal from "./MakeModal"
-// import ChangeName from "./ChangeName"
+import RoomModal from "./MakeModal"
+import ChangeName from "./ChangeName"
 import "../styles/room.css";
 
 interface CreateRoomProps {
@@ -147,11 +147,11 @@ const CreateRoom: React.FC<CreateRoomProps> = ({ user_name }) => {
                   로그인
                 </button>
               )}
-              {/* <ChangeName/> */}
+              <ChangeName/>
               </div>
               {rooms.map((room) => (
                 <div key={room.id}>
-                  {/* <RoomModal room={room} /> */}
+                  <RoomModal room={room} />
                 </div>
               ))}
             </div>
