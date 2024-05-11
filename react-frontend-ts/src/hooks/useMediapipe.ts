@@ -8,7 +8,6 @@ import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
 import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 import { WebRTCResult } from './useWebRTC';
 
-
 interface UseMediapipeProps {
   webcamRef: MutableRefObject<HTMLVideoElement | null>;
   indexRef: MutableRefObject<number>;
@@ -32,11 +31,13 @@ const useMediapipe = ({
   rightHand2RightRef,
   canvasSize,
 }: UseMediapipeProps) => {
+  
   const onLeftsideResults = useCallback((results: PoseResults) => {
     if (indexRef.current === 0 && results.poseLandmarks && results.poseLandmarks.length > 0) {
       const landmarks = results.poseLandmarks;
       const joint1 = landmarks[15];
       const joint2 = landmarks[13];
+      console.log(joint1.x, joint2.x);
 
       handleLeftsideBodyCoords(
         { x: joint1.x, y: joint1.y },
@@ -46,11 +47,14 @@ const useMediapipe = ({
   }, [indexRef, peers]);
 
   const onRightsideResults = useCallback((results: HandsResults) => {
+    console.log("onRightsideResults");
+    console.log(results);
     if (indexRef.current === 1 && results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
       const hand = results.multiHandLandmarks[0];
       const joint1 = hand[0];
       const joint2 = hand[9];
       const joint3 = hand[12];
+      console.log(joint1.x, joint2.x, joint3.x);
 
       handleRightsideBodyCoords(
         { x: joint1.x, y: joint1.y },
@@ -60,64 +64,99 @@ const useMediapipe = ({
     }
   }, [indexRef, peers]);
 
+  // Hands 초기화 및 설정 함수
+  const initializeHands = (onResults: (results: HandsResults) => void) => {
+    const hands = new Hands({
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
+    });
+
+
+
+    hands.setOptions({
+      maxNumHands: 1,
+      modelComplexity: 1,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5,
+    });
+
+    hands.onResults(onResults);
+
+    return hands;
+  };
+
+  // Pose 초기화 및 설정 함수
+  const initializePose = (onResults: (results: PoseResults) => void) => {
+    const pose = new Pose({
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
+    });
+
+    console.log("Pose:", pose);
+
+    pose.setOptions({
+      modelComplexity: 1,
+      smoothLandmarks: true,
+      enableSegmentation: false,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5,
+    });
+
+    pose.onResults(onResults);
+
+    return pose;
+  };
+
+  // useEffect for initializing and using Mediapipe Hands
   useEffect(() => {
-    let hands: Hands;
-    let pose: Pose;
-    let camera: Camera;
-
-    try {
-      hands = new Hands({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
+    if (indexRef.current === 1) {
+    const hands = initializeHands(onRightsideResults);
+    // console.log("Is hands!")
+    console.log(webcamRef.current);
+    if (webcamRef.current) {
+      const camera = new Camera(webcamRef.current, {
+        onFrame: async () => {
+          try {
+            await hands.send({ image: webcamRef.current! });
+          } catch (error) {
+            console.error("Error sending frame to Mediapipe Hands:", error);
+          }
+        },
+        width: 800,
+        height: 600,
       });
-      console.log(hands)
-      hands.setOptions({
-        maxNumHands: 1,
-        modelComplexity: 1,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      });
+      camera.start();
 
-      hands.onResults(onRightsideResults);
+      return () => {
+        camera.stop();
+      };
+    }
+  }
+  }, [onRightsideResults, webcamRef]);
 
-      pose = new Pose({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
-      });
-      console.log(pose)
-      pose.setOptions({
-        modelComplexity: 1,
-        smoothLandmarks: true,
-        enableSegmentation: false,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      });
-
-      pose.onResults(onLeftsideResults);
-
+  // useEffect for initializing and using Mediapipe Pose
+  useEffect(() => {
+      if (indexRef.current === 0) {
+      const pose = initializePose(onLeftsideResults);
+      console.log(webcamRef.current);
       if (webcamRef.current) {
-        console.log(webcamRef.current.srcObject)
-        console.log(webcamRef.current)
-        camera = new Camera(webcamRef.current, {
+        const camera = new Camera(webcamRef.current, {
           onFrame: async () => {
-            // try {
-            //   await hands.send({ image: webcamRef.current! });
-            //   await pose.send({ image: webcamRef.current! });
-            // } catch (error) {
-            //   console.error("Error sending frame to Mediapipe:", error);
-            // }
+            try {
+              await pose.send({ image: webcamRef.current! });
+            } catch (error) {
+              console.error("Error sending frame to Mediapipe Pose:", error);
+            }
           },
           width: 800,
           height: 600,
         });
         camera.start();
-      }
-    } catch (error) {
-      console.error("Error initializing Mediapipe:", error);
-    }
 
-    return () => {
-      camera?.stop();
-    };
-  }, [onRightsideResults, onLeftsideResults]);
+        return () => {
+          camera.stop();
+        };
+      }
+  }
+  }, [onLeftsideResults, webcamRef]);
 
   const handleLeftsideBodyCoords = (joint1Start: any, joint1End: any) => {
     if (indexRef.current === 0) {
