@@ -1,7 +1,7 @@
 import { Bodies, World } from "matter-js";
 
 export const initializeGameObjects = (engine, refs) => {
-  const { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightHand1RightRef, rightHand2RightRef } = refs;
+  const { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
 
   const walls = [
     Bodies.rectangle(canvasSize.x / 2, 0, canvasSize.x, 50, { isStatic: true }),
@@ -121,23 +121,7 @@ export const initializeGameObjects = (engine, refs) => {
       },
     }
   );
-  rightHand1RightRef.current = Bodies.rectangle(
-    canvasSize.x * 3 / 4,
-    canvasSize.y / 2,
-    0,
-    15,
-    {
-      isStatic: true,
-      angle: 0,
-      collisionFilter: { mask: 0 },
-      render: {
-        fillStyle: "blue",
-        strokeStyle: "black",
-        lineWidth: 1,
-      },
-    }
-  );
-  rightHand2RightRef.current = Bodies.rectangle(
+  rightArmRightRef.current = Bodies.rectangle(
     canvasSize.x * 3 / 4,
     canvasSize.y / 2,
     0,
@@ -161,8 +145,7 @@ export const initializeGameObjects = (engine, refs) => {
     mouseRef.current,
     bombRef.current,
     leftArmLeftRef.current,
-    rightHand1RightRef.current,
-    rightHand2RightRef.current,
+    rightArmRightRef.current,
     goal,
     goalArrow,
   ]);

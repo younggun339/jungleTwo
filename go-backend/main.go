@@ -16,9 +16,13 @@ func main() {
 
 	mux := pat.New()
 
+	mux.HandleFunc("/room/search", app.SearchRoom)
+	mux.HandleFunc("/room/delete/{id}", app.DeleteRoom)
+	mux.HandleFunc("/room/1", app.DeleteAllRoom)
 	mux.HandleFunc("/room/new", app.MakeNewRoom)
 	mux.HandleFunc("/room/get", app.GetRoomList)
 	mux.HandleFunc("/room/check", app.CheckRoomPW)
+	mux.HandleFunc("/room/{id}", app.CheckRoomId)
 	mux.HandleFunc("/auth/google/login", app.GoogleLoginHandler)
 	mux.HandleFunc("/auth/google/callback", app.GoogleAuthCallback)
 	mux.HandleFunc("/auth/kakao/login", app.KakaoLoginHandler)
@@ -26,7 +30,6 @@ func main() {
 	mux.HandleFunc("/check", app.CheckLogin)
 	mux.HandleFunc("/logout", app.Logout)
 	mux.HandleFunc("/update", app.UpdateUserSql)
-	mux.HandleFunc("/game/{gameRoomID}", app.PassRoom)
 
 	n := negroni.Classic()
 	n.UseHandler(mux)

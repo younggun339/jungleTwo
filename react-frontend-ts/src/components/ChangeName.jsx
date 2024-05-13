@@ -15,7 +15,7 @@ const ChangeName = () => {
 
   const handleConfirm = () => {
     const newName = document.getElementById('name').value;
-    fetch("http://zzrot.store/update", {
+    fetch("https://zzrot.store/update", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

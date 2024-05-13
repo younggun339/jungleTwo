@@ -22,10 +22,6 @@ const Home: React.FC = () => {
     <div style={{ textAlign: "center" }}>
       <div className="wrapper">
         <div className="form-signin">
-          <p>
-            <img src="/images/lattadoit2.png" alt="Logo" />
-          </p>
-
           <img
             src="/images/kakao_login_large_narrow.png"
             alt="Kakao login"
@@ -35,10 +31,9 @@ const Home: React.FC = () => {
           <img
             src="/images/web_light_sq_SU@2x.png"
             alt="Google login"
-            style={{ width: "130px", height: "auto" }}
+            style={{ width: "130px", height: "auto", marginRight: "10px"  }}
             onClick={handleGoogleLogin}
           />
-          <img src="/images/cute.webp" alt="Logo" />
         </div>
       </div>
     </div>

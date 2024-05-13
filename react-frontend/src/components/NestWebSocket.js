@@ -50,7 +50,7 @@ class NestWebSocket {
 }
 
 // WebSocket 서버의 URL
-const websocketUrl = "http://43.203.29.69/mouse-journey";
+const websocketUrl = "https://43.203.29.69/mouse-journey";
 
 // NestWebSocket 인스턴스를 생성합니다.
 const nestWebSocket = new NestWebSocket(websocketUrl);

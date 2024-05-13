@@ -23,23 +23,26 @@ const useWebRTC = (
   nestjsSocketRef: MutableRefObject<Socket | null>,
   roomName: string,
   leftArmLeftRef: MutableRefObject<Body | null>,
-  rightHand1RightRef: MutableRefObject<Body | null>,
-  rightHand2RightRef: MutableRefObject<Body | null>,
+  rightArmRightRef: MutableRefObject<Body | null>,
   canvasSize: { x: number; y: number },
-  startGame: () => void
+  setIsGameStarted: (isGameStarted: boolean) => void,
+  setIsGoalReached: (isGoalReached: boolean) => void,
+  setCountdown: (countdown: number) => void,
 ): WebRTCResult => {
-  const userVideo = useRef<HTMLVideoElement | null>(null);
   const peersRef = useRef<PeerObject[]>([]);
   const [peers, setPeers] = useState<PeerObject[]>([]);
   const indexRef = useRef(0);
+  const userVideo = useRef<HTMLVideoElement | null>(null);
 
   const sendLeftHandJoint = (data: any) => {
+    console.log("send data: ", data.joint1Start, data.joint1End);
     peersRef.current.forEach((peerObj) => {
       peerObj.peer.send(JSON.stringify({ type: 'left-hand-joint', data }));
     });
   };
 
   const sendRightHandJoint = (data: any) => {
+    console.log("send data: ", data.joint1Start, data.joint1End);
     peersRef.current.forEach((peerObj) => {
       peerObj.peer.send(JSON.stringify({ type: 'right-hand-joint', data }));
     });
@@ -53,6 +56,7 @@ const useWebRTC = (
           userVideo.current.srcObject = stream;
         }
 
+        console.log(nestjsSocketRef.current);
         if (nestjsSocketRef.current && nestjsSocketRef.current.id) {
           nestjsSocketRef.current.emit("join-room", roomName);
 
@@ -65,6 +69,7 @@ const useWebRTC = (
             console.log("All users received: ", users);
             const peers: PeerObject[] = [];
             users.forEach((userID) => {
+              console.log("여기 : ", stream);
               const peer = createPeer(userID, nestjsSocketRef.current!.id!, stream);
               const peerObj: PeerObject = { peerID: userID, peer };
               peer.on("data", handleIncomingData);
@@ -86,6 +91,7 @@ const useWebRTC = (
             peersRef.current.push(peerObj);
             setPeers((users) => [...users, peerObj]);
             console.log("User joined: ", payload.callerID);
+            console.log("유저 들어옴");
           });
 
           nestjsSocketRef.current.on("receiving-returned-signal", (payload: { id: string; signal: any }) => {
@@ -99,12 +105,13 @@ const useWebRTC = (
             const peers = peersRef.current.filter((p) => p.peerID !== id);
             peersRef.current = peers;
             setPeers(peers);
-            console.log("User left: ", id);
+            console.log("User left: ", id); // 사용자 left
           });
 
           nestjsSocketRef.current!.on("game-started", () => {
-            console.log("Game started signal received", {  });
-            startGame();
+            setIsGameStarted(true);
+            setIsGoalReached(false);
+            setCountdown(3);
           });
         }
       });
@@ -121,6 +128,8 @@ const useWebRTC = (
         maxRetransmits: 0,
       },
     });
+
+    console.log("stream created: ", stream);
 
     peer.on("signal", (signal) => {
       nestjsSocketRef.current?.emit("sending-signal", {
@@ -159,11 +168,9 @@ const useWebRTC = (
     if (parsedData.type === 'left-hand-joint') {
       const { joint1Start, joint1End } = parsedData.data;
       updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
-
     } else if (parsedData.type === 'right-hand-joint') {
-      const { joint1, joint2, joint3 } = parsedData.data;
-      updateRsideSkeleton(rightHand1RightRef, joint1, joint2, canvasSize);
-      updateRsideSkeleton(rightHand2RightRef, joint2, joint3, canvasSize);
+      const { joint1Start, joint1End } = parsedData.data;
+      updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
     }
   };
 
@@ -176,7 +183,7 @@ export interface PeerObject {
 }
 
 export interface WebRTCResult {
-  userVideo: React.MutableRefObject<HTMLVideoElement | null>;
+  userVideo: MutableRefObject<HTMLVideoElement | null>;
   peers: PeerObject[];
   indexRef: MutableRefObject<number>;
   sendLeftHandJoint: (data: any) => void;

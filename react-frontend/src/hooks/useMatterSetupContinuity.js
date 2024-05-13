@@ -178,7 +178,7 @@ const useMatterSetupContinuity = (refs, setGoalReached, setGameStart, setInGameS
 
 
     // =============== socket.io 서버에 연결 ================
-    const socket = io('http://localhost:5000');
+    const socket = io('https://localhost:5000');
     socket.on('body-coords-L', (data) => {
       // 왼팔, 오른팔 좌표 데이터 추출
       const { joint1Start, joint1End, joint2Start, joint2End } = data;

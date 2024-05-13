@@ -99,10 +99,22 @@ func CreateRoom(db *sql.DB, room RoomState) {
 	}
 }
 
-func GetRoom(db *sql.DB) []RoomState {
+func GetRoom(db *sql.DB, search string) []RoomState {
 	roomList := []RoomState{}
 
-	rows, err := db.Query("SELECT * FROM room_table")
+	var (
+		query string
+		args  []interface{}
+	)
+
+	if search != "" {
+		query = "SELECT * FROM room_table WHERE room_id = ?"
+		args = append(args, search)
+	} else {
+		query = "SELECT * FROM room_table"
+	}
+
+	rows, err := db.Query(query, args...)
 	if err != nil {
 		fmt.Println("Error querying database:", err)
 		return roomList

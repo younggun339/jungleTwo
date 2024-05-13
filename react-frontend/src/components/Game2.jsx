@@ -29,7 +29,7 @@ function Game2() {
 
   const socketRef = useRef(null);
   useEffect(() => {
-    socketRef.current = io("http://localhost:5000");
+    socketRef.current = io("https://localhost:5000");
   }, []);
 
   useMatterSetup({

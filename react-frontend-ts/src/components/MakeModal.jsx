@@ -9,7 +9,7 @@ const RoomModal = ({ room }) => {
 
   const openModal = () => {
     if (room.room_pw === "") {
-      window.location.assign("http://zzrot.store/game/"+room.room_id);
+      window.location.assign("https://zzrot.store/game/"+room.room_id);
       return
     }
     setModalIsOpen(true);
@@ -21,7 +21,7 @@ const RoomModal = ({ room }) => {
 
   const handleConfirm = () => {
     const password = document.getElementById('password').value;
-    fetch("http://zzrot.store/room/check", {
+    fetch("https://zzrot.store/room/check", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const RoomModal = ({ room }) => {
     .then(response => response.json())
     .then(data => {
       if (data.result) {
-        window.location.assign("http://zzrot.store/game/"+room.room_id);
+        window.location.assign("https://zzrot.store/game/"+room.room_id);
       } else {
         setMessage('잘못된 비밀번호입니다. 다시 시도해주세요.');
       }

@@ -8,8 +8,7 @@ const useMatterSetup = (refs) => {
     sceneRef,
     engineRef,
     leftArmLeftRef,
-    rightHand1RightRef,
-    rightHand2RightRef,
+    rightArmRightRef,
     mouseRef,
     bombRef,
     nestjsSocketRef
@@ -36,7 +35,7 @@ const useMatterSetup = (refs) => {
 
     initializeGameObjects(
       engine,
-      { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightHand1RightRef, rightHand2RightRef }
+      { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef }
     );
 
     Render.run(render);

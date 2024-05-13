@@ -8,14 +8,13 @@ import { Body, Bodies } from 'matter-js';
  * @param {Object} canvasSize - The size of the canvas with properties x and y.
  */
 export function updateRsideSkeleton(skeletonRef, jointStart, jointEnd, canvasSize) {
-  const width = Math.sqrt(Math.pow((jointStart.x - jointEnd.x) * canvasSize.x / 2, 2) + Math.pow((jointStart.y - jointEnd.y) * canvasSize.y, 2));
+  const width = Math.sqrt(Math.pow((jointStart.x - jointEnd.x), 2) + Math.pow((jointStart.y - jointEnd.y), 2));
   const angle = Math.atan2(jointEnd.y - jointStart.y, jointEnd.x - jointStart.x);
-
-  const centerX = canvasSize.x - ((jointStart.x + jointEnd.x) / 2) * (canvasSize.x / 2);
-  const centerY = (jointStart.y + jointEnd.y) / 2 * canvasSize.y;
+  
+  const centerX = canvasSize.x - ((jointStart.x + jointEnd.x) / 2);
+  const centerY = (jointStart.y + jointEnd.y) / 2;
   const mirroredAngle = Math.PI - angle;
-
-  // Set the position and angle of the rectangle that represents the finger
+  
   if (skeletonRef.current) {
     Body.setPosition(skeletonRef.current, { x: centerX, y: centerY });
     Body.setAngle(skeletonRef.current, mirroredAngle);

@@ -1,3 +1,4 @@
+// updateLsideSkeleton.js
 import { Body, Bodies } from 'matter-js';
 
 /**
@@ -8,15 +9,13 @@ import { Body, Bodies } from 'matter-js';
  * @param {Object} canvasSize - The size of the canvas with properties x and y.
  */
 export function updateLsideSkeleton(skeletonRef, jointStart, jointEnd, canvasSize) {
-  const width = Math.sqrt(Math.pow((jointStart.x - jointEnd.x) * canvasSize.x / 2, 2) + Math.pow((jointStart.y - jointEnd.y) * canvasSize.y, 2));
+  const width = Math.sqrt(Math.pow((jointStart.x - jointEnd.x), 2) + Math.pow((jointStart.y - jointEnd.y), 2));
   const angle = Math.atan2(jointEnd.y - jointStart.y, jointEnd.x - jointStart.x);
-
-  // Adjust the X coordinate for right-to-left mirroring
-  const centerX = canvasSize.x / 2 - ((jointStart.x + jointEnd.x) / 2) * (canvasSize.x / 2);
-  const centerY = (jointStart.y + jointEnd.y) / 2 * canvasSize.y;
-  const mirroredAngle = Math.PI - angle; // Angle reversal for mirroring
-
-  // Set the position and angle of the rectangle that represents the finger
+  
+  const centerX = canvasSize.x / 2 - ((jointStart.x + jointEnd.x) / 2);
+  const centerY = (jointStart.y + jointEnd.y) / 2;
+  const mirroredAngle = Math.PI - angle;
+  
   if (skeletonRef.current) {
     Body.setPosition(skeletonRef.current, { x: centerX, y: centerY });
     Body.setAngle(skeletonRef.current, mirroredAngle);

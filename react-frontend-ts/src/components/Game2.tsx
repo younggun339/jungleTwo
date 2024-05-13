@@ -7,6 +7,7 @@ import { io, Socket } from "socket.io-client";
 import useMatterSetup from "../hooks/useMatterSetup";
 import useWebRTC, { WebRTCResult } from '../hooks/useWebRTC';
 import useMediapipe from "../hooks/useMediapipe";
+import useTensorFlow from "../hooks/useTensorFlow";
 import useSimulation from "../hooks/useSimulation";
 import { resetGameObjects } from "../utils/resetGameObjects";
 import Video from "./Video";
@@ -19,19 +20,24 @@ const Game2: React.FC = () => {
   const engineRef = useRef(Engine.create());
   const canvasSize = { x: 1600, y: 600 };
   const leftArmLeftRef = useRef<Body | null>(null);
-  const rightHand1RightRef = useRef<Body | null>(null);
-  const rightHand2RightRef = useRef<Body | null>(null);
+  const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
-  const webcamRef = useRef<HTMLVideoElement | null>(null);
   // TODO: userParam으로 "game/"+id 이렇게 바꿔야댐
   // const gameRoomId = "game";
   const { gameRoomID } = useParams<{ gameRoomID: string }>();
   const gameRoomId = "game/" + gameRoomID;
-  console.log(gameRoomId);
 
+  const [showModal, setShowModal] = useState(true);
+  const [isSimStarted, setIsSimStarted] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(false);
+  const [isGoalReached, setIsGoalReached] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(3);
+  const [isRightCamLoaded, setIsRightCamLoaded] = useState(false);
+  const [isMyCamLoaded, setIsMyCamLoaded] = useState(false);
+  
   useEffect(() => {
-    nestjsSocketRef.current = io("http://43.203.29.69:8080/");
+    nestjsSocketRef.current = io("https://zzrot.store/");
   }, []);
 
   const startGame = () => {
@@ -49,52 +55,45 @@ const Game2: React.FC = () => {
     }
   };
 
-  const { peers, indexRef, sendLeftHandJoint, sendRightHandJoint } = useWebRTC(
+  const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } = useWebRTC(
     nestjsSocketRef, 
     gameRoomId, 
     leftArmLeftRef, 
-    rightHand1RightRef, 
-    rightHand2RightRef, 
+    rightArmRightRef, 
     canvasSize, 
-    startGame
+    setIsGameStarted,
+    setIsGoalReached,
+    setCountdown,
   ) as WebRTCResult;
 
-  const [showModal, setShowModal] = useState(true);
-  const [isSimStarted, setIsSimStarted] = useState(false);
-  const [isGameStarted, setIsGameStarted] = useState(false);
-  const [isGoalReached, setIsGoalReached] = useState(false);
-  const [countdown, setCountdown] = useState<number | null>(3);
-  const [isRightCamLoaded, setIsRightCamLoaded] = useState(false);
 
   useMatterSetup({
     canvasSize,
     sceneRef,
     engineRef,
     leftArmLeftRef,
-    rightHand1RightRef,
-    rightHand2RightRef,
+    rightArmRightRef,
     mouseRef,
     bombRef,
     nestjsSocketRef,
   });
 
-  useMediapipe({
-    webcamRef,
+  useTensorFlow(
+    userVideo,
     indexRef,
     peers,
     sendLeftHandJoint,
     sendRightHandJoint,
     leftArmLeftRef,
-    rightHand1RightRef,
-    rightHand2RightRef,
-    canvasSize
-  });
+    rightArmRightRef,
+    canvasSize,
+    isMyCamLoaded
+  );
 
   useSimulation({
     isSimStarted,
     leftArmLeftRef,
-    rightHand1RightRef,
-    rightHand2RightRef,
+    rightArmRightRef,
     mouseRef,
     bombRef,
     nestjsSocketRef,
@@ -123,6 +122,7 @@ const Game2: React.FC = () => {
 
   return (
     <div className="App">
+      
       <div id="matter-container" ref={sceneRef}>
         {peers.slice(0, indexRef.current).map((peer, index) => (
           <Video
@@ -136,10 +136,11 @@ const Game2: React.FC = () => {
         <video
           id={indexRef.current === 0 ? "video-container-1" : "video-container-2"}
           muted
-          ref={webcamRef}
+          ref={userVideo}
           autoPlay
           playsInline
           style={{ order: indexRef.current }}
+          onLoadedData={() => setIsMyCamLoaded(true)}
         />
 
         {peers.slice(indexRef.current).map((peer, index) => (
@@ -159,9 +160,10 @@ const Game2: React.FC = () => {
           Start Game
         </button>
       )}
-      {/* {!isRightCamLoaded && (
-        <div id="loading-overlay">Loading...</div>
-      )} */}
+    <footer className="footer">
+      <div className="player0">기다리는 중...</div>
+      <div className="player1">기다리는 중...</div>
+    </footer>
     </div>
   );
 };

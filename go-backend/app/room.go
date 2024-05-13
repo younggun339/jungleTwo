@@ -1,6 +1,7 @@
 package app
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -16,14 +17,15 @@ type RoomState struct {
 }
 
 func MakeNewRoom(w http.ResponseWriter, r *http.Request) {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	decoder := json.NewDecoder(r.Body)
 
 	var newRoom RoomState
-	json.Unmarshal(body, &newRoom)
+	err := decoder.Decode(&newRoom)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	defer r.Body.Close()
 
 	if newRoom.RoomName == "" {
 		fmt.Println("의미없는 방 제목")
@@ -38,10 +40,18 @@ func MakeNewRoom(w http.ResponseWriter, r *http.Request) {
 	CreateRoom(mySQL, newRoom)
 
 	fmt.Println("방 생성 완료: " + newRoom.RoomName + "/ " + newRoom.RoomMaster)
+	responseData := struct {
+		Result bool `json:"result"`
+	}{
+		Result: true,
+	}
+
+	jsonData, _ := json.Marshal(responseData)
+	fmt.Fprint(w, string(jsonData))
 }
 
 func GetRoomList(w http.ResponseWriter, r *http.Request) {
-	roomList := GetRoom(mySQL)
+	roomList := GetRoom(mySQL, "")
 	slices.Reverse(roomList)
 	jsonData, err := json.Marshal(roomList)
 
@@ -78,6 +88,60 @@ func CheckRoomPW(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(jsonData))
 }
 
-func PassRoom(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("hi")
+func CheckRoomId(w http.ResponseWriter, r *http.Request) {
+	roomId := r.URL.Path
+	var result bool
+
+	roomId = roomId[len(roomId)-8:]
+
+	fmt.Println(roomId)
+
+	var resultId string
+	err := mySQL.QueryRow("SELECT room_id FROM room_table WHERE room_id = ?", roomId).Scan(&resultId)
+	switch {
+	case err == sql.ErrNoRows:
+		result = false
+	case err != nil:
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	default:
+		result = true
+	}
+
+	responseData := struct {
+		Result bool `json:"result"`
+	}{
+		Result: result,
+	}
+
+	jsonData, err := json.Marshal(responseData)
+	if err != nil {
+		fmt.Println("Error marshaling JSON:", err)
+		return
+	}
+
+	fmt.Println(string(jsonData))
+	fmt.Fprint(w, string(jsonData))
+}
+
+func DeleteAllRoom(w http.ResponseWriter, r *http.Request) {
+	_, err := mySQL.Exec("DELETE FROM room_table")
+	if err != nil {
+		fmt.Println("Delete: ", err)
+		return
+	}
+}
+
+func DeleteRoom(w http.ResponseWriter, r *http.Request) {
+	roomId := r.URL.Path
+
+	roomId = roomId[len(roomId)-8:]
+	_, err := mySQL.Exec("DELETE FROM room_table WHERE room_id = ?", roomId)
+	if err != nil {
+		fmt.Println("Delete: ", err)
+		return
+	}
+}
+func SearchRoom(w http.ResponseWriter, r *http.Request) {
+	GetRoom(mySQL, "")
 }

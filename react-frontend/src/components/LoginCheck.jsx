@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 function LoginCheck({ setUserName }) {
   useEffect(() => {
-    fetch("http://zzrot.store/check", {
+    fetch("https://zzrot.store/check", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

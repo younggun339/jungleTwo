@@ -7,8 +7,7 @@ import { Socket } from 'socket.io-client';
 interface UseSimulationProps {
   isSimStarted: boolean;
   leftArmLeftRef: MutableRefObject<Body | null>;
-  rightHand1RightRef: MutableRefObject<Body | null>;
-  rightHand2RightRef: MutableRefObject<Body | null>;
+  rightArmRightRef: MutableRefObject<Body | null>;
   mouseRef: MutableRefObject<Body | null>;
   bombRef: MutableRefObject<Body | null>;
   nestjsSocketRef: MutableRefObject<Socket | null>;
@@ -20,8 +19,7 @@ interface UseSimulationProps {
 const useSimulation = ({
   isSimStarted,
   leftArmLeftRef,
-  rightHand1RightRef,
-  rightHand2RightRef,
+  rightArmRightRef,
   mouseRef,
   bombRef,
   nestjsSocketRef,
@@ -33,11 +31,9 @@ const useSimulation = ({
     if (
       isSimStarted &&
       leftArmLeftRef.current &&
-      rightHand1RightRef.current &&
-      rightHand2RightRef.current &&
+      rightArmRightRef.current &&
       leftArmLeftRef.current.vertices.length > 1 &&
-      rightHand1RightRef.current.vertices.length > 1 &&
-      rightHand2RightRef.current.vertices.length > 1
+      rightArmRightRef.current.vertices.length > 1
     ) {
       const fixedRef1 = {
         x: leftArmLeftRef.current.position.x,
@@ -46,16 +42,10 @@ const useSimulation = ({
         angle: leftArmLeftRef.current.angle,
       };
       const fixedRef2 = {
-        x: rightHand1RightRef.current.position.x,
-        y: rightHand1RightRef.current.position.y,
-        width: Math.abs(rightHand1RightRef.current.vertices[1].x - rightHand1RightRef.current.vertices[0].x),
-        angle: rightHand1RightRef.current.angle,
-      };
-      const fixedRef3 = {
-        x: rightHand2RightRef.current.position.x,
-        y: rightHand2RightRef.current.position.y,
-        width: Math.abs(rightHand2RightRef.current.vertices[1].x - rightHand2RightRef.current.vertices[0].x),
-        angle: rightHand2RightRef.current.angle,
+        x: rightArmRightRef.current.position.x,
+        y: rightArmRightRef.current.position.y,
+        width: Math.abs(rightArmRightRef.current.vertices[1].x - rightArmRightRef.current.vertices[0].x),
+        angle: rightArmRightRef.current.angle,
       };
 
       fetch("/simulation-start", {
@@ -66,7 +56,6 @@ const useSimulation = ({
         body: JSON.stringify({
           fixedRef1,
           fixedRef2,
-          fixedRef3,
         }),
       })
         .then((response) => response.json())

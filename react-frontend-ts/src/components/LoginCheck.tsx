@@ -6,7 +6,7 @@ interface LoginCheckProps {
 
 const LoginCheck: React.FC<LoginCheckProps> = ({ setUserName }) => {
   useEffect(() => {
-    fetch("http://localhost/check", {
+    fetch("https://zzrot.store/check", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

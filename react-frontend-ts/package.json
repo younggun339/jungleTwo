@@ -2,14 +2,10 @@
   "name": "react-frontend-ts",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
   "dependencies": {
     "@emotion/css": "^11.11.2",
-    "@mediapipe/camera_utils": "^0.3.1675466862",
-    "@mediapipe/drawing_utils": "^0.3.1675466124",
-    "@mediapipe/hands": "^0.4.1675469240",
-    "@mediapipe/pose": "^0.5.1675469404",
-    "@mediapipe/tasks-vision": "^0.10.14",
+    "@tensorflow-models/posenet": "^2.2.2",
+    "@tensorflow/tfjs": "^4.19.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -28,6 +24,9 @@
     "stream-browserify": "^3.0.0",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -59,7 +58,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/simple-peer": "^9.11.8",
     "@types/uuid": "^9.0.8",
-    "react-scripts": "^5.0.1",
-    "typescript": "^4.2.2"
+    "react-scripts": "^4.0.1",
+    "typescript": "^3.9.10"
   }
 }

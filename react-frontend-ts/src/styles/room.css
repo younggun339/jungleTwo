@@ -4,6 +4,9 @@ a {
   text-decoration: none;
 }
 
+.profile {
+  width: 3%;
+}
 
 .Container {
   margin: 40px;
