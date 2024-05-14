@@ -6,10 +6,10 @@ import { Engine, Body } from "matter-js";
 import { io, Socket } from "socket.io-client";
 import useMatterSetup from "../hooks/useMatterSetup";
 import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
-import useMediapipe from "../hooks/useMediapipe";
-import useTensorFlow from "../hooks/useTensorFlow";
 import useSimulation from "../hooks/useSimulation";
 import { resetGameObjects } from "../utils/resetGameObjects";
+import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
+import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 import Video from "./Video";
 import "../styles/game.css";
 
@@ -23,6 +23,7 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef(Engine.create());
   const canvasSize = { x: 1600, y: 600 };
+  const canvasRef = useRef(null);
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
@@ -86,6 +87,7 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       leftArmLeftRef,
       rightArmRightRef,
       canvasSize,
+      canvasRef,
       setIsGameStarted,
       setIsGoalReached,
       setCountdown,
@@ -102,17 +104,6 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
     bombRef,
     nestjsSocketRef,
   });
-
-  // useMediapipe({
-  //   userVideo,
-  //   indexRef,
-  //   peers,
-  //   sendLeftHandJoint,
-  //   sendRightHandJoint,
-  //   leftArmLeftRef,
-  //   rightArmRightRef,
-  //   canvasSize,
-  // });
 
   useSimulation({
     isSimStarted,
@@ -131,6 +122,45 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       resetGameObjects(mouseRef, bombRef, setIsSimStarted, setIsGameStarted);
     },
   });
+
+  // =============== 게임 시작 이벤트 ===============
+  // 왼팔 및 오른팔 사각형의 위치를 매 프레임마다 업데이트
+  interface BodyCoordsL {
+    joint1: { x: number; y: number };
+    joint2: { x: number; y: number };
+  }
+
+  interface BodyCoordsR {
+    joint1: { x: number; y: number };
+    joint2: { x: number; y: number };
+  }
+
+  useEffect(() => {
+    const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
+      const { joint1, joint2 } = data;
+      updateLsideSkeleton(leftArmLeftRef, joint1, joint2, canvasSize);
+      sendLeftHandJoint({ joint1, joint2 });
+    };
+
+    const handleRightsideBodyCoords = (data: BodyCoordsR) => {
+      const { joint1, joint2 } = data;
+      updateRsideSkeleton(rightArmRightRef, joint1, joint2, canvasSize);
+      sendRightHandJoint({ joint1, joint2 });
+    };
+
+    if (!isSimStarted) {
+      flaskSocketRef.current?.on("body-coords-L", handleLeftsideBodyCoords);
+      flaskSocketRef.current?.on("body-coords-R", handleRightsideBodyCoords);
+    } else {
+      flaskSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
+      flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
+    }
+
+    return () => {
+      flaskSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
+      flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
+    };
+  }, [isSimStarted]);
 
   useEffect(() => {
     if (isGameStarted && countdown && countdown > 0) {
@@ -167,7 +197,7 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
           style={{ order: indexRef.current }}
           onLoadedData={() => setIsMyCamLoaded(true)}
         />
-
+        <canvas ref={canvasRef} style={{ display: "none" }} />
         {peers.slice(indexRef.current).map((peer, index) => (
           <Video
             key={`${peer.peerID}-${index}`}

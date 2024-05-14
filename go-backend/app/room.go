@@ -130,7 +130,6 @@ func DeleteAllRoom(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteRoom(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("들어옴")
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		fmt.Println(err)
@@ -138,8 +137,6 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) {
 	}
 	var newRoom RoomState
 	json.Unmarshal(body, &newRoom)
-
-	fmt.Println(newRoom)
 
 	_, err = mySQL.Exec("DELETE FROM room_table WHERE room_id = ?", newRoom.RoomId)
 	if err != nil {

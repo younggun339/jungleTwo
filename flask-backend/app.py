@@ -1,3 +1,4 @@
+# app.py
 from flask import Flask, Response, request, jsonify, session
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
@@ -8,6 +9,7 @@ import time
 import numpy as np
 import cv2
 import mediapipe as mp
+
 
 app = Flask(__name__, static_folder='../react-frontend-ts/build', static_url_path='/')
 socketio = SocketIO(app, cors_allowed_origins="*")

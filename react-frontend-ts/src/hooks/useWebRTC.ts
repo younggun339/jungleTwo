@@ -6,7 +6,8 @@ import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
 import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 
 // 추가: Polyfill import
-import 'process/browser';
+import "process/browser";
+import startCapturing from "../components/startCapturing";
 
 const pcConfig = {
   iceServers: [
@@ -18,19 +19,19 @@ const pcConfig = {
   ],
 };
 
-const retryFetch = async (url, options, retries = 5) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const response = await fetch(url, options);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response;
-    } catch (error) {
-      if (i === retries - 1) throw error;
-    }
-  }
-};
+// const retryFetch = async (url, options, retries = 20) => {
+//   for (let i = 0; i < retries; i++) {
+//     try {
+//       const response = await fetch(url, options);
+//       if (!response.ok) {
+//         throw new Error("Network response was not ok");
+//       }
+//       return response;
+//     } catch (error) {
+//       if (i === retries - 1) throw error;
+//     }
+//   }
+// };
 
 const useWebRTC = (
   nestjsSocketRef: MutableRefObject<Socket | null>,
@@ -38,10 +39,11 @@ const useWebRTC = (
   leftArmLeftRef: MutableRefObject<Body | null>,
   rightArmRightRef: MutableRefObject<Body | null>,
   canvasSize: { x: number; y: number },
+  canvasRef: MutableRefObject<HTMLCanvasElement | null>,
   setIsGameStarted: (isGameStarted: boolean) => void,
   setIsGoalReached: (isGoalReached: boolean) => void,
   setCountdown: (countdown: number) => void,
-  userName: string,
+  userName: string
 ): WebRTCResult => {
   const peersRef = useRef<PeerObject[]>([]);
   const [peers, setPeers] = useState<PeerObject[]>([]);
@@ -50,13 +52,13 @@ const useWebRTC = (
 
   const sendLeftHandJoint = (data: any) => {
     peersRef.current.forEach((peerObj) => {
-      peerObj.peer.send(JSON.stringify({ type: 'left-hand-joint', data }));
+      peerObj.peer.send(JSON.stringify({ type: "left-hand-joint", data }));
     });
   };
 
   const sendRightHandJoint = (data: any) => {
     peersRef.current.forEach((peerObj) => {
-      peerObj.peer.send(JSON.stringify({ type: 'right-hand-joint', data }));
+      peerObj.peer.send(JSON.stringify({ type: "right-hand-joint", data }));
     });
   };
 
@@ -66,6 +68,13 @@ const useWebRTC = (
       .then((stream) => {
         if (userVideo.current) {
           userVideo.current.srcObject = stream;
+          startCapturing(
+            stream,
+            userVideo,
+            canvasRef,
+            nestjsSocketRef,
+            indexRef
+          );
         }
 
         if (nestjsSocketRef.current && nestjsSocketRef.current.id) {
@@ -76,35 +85,38 @@ const useWebRTC = (
             window.location.href = "/";
           });
 
-          nestjsSocketRef.current.on('user', (data: string[]) => {
+          nestjsSocketRef.current.on("user", (data: string[]) => {
             const element0 = document.getElementById("player0");
             const element1 = document.getElementById("player1");
             element0!.textContent = data[0][1];
             if (data.length == 2) {
               element1!.textContent = data[1][1];
-            } else{
+            } else {
               element1!.textContent = "기다리는 중...";
             }
           });
 
-          nestjsSocketRef.current.on('delete', async (data: string) => {
-            try {
-              await retryFetch("https://zzrot.store/room/delete", {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ room_id: data }),
-              });
-            } catch (error) {
-              console.error('Fetch failed after retries', error);
-            }
+          nestjsSocketRef.current.on("delete", (data: string) => {
+            fetch("https://zzrot.store/room/delete", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ room_id: data }),
+            })
+            .catch(error => {
+              console.error('Error:', error);
+          });
           });
 
           nestjsSocketRef.current.on("all-users", (users: string[]) => {
             const peers: PeerObject[] = [];
             users.forEach((userID) => {
-              const peer = createPeer(userID, nestjsSocketRef.current!.id!, stream);
+              const peer = createPeer(
+                userID,
+                nestjsSocketRef.current!.id!,
+                stream
+              );
               const peerObj: PeerObject = { peerID: userID, peer };
               peer.on("data", handleIncomingData);
               peer.on("error", (err) => console.error("Peer error:", err));
@@ -115,19 +127,27 @@ const useWebRTC = (
             indexRef.current = users.length;
           });
 
-          nestjsSocketRef.current.on("user-joined", (payload: { signal: any; callerID: string }) => {
-            const peer = addPeer(payload.signal, payload.callerID, stream);
-            const peerObj: PeerObject = { peer, peerID: payload.callerID };
-            peer.on("data", handleIncomingData);
-            peer.on("error", (err) => console.error("Peer error:", err));
-            peersRef.current.push(peerObj);
-            setPeers((users) => [...users, peerObj]);
-          });
+          nestjsSocketRef.current.on(
+            "user-joined",
+            (payload: { signal: any; callerID: string }) => {
+              const peer = addPeer(payload.signal, payload.callerID, stream);
+              const peerObj: PeerObject = { peer, peerID: payload.callerID };
+              peer.on("data", handleIncomingData);
+              peer.on("error", (err) => console.error("Peer error:", err));
+              peersRef.current.push(peerObj);
+              setPeers((users) => [...users, peerObj]);
+            }
+          );
 
-          nestjsSocketRef.current.on("receiving-returned-signal", (payload: { id: string; signal: any }) => {
-            const item = peersRef.current.find((p) => p.peerID === payload.id);
-            if (item) item.peer.signal(payload.signal);
-          });
+          nestjsSocketRef.current.on(
+            "receiving-returned-signal",
+            (payload: { id: string; signal: any }) => {
+              const item = peersRef.current.find(
+                (p) => p.peerID === payload.id
+              );
+              if (item) item.peer.signal(payload.signal);
+            }
+          );
 
           nestjsSocketRef.current.on("user-left", (id: string) => {
             const peerObj = peersRef.current.find((p) => p.peerID === id);
@@ -136,7 +156,7 @@ const useWebRTC = (
             peersRef.current = peers;
             setPeers(peers);
           });
-          
+
           nestjsSocketRef.current!.on("game-started", () => {
             setIsGameStarted(true);
             setIsGoalReached(false);
@@ -146,7 +166,11 @@ const useWebRTC = (
       });
   }, [roomName]);
 
-  const createPeer = (userToSignal: string, callerID: string, stream: MediaStream): Peer.Instance => {
+  const createPeer = (
+    userToSignal: string,
+    callerID: string,
+    stream: MediaStream
+  ): Peer.Instance => {
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -171,7 +195,11 @@ const useWebRTC = (
     return peer;
   };
 
-  const addPeer = (incomingSignal: any, callerID: string, stream: MediaStream): Peer.Instance => {
+  const addPeer = (
+    incomingSignal: any,
+    callerID: string,
+    stream: MediaStream
+  ): Peer.Instance => {
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -194,10 +222,10 @@ const useWebRTC = (
   const handleIncomingData = (data: any) => {
     const parsedData = JSON.parse(data);
 
-    if (parsedData.type === 'left-hand-joint') {
+    if (parsedData.type === "left-hand-joint") {
       const { joint1Start, joint1End } = parsedData.data;
       updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
-    } else if (parsedData.type === 'right-hand-joint') {
+    } else if (parsedData.type === "right-hand-joint") {
       const { joint1Start, joint1End } = parsedData.data;
       updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
     }

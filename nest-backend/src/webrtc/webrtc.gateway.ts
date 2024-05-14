@@ -37,9 +37,9 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     if (this.room_user[roomName].length === 0) {
       setTimeout(() => {
-        console.log(roomName + "빈방")
+        console.log("빈방:" + roomName)
         this.server.emit("delete", roomName)
-      }, 1200);
+      }, 1000);
     }
     else {
       setTimeout(() => {
@@ -47,7 +47,7 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
           const users = this.room_user[roomName][i];
           this.server.to(users[0]).emit("user", this.room_user[roomName]);
         }
-      }, 1200);
+      }, 1000);
     }
   }
 
@@ -107,6 +107,6 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const users = this.room_user[user.gameRoomID][i];
         this.server.to(users[0]).emit("user", this.room_user[user.gameRoomID]);
       }
-    }, 1200);
+    }, 1000);
   }
 }
