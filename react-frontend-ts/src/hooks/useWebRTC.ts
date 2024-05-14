@@ -18,6 +18,20 @@ const pcConfig = {
   ],
 };
 
+const retryFetch = async (url, options, retries = 5) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response;
+    } catch (error) {
+      if (i === retries - 1) throw error;
+    }
+  }
+};
+
 const useWebRTC = (
   nestjsSocketRef: MutableRefObject<Socket | null>,
   roomName: string,
@@ -54,7 +68,6 @@ const useWebRTC = (
           userVideo.current.srcObject = stream;
         }
 
-        console.log(nestjsSocketRef.current);
         if (nestjsSocketRef.current && nestjsSocketRef.current.id) {
           nestjsSocketRef.current.emit("join-room", roomName);
 
@@ -71,6 +84,20 @@ const useWebRTC = (
               element1!.textContent = data[1][1];
             } else{
               element1!.textContent = "기다리는 중...";
+            }
+          });
+
+          nestjsSocketRef.current.on('delete', async (data: string) => {
+            try {
+              await retryFetch("https://zzrot.store/room/delete", {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ room_id: data }),
+              });
+            } catch (error) {
+              console.error('Fetch failed after retries', error);
             }
           });
 

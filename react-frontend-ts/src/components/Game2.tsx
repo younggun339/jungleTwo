@@ -1,11 +1,11 @@
 // Game2.tsx
 
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import { Engine, Body } from "matter-js";
 import { io, Socket } from "socket.io-client";
 import useMatterSetup from "../hooks/useMatterSetup";
-import useWebRTC, { WebRTCResult } from '../hooks/useWebRTC';
+import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
 import useMediapipe from "../hooks/useMediapipe";
 import useTensorFlow from "../hooks/useTensorFlow";
 import useSimulation from "../hooks/useSimulation";
@@ -19,6 +19,7 @@ interface Game2Props {
 
 const Game2: React.FC<Game2Props> = ({ userName }) => {
   const nestjsSocketRef = useRef<Socket | null>(null);
+  const flaskSocketRef = useRef<Socket | null>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef(Engine.create());
   const canvasSize = { x: 1600, y: 600 };
@@ -38,10 +39,29 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   const [countdown, setCountdown] = useState<number | null>(3);
   const [isRightCamLoaded, setIsRightCamLoaded] = useState(false);
   const [isMyCamLoaded, setIsMyCamLoaded] = useState(false);
-  
+
   useEffect(() => {
     nestjsSocketRef.current = io("https://zzrot.store/");
-    nestjsSocketRef.current.emit("user-signal", {gameRoomID, userName});
+    nestjsSocketRef.current.emit("user-signal", { gameRoomID, userName });
+  }, []);
+
+  useEffect(() => {
+    if (flaskSocketRef.current) {
+      flaskSocketRef.current.disconnect();
+    }
+    flaskSocketRef.current = io("https://zzrot.store/socket.io/mediapipe/", {
+      path: "/socket.io/mediapipe/",
+      transports: ["websocket"],
+    });
+    flaskSocketRef.current.emit("flask-connect", () => {
+      console.log("flask socket connected");
+    });
+    return () => {
+      // 컴포넌트 언마운트 시 소켓 연결 닫기
+      if (flaskSocketRef.current && flaskSocketRef.current.connected) {
+        flaskSocketRef.current.disconnect();
+      }
+    };
   }, []);
 
   const startGame = () => {
@@ -52,25 +72,25 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       console.log("if 후: ", isGameStarted);
       setCountdown(3);
       setShowModal(false);
-      
+
       if (nestjsSocketRef.current) {
         // nestjsSocketRef.current.emit('start-game', { roomId: gameRoomId });
       }
     }
   };
 
-  const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } = useWebRTC(
-    nestjsSocketRef, 
-    gameRoomId, 
-    leftArmLeftRef, 
-    rightArmRightRef, 
-    canvasSize, 
-    setIsGameStarted,
-    setIsGoalReached,
-    setCountdown,
-    userName,
-  ) as WebRTCResult;
-
+  const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } =
+    useWebRTC(
+      nestjsSocketRef,
+      gameRoomId,
+      leftArmLeftRef,
+      rightArmRightRef,
+      canvasSize,
+      setIsGameStarted,
+      setIsGoalReached,
+      setCountdown,
+      userName
+    ) as WebRTCResult;
 
   useMatterSetup({
     canvasSize,
@@ -83,16 +103,16 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
     nestjsSocketRef,
   });
 
-  useMediapipe({
-    userVideo,
-    indexRef,
-    peers,
-    sendLeftHandJoint,
-    sendRightHandJoint,
-    leftArmLeftRef,
-    rightArmRightRef,
-    canvasSize
-  });
+  // useMediapipe({
+  //   userVideo,
+  //   indexRef,
+  //   peers,
+  //   sendLeftHandJoint,
+  //   sendRightHandJoint,
+  //   leftArmLeftRef,
+  //   rightArmRightRef,
+  //   canvasSize,
+  // });
 
   useSimulation({
     isSimStarted,
@@ -126,7 +146,6 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
 
   return (
     <div className="App">
-      
       <div id="matter-container" ref={sceneRef}>
         {peers.slice(0, indexRef.current).map((peer, index) => (
           <Video
@@ -138,7 +157,9 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
         ))}
 
         <video
-          id={indexRef.current === 0 ? "video-container-1" : "video-container-2"}
+          id={
+            indexRef.current === 0 ? "video-container-1" : "video-container-2"
+          }
           muted
           ref={userVideo}
           autoPlay
@@ -158,17 +179,19 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
         ))}
       </div>
 
-      {isGameStarted && countdown && countdown > 0 && <div id="countdown">{countdown}</div>}
+      {isGameStarted && countdown && countdown > 0 && (
+        <div id="countdown">{countdown}</div>
+      )}
       {!isGameStarted && (
         <button onClick={startGame} id="start-button">
           Start Game
         </button>
       )}
-      
-    <footer className="footer">
-      <div id="player0">기다리는 중...</div>
-      <div id="player1">기다리는 중...</div>
-    </footer>
+
+      <footer className="footer">
+        <div id="player0">기다리는 중...</div>
+        <div id="player1">기다리는 중...</div>
+      </footer>
     </div>
   );
 };

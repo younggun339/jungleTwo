@@ -94,8 +94,6 @@ func CheckRoomId(w http.ResponseWriter, r *http.Request) {
 
 	roomId = roomId[len(roomId)-8:]
 
-	fmt.Println(roomId)
-
 	var resultId string
 	err := mySQL.QueryRow("SELECT room_id FROM room_table WHERE room_id = ?", roomId).Scan(&resultId)
 	switch {
@@ -120,7 +118,6 @@ func CheckRoomId(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(string(jsonData))
 	fmt.Fprint(w, string(jsonData))
 }
 
@@ -133,10 +130,18 @@ func DeleteAllRoom(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteRoom(w http.ResponseWriter, r *http.Request) {
-	roomId := r.URL.Path
+	fmt.Println("들어옴")
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var newRoom RoomState
+	json.Unmarshal(body, &newRoom)
 
-	roomId = roomId[len(roomId)-8:]
-	_, err := mySQL.Exec("DELETE FROM room_table WHERE room_id = ?", roomId)
+	fmt.Println(newRoom)
+
+	_, err = mySQL.Exec("DELETE FROM room_table WHERE room_id = ?", newRoom.RoomId)
 	if err != nil {
 		fmt.Println("Delete: ", err)
 		return

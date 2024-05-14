@@ -17,7 +17,7 @@ func main() {
 	mux := pat.New()
 
 	mux.HandleFunc("/room/search", app.SearchRoom)
-	mux.HandleFunc("/room/delete/{id}", app.DeleteRoom)
+	mux.HandleFunc("/room/delete", app.DeleteRoom)
 	mux.HandleFunc("/room/1", app.DeleteAllRoom)
 	mux.HandleFunc("/room/new", app.MakeNewRoom)
 	mux.HandleFunc("/room/get", app.GetRoomList)

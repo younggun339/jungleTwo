@@ -35,12 +35,20 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
 
-    setTimeout(() => {
-      for (let i = 0; i < this.room_user[roomName].length; i++) {
-        const users = this.room_user[roomName][i];
-        this.server.to(users[0]).emit("user", this.room_user[roomName]);
-      }
-    }, 1500);
+    if (this.room_user[roomName].length === 0) {
+      setTimeout(() => {
+        console.log(roomName + "빈방")
+        this.server.emit("delete", roomName)
+      }, 1200);
+    }
+    else {
+      setTimeout(() => {
+        for (let i = 0; i < this.room_user[roomName].length; i++) {
+          const users = this.room_user[roomName][i];
+          this.server.to(users[0]).emit("user", this.room_user[roomName]);
+        }
+      }, 1200);
+    }
   }
 
   @SubscribeMessage('join-room')
@@ -99,6 +107,6 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const users = this.room_user[user.gameRoomID][i];
         this.server.to(users[0]).emit("user", this.room_user[user.gameRoomID]);
       }
-    }, 1500);
+    }, 1200);
   }
 }
