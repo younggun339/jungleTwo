@@ -8,37 +8,7 @@ const useMatterSetupContinuity = (refs, setGoalReached, setGameStart, setInGameS
   const { sceneRef, videoRef, engineRef, leftArmRef, rightArmRef, circleRef } = refs;
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  const loadImages = async () => {
-    const loadImage = src => new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = src;
-    });
-
-    try {
-      await Promise.all([
-        loadImage("/assets/spike.png"),
-        loadImage("/assets/mouse_stand.png"),
-        loadImage("/assets/goal_arrow.png"),
-        loadImage("/assets/platform_1.png"),
-        loadImage("/assets/mouse_dead.png")
-      ]);
-      setImagesLoaded(true);
-    } catch (error) {
-      console.error("Failed to load one or more images:", error);
-    }
-  };
-
   useEffect(() => {
-    loadImages();
-  }, []);
-
-  useEffect(() => {
-    if (!imagesLoaded) {
-      return;
-    }
-
     // ============== matter-js 초기값 세팅 =================
     const canvasSize = { x: 800, y: 600 };
 
@@ -197,7 +167,7 @@ const useMatterSetupContinuity = (refs, setGoalReached, setGameStart, setInGameS
       render.context = null;
     };
   }, [imagesLoaded]);
-
+  
   return {};
 };
 

@@ -13,8 +13,11 @@ import { resetGameObjects } from "../utils/resetGameObjects";
 import Video from "./Video";
 import "../styles/game.css";
 
+interface Game2Props {
+  userName: string;
+}
 
-const Game2: React.FC = () => {
+const Game2: React.FC<Game2Props> = ({ userName }) => {
   const nestjsSocketRef = useRef<Socket | null>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef(Engine.create());
@@ -38,6 +41,7 @@ const Game2: React.FC = () => {
   
   useEffect(() => {
     nestjsSocketRef.current = io("https://zzrot.store/");
+    nestjsSocketRef.current.emit("user-signal", {gameRoomID, userName});
   }, []);
 
   const startGame = () => {
@@ -64,6 +68,7 @@ const Game2: React.FC = () => {
     setIsGameStarted,
     setIsGoalReached,
     setCountdown,
+    userName,
   ) as WebRTCResult;
 
 
@@ -160,9 +165,10 @@ const Game2: React.FC = () => {
           Start Game
         </button>
       )}
+      
     <footer className="footer">
-      <div className="player0">기다리는 중...</div>
-      <div className="player1">기다리는 중...</div>
+      <div id="player0">기다리는 중...</div>
+      <div id="player1">기다리는 중...</div>
     </footer>
     </div>
   );

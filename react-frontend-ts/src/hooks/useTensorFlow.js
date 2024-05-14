@@ -51,11 +51,11 @@ const useTensorFlow = (
       const loadPoseNetModel = async () => {
         const net = await posenet.load({
           inputResolution: { width: canvasSize.x / 2, height: canvasSize.y },
-          scale: 0.1,
+          scale: 0.8,
         });
         const camera = userVideo.current;
-        camera.width = userVideo.current.videoWidth;
-        camera.height = userVideo.current.videoHeight;
+        camera.width = canvasSize.x / 2;
+        camera.height = canvasSize.y;
 
         const detectPose = async () => {
           if (camera && net) {

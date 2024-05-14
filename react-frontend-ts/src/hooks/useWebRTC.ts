@@ -7,7 +7,6 @@ import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 
 // 추가: Polyfill import
 import 'process/browser';
-import { Buffer } from 'buffer';
 
 const pcConfig = {
   iceServers: [
@@ -28,6 +27,7 @@ const useWebRTC = (
   setIsGameStarted: (isGameStarted: boolean) => void,
   setIsGoalReached: (isGoalReached: boolean) => void,
   setCountdown: (countdown: number) => void,
+  userName: string,
 ): WebRTCResult => {
   const peersRef = useRef<PeerObject[]>([]);
   const [peers, setPeers] = useState<PeerObject[]>([]);
@@ -35,14 +35,12 @@ const useWebRTC = (
   const userVideo = useRef<HTMLVideoElement | null>(null);
 
   const sendLeftHandJoint = (data: any) => {
-    console.log("send data: ", data.joint1Start, data.joint1End);
     peersRef.current.forEach((peerObj) => {
       peerObj.peer.send(JSON.stringify({ type: 'left-hand-joint', data }));
     });
   };
 
   const sendRightHandJoint = (data: any) => {
-    console.log("send data: ", data.joint1Start, data.joint1End);
     peersRef.current.forEach((peerObj) => {
       peerObj.peer.send(JSON.stringify({ type: 'right-hand-joint', data }));
     });
@@ -66,10 +64,8 @@ const useWebRTC = (
           });
 
           nestjsSocketRef.current.on("all-users", (users: string[]) => {
-            console.log("All users received: ", users);
             const peers: PeerObject[] = [];
             users.forEach((userID) => {
-              console.log("여기 : ", stream);
               const peer = createPeer(userID, nestjsSocketRef.current!.id!, stream);
               const peerObj: PeerObject = { peerID: userID, peer };
               peer.on("data", handleIncomingData);
@@ -79,8 +75,7 @@ const useWebRTC = (
             });
             setPeers(peers);
             indexRef.current = users.length;
-            console.log("Peers updated: ", peers);
-            console.log("Peers index: ", indexRef.current);
+            console.log(userName)
           });
 
           nestjsSocketRef.current.on("user-joined", (payload: { signal: any; callerID: string }) => {
@@ -90,8 +85,7 @@ const useWebRTC = (
             peer.on("error", (err) => console.error("Peer error:", err));
             peersRef.current.push(peerObj);
             setPeers((users) => [...users, peerObj]);
-            console.log("User joined: ", payload.callerID);
-            console.log("유저 들어옴");
+            console.log(payload.callerID)
           });
 
           nestjsSocketRef.current.on("receiving-returned-signal", (payload: { id: string; signal: any }) => {

@@ -13,8 +13,9 @@ import "./styles/home.css";
  * App 컴포넌트는 웹 애플리케이션의 메인 라우팅을 담당합니다.
  * 이 구성 요소는 사이트의 여러 페이지로의 라우팅을 관리합니다.
  */
+
 const App: React.FC = () => {
-  const [user_name, setUserName] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
 
   return (
     <Router>
@@ -23,13 +24,13 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route
           path="/create-room"
-          element={<CreateRoom user_name={user_name} />}
+          element={<CreateRoom userName={userName} />}
         />
         <Route
           path="/game/:gameRoomID"
           element={
             <RoomCheck>
-              <Game2 user_name={user_name} />
+              {userName && <Game2 userName={userName} />}
             </RoomCheck>
           }
         />

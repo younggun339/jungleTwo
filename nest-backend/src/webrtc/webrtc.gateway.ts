@@ -8,7 +8,7 @@ import {
 import { Server, Socket } from 'socket.io';
 
 interface User {
-  [roomId: string]: string[];
+  [roomName: string]: string[];
 }
 
 @WebSocketGateway({ cors: true })
@@ -17,32 +17,31 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   private users: User = {};
-  private socketToRoom: { [socketId: string]: string } = {};
+  private user_dict: { [key: string]: [string, string][] } = {};
+  private socketToRoom: { [key: string]: string } = {};
 
   handleConnection(client: Socket) {
     console.log('Client connected:', client.id);
   }
 
   handleDisconnect(client: Socket) {
-    const roomId = this.socketToRoom[client.id];
-    if (roomId) {
-      let room = this.users[roomId];
+    const roomName = this.socketToRoom[client.id];
+    console.log(roomName)
+    if (roomName) {
+      let room = this.users[roomName];
       if (room) {
         room = room.filter((id) => id !== client.id);
-        this.users[roomId] = room;
+        this.users[roomName] = room;
       }
       delete this.socketToRoom[client.id];
-      this.server.to(roomId).emit('user-left', client.id);
+      this.server.to(roomName).emit('user-left', client.id);
     }
-    console.log('Client disconnected:', client.id);
   }
 
   @SubscribeMessage('join-room')
-  handleJoinRoom(client: Socket, roomId: string) {
-    if (this.users[roomId]) {
-      const room = this.users[roomId];
-      console.log('Client joined:', client.id);
-      console.log('Joined room:', roomId);
+  handleJoinRoom(client: Socket, roomName: string) {
+    if (this.users[roomName]) {
+      const room = this.users[roomName];
       if (room.length === 2) {
         client.emit('room-full');
         return;
@@ -50,11 +49,11 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
         room.push(client.id);
       }
     } else {
-      this.users[roomId] = [client.id];
+      this.users[roomName] = [client.id];
     }
 
-    this.socketToRoom[client.id] = roomId;
-    const usersInThisRoom = this.users[roomId].filter((id) => id !== client.id);
+    this.socketToRoom[client.id] = roomName;
+    const usersInThisRoom = this.users[roomName].filter((id) => id !== client.id);
     client.emit('all-users', usersInThisRoom);
   }
 
@@ -81,5 +80,16 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.server.to(userId).emit('game-started');
       });
     }
+  }
+  @SubscribeMessage('user-signal')
+  handleUserSignal(client: Socket, user: {gameRoomID:string; userName: string}) {
+    if (!this.user_dict[user.gameRoomID]) {
+      this.user_dict[user.gameRoomID] = [];
+    }
+    if (!this.socketToRoom[client.id]) {
+      
+    }
+    this.user_dict[user.gameRoomID].push([client.id, user.userName]);
+    console.log(this.user_dict[user.gameRoomID]);
   }
 }

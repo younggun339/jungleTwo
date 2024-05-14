@@ -3,10 +3,10 @@ import "../styles/room.css";
 import RoomModal from "./MakeModal"
 import ChangeName from "./ChangeName"
 
-const CreateRoom = ({ user_name }) => {
+const CreateRoom = ({ userName }) => {
   const [rooms, setRooms] = useState([]);
   const [showPasswordInput, setShowPasswordInput] = useState(false);
-  const isLoggedIn = user_name !== "";
+  const isLoggedIn = userName !== "";
 
   const handleCreateRoom = (event) => {
     event.preventDefault(); // 기본 제출 행동 방지
@@ -37,7 +37,7 @@ const CreateRoom = ({ user_name }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ room_id: newRoomId, room_name: roomName, room_master: user_name,room_pw:passWord }),
+      body: JSON.stringify({ room_id: newRoomId, room_name: roomName, room_master: userName,room_pw:passWord }),
     })
       .then(response => response.json())
       .then(data => {
@@ -93,8 +93,8 @@ const CreateRoom = ({ user_name }) => {
       <div className="Container">
         <p>
           <img src="/images/profile.png" className="profile" />
-          {user_name && <span>{user_name}</span>}
-          <span>{(user_name === null || user_name === undefined) && '로그인 안됨'}</span>
+          {userName && <span>{userName}</span>}
+          <span>{(userName === null || userName === undefined) && '로그인 안됨'}</span>
         </p>
         <div className="SplitContainer">
           <div className="CreateRoomContainer">
