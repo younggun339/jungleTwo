@@ -22,7 +22,7 @@ const useTensorFlow = (
   const onLeftsideResults = useCallback((pose) => {
     if (indexRef.current === 0 && pose && pose.keypoints) {
       const keypoints = pose.keypoints;
-      const joint1 = keypoints.find(point => point.part === 'leftElbow');
+      const joint1 = keypoints.find(point => point.part === 'rightWrist');
       const joint2 = keypoints.find(point => point.part === 'leftWrist');
 
       if (joint1 && joint2) {
@@ -34,8 +34,8 @@ const useTensorFlow = (
   const onRightsideResults = useCallback((pose) => {
     if (indexRef.current === 1 && pose && pose.keypoints) {
       const keypoints = pose.keypoints;
-      const joint1 = keypoints.find(point => point.part === 'rightElbow');
-      const joint2 = keypoints.find(point => point.part === 'rightWrist');
+      const joint1 = keypoints.find(point => point.part === 'rightWrist');
+      const joint2 = keypoints.find(point => point.part === 'leftWrist');
 
       if (joint1 && joint2) {
         handleRightsideBodyCoords(
@@ -51,7 +51,8 @@ const useTensorFlow = (
       const loadPoseNetModel = async () => {
         const net = await posenet.load({
           inputResolution: { width: canvasSize.x / 2, height: canvasSize.y },
-          scale: 0.8,
+          outputStride: 16,
+          scale: 1.0,
         });
         const camera = userVideo.current;
         camera.width = canvasSize.x / 2;

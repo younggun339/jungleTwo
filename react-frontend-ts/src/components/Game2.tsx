@@ -83,7 +83,7 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
     nestjsSocketRef,
   });
 
-  useTensorFlow(
+  useMediapipe({
     userVideo,
     indexRef,
     peers,
@@ -91,9 +91,8 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
     sendRightHandJoint,
     leftArmLeftRef,
     rightArmRightRef,
-    canvasSize,
-    isMyCamLoaded
-  );
+    canvasSize
+  });
 
   useSimulation({
     isSimStarted,

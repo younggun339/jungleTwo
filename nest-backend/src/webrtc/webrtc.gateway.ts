@@ -17,25 +17,30 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   private users: User = {};
-  private user_dict: { [key: string]: [string, string][] } = {};
-  private socketToRoom: { [key: string]: string } = {};
+  private room_user: { [key: string]: [string, string][] } = {};
+  private user_room: { [key: string]: string } = {};
 
   handleConnection(client: Socket) {
     console.log('Client connected:', client.id);
   }
 
   handleDisconnect(client: Socket) {
-    const roomName = this.socketToRoom[client.id];
-    console.log(roomName)
-    if (roomName) {
-      let room = this.users[roomName];
-      if (room) {
-        room = room.filter((id) => id !== client.id);
-        this.users[roomName] = room;
+    const roomName = this.user_room[client.id];
+    delete this.user_room[client.id];
+
+    for (let i = 0; i < this.room_user[roomName].length; i++)  {
+      if (this.room_user[roomName][i][0] === client.id) {
+        this.room_user[roomName].splice(i, 1);
+        break;
       }
-      delete this.socketToRoom[client.id];
-      this.server.to(roomName).emit('user-left', client.id);
     }
+
+    setTimeout(() => {
+      for (let i = 0; i < this.room_user[roomName].length; i++) {
+        const users = this.room_user[roomName][i];
+        this.server.to(users[0]).emit("user", this.room_user[roomName]);
+      }
+    }, 1500);
   }
 
   @SubscribeMessage('join-room')
@@ -52,20 +57,17 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.users[roomName] = [client.id];
     }
 
-    this.socketToRoom[client.id] = roomName;
     const usersInThisRoom = this.users[roomName].filter((id) => id !== client.id);
     client.emit('all-users', usersInThisRoom);
   }
 
   @SubscribeMessage('sending-signal')
   handleSendingSignal(client: Socket, payload: { userToSignal: string; signal: any; callerID: string }) {
-    console.log(`Sending signal from ${client.id} to ${payload.userToSignal}`);
     this.server.to(payload.userToSignal).emit('user-joined', { signal: payload.signal, callerID: payload.callerID });
   }
 
   @SubscribeMessage('returning-signal')
   handleReturningSignal(client: Socket, payload: { callerID: string; signal: any }) {
-    console.log(`Returning signal to ${payload.callerID} from ${client.id}`);
     this.server.to(payload.callerID).emit('receiving-returned-signal', { signal: payload.signal, id: client.id });
   }
 
@@ -76,20 +78,27 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const usersInThisRoom = this.users[payload.roomId].filter((id) => id !== client.id);
     if (usersInThisRoom) {
       usersInThisRoom.forEach(userId => {
-        console.log(`Emitting game-started to user: ${userId}`);
         this.server.to(userId).emit('game-started');
       });
     }
   }
   @SubscribeMessage('user-signal')
   handleUserSignal(client: Socket, user: {gameRoomID:string; userName: string}) {
-    if (!this.user_dict[user.gameRoomID]) {
-      this.user_dict[user.gameRoomID] = [];
+    if (!this.room_user[user.gameRoomID]) {
+      this.room_user[user.gameRoomID] = [];
     }
-    if (!this.socketToRoom[client.id]) {
-      
+    if (!this.user_room[client.id]) {
+      this.user_room[client.id] = user.gameRoomID;
     }
-    this.user_dict[user.gameRoomID].push([client.id, user.userName]);
-    console.log(this.user_dict[user.gameRoomID]);
+    this.room_user[user.gameRoomID].push([client.id, user.userName]);
+    console.log(user.gameRoomID+ " 방에 입장 : " + this.room_user[user.gameRoomID]);
+    console.log("현재 유저 " + user.userName + "의 방: " + this.user_room[client.id])
+
+    setTimeout(() => {
+      for (let i = 0; i < this.room_user[user.gameRoomID].length; i++) {
+        const users = this.room_user[user.gameRoomID][i];
+        this.server.to(users[0]).emit("user", this.room_user[user.gameRoomID]);
+      }
+    }, 1500);
   }
 }

@@ -63,6 +63,17 @@ const useWebRTC = (
             window.location.href = "/";
           });
 
+          nestjsSocketRef.current.on('user', (data: string[]) => {
+            const element0 = document.getElementById("player0");
+            const element1 = document.getElementById("player1");
+            element0!.textContent = data[0][1];
+            if (data.length == 2) {
+              element1!.textContent = data[1][1];
+            } else{
+              element1!.textContent = "기다리는 중...";
+            }
+          });
+
           nestjsSocketRef.current.on("all-users", (users: string[]) => {
             const peers: PeerObject[] = [];
             users.forEach((userID) => {
@@ -75,7 +86,6 @@ const useWebRTC = (
             });
             setPeers(peers);
             indexRef.current = users.length;
-            console.log(userName)
           });
 
           nestjsSocketRef.current.on("user-joined", (payload: { signal: any; callerID: string }) => {
@@ -85,7 +95,6 @@ const useWebRTC = (
             peer.on("error", (err) => console.error("Peer error:", err));
             peersRef.current.push(peerObj);
             setPeers((users) => [...users, peerObj]);
-            console.log(payload.callerID)
           });
 
           nestjsSocketRef.current.on("receiving-returned-signal", (payload: { id: string; signal: any }) => {
@@ -99,9 +108,8 @@ const useWebRTC = (
             const peers = peersRef.current.filter((p) => p.peerID !== id);
             peersRef.current = peers;
             setPeers(peers);
-            console.log("User left: ", id); // 사용자 left
           });
-
+          
           nestjsSocketRef.current!.on("game-started", () => {
             setIsGameStarted(true);
             setIsGoalReached(false);

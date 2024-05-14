@@ -9,26 +9,24 @@ import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 import { WebRTCResult } from './useWebRTC';
 
 interface UseMediapipeProps {
-  webcamRef: MutableRefObject<HTMLVideoElement | null>;
+  userVideo: MutableRefObject<HTMLVideoElement | null>;
   indexRef: MutableRefObject<number>;
   peers: WebRTCResult["peers"];
   sendLeftHandJoint: WebRTCResult["sendLeftHandJoint"];
   sendRightHandJoint: WebRTCResult["sendRightHandJoint"];
   leftArmLeftRef: MutableRefObject<Body | null>;
-  rightHand1RightRef: MutableRefObject<Body | null>;
-  rightHand2RightRef: MutableRefObject<Body | null>;
+  rightArmRightRef: MutableRefObject<Body | null>;
   canvasSize: { x: number; y: number };
 }
 
 const useMediapipe = ({
-  webcamRef,
+  userVideo,
   indexRef,
   peers,
   sendLeftHandJoint,
   sendRightHandJoint,
   leftArmLeftRef,
-  rightHand1RightRef,
-  rightHand2RightRef,
+  rightArmRightRef,
   canvasSize,
 }: UseMediapipeProps) => {
   
@@ -70,8 +68,6 @@ const useMediapipe = ({
       locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
     });
 
-
-
     hands.setOptions({
       maxNumHands: 1,
       modelComplexity: 1,
@@ -110,12 +106,12 @@ const useMediapipe = ({
     if (indexRef.current === 1) {
     const hands = initializeHands(onRightsideResults);
     // console.log("Is hands!")
-    console.log(webcamRef.current);
-    if (webcamRef.current) {
-      const camera = new Camera(webcamRef.current, {
+    console.log(userVideo.current);
+    if (userVideo.current) {
+      const camera = new Camera(userVideo.current, {
         onFrame: async () => {
           try {
-            await hands.send({ image: webcamRef.current! });
+            await hands.send({ image: userVideo.current! });
           } catch (error) {
             console.error("Error sending frame to Mediapipe Hands:", error);
           }
@@ -130,18 +126,18 @@ const useMediapipe = ({
       };
     }
   }
-  }, [onRightsideResults, webcamRef]);
+  }, [onRightsideResults, userVideo]);
 
   // useEffect for initializing and using Mediapipe Pose
   useEffect(() => {
       if (indexRef.current === 0) {
       const pose = initializePose(onLeftsideResults);
-      console.log(webcamRef.current);
-      if (webcamRef.current) {
-        const camera = new Camera(webcamRef.current, {
+      console.log(userVideo.current);
+      if (userVideo.current) {
+        const camera = new Camera(userVideo.current, {
           onFrame: async () => {
             try {
-              await pose.send({ image: webcamRef.current! });
+              await pose.send({ image: userVideo.current! });
             } catch (error) {
               console.error("Error sending frame to Mediapipe Pose:", error);
             }
@@ -156,7 +152,7 @@ const useMediapipe = ({
         };
       }
   }
-  }, [onLeftsideResults, webcamRef]);
+  }, [onLeftsideResults, userVideo]);
 
   const handleLeftsideBodyCoords = (joint1Start: any, joint1End: any) => {
     if (indexRef.current === 0) {
@@ -167,8 +163,7 @@ const useMediapipe = ({
 
   const handleRightsideBodyCoords = (joint1: any, joint2: any, joint3: any) => {
     if (indexRef.current === 1) {
-      updateRsideSkeleton(rightHand1RightRef, joint1, joint2, canvasSize);
-      updateRsideSkeleton(rightHand2RightRef, joint2, joint3, canvasSize);
+      updateRsideSkeleton(rightArmRightRef, joint1, joint2, canvasSize);
       sendRightHandJoint({ joint1, joint2, joint3 });
     }
   };
