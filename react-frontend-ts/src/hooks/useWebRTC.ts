@@ -2,8 +2,7 @@ import { useEffect, useRef, useState, MutableRefObject } from "react";
 import { Body } from "matter-js";
 import { Socket } from "socket.io-client";
 import Peer from "simple-peer";
-import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
-import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
+import { updateLsideSkeleton, updateRsideSkeleton } from "../utils/updateSkeleton";
 
 // 추가: Polyfill import
 import "process/browser";
@@ -19,7 +18,7 @@ const pcConfig = {
   ],
 };
 
-const retryFetch = async (url, options, retries = 20) => {
+const retryFetch = async (url: any, options: any, retries = 20) => {
   for (let i = 0; i < retries; i++) {
     try {
       const response = await fetch(url, options);
@@ -41,24 +40,14 @@ const useWebRTC = (
   rightArmRightRef: MutableRefObject<Body | null>,
   canvasSize: { x: number; y: number },
   canvasRef: MutableRefObject<HTMLCanvasElement | null>,
-  userName: string
+  userName: string,
+  isTutorialImage2End: boolean,
+  isSimStarted: boolean,
 ): WebRTCResult => {
   const peersRef = useRef<PeerObject[]>([]);
   const [peers, setPeers] = useState<PeerObject[]>([]);
   const indexRef = useRef(0);
   const userVideo = useRef<HTMLVideoElement | null>(null);
-
-  const sendLeftHandJoint = (data: any) => {
-    peersRef.current.forEach((peerObj) => {
-      peerObj.peer.send(JSON.stringify({ type: "left-hand-joint", data }));
-    });
-  };
-
-  const sendRightHandJoint = (data: any) => {
-    peersRef.current.forEach((peerObj) => {
-      peerObj.peer.send(JSON.stringify({ type: "right-hand-joint", data }));
-    });
-  };
 
   useEffect(() => {
     navigator.mediaDevices
@@ -66,12 +55,6 @@ const useWebRTC = (
       .then((stream) => {
         if (userVideo.current) {
           userVideo.current.srcObject = stream;
-          startCapturing(
-            userVideo,
-            canvasRef,
-            flaskSocketRef,
-            indexRef
-          );
         }
 
         if (nestjsSocketRef.current && nestjsSocketRef.current.id) {
@@ -223,11 +206,43 @@ const useWebRTC = (
     if (parsedData.type === "left-hand-joint") {
       const { joint1Start, joint1End } = parsedData.data;
       updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
-    } else if (parsedData.type === "right-hand-joint") {
+    } else if (parsedData.type === "right-hand-joint" ) {
       const { joint1Start, joint1End } = parsedData.data;
       updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
     }
   };
+
+  const sendLeftHandJoint = (joint1Start: any, joint1End: any) => {
+    peersRef.current.forEach((peerObj) => {
+      peerObj.peer.send(JSON.stringify({ type: "left-hand-joint", data: { joint1Start, joint1End } }));
+    });
+  };
+
+  const sendRightHandJoint = (joint1Start: any, joint1End: any) => {
+    peersRef.current.forEach((peerObj) => {
+      peerObj.peer.send(JSON.stringify({ type: "right-hand-joint", data: { joint1Start, joint1End } }));
+    });
+  };
+
+  useEffect(() => {
+    let stopCapturing: (() => void) | undefined;
+  
+    if (isTutorialImage2End && !isSimStarted) {
+      stopCapturing = startCapturing(
+        userVideo,
+        canvasRef,
+        flaskSocketRef,
+        indexRef,
+        isSimStarted,
+      );
+    }
+  
+    return () => {
+      if (stopCapturing) {
+        stopCapturing();
+      }
+    };
+  }, [isTutorialImage2End, isSimStarted]);
 
   return { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint };
 };
@@ -241,8 +256,8 @@ export interface WebRTCResult {
   userVideo: MutableRefObject<HTMLVideoElement | null>;
   peers: PeerObject[];
   indexRef: MutableRefObject<number>;
-  sendLeftHandJoint: (data: any) => void;
-  sendRightHandJoint: (data: any) => void;
+  sendLeftHandJoint: (joint1Start: any, joint1End: any) => void;
+  sendRightHandJoint: (joint1Start: any, joint1End: any) => void;
 }
 
 export default useWebRTC;

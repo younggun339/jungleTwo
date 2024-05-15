@@ -1,8 +1,7 @@
 // useSimulation.ts
 import { useEffect } from 'react';
 import { MutableRefObject } from 'react';
-import { Body } from 'matter-js';
-import { Socket } from 'socket.io-client';
+import { Engine, Body, Events } from 'matter-js';
 
 interface UseSimulationProps {
   isSimStarted: boolean;
@@ -10,10 +9,7 @@ interface UseSimulationProps {
   rightArmRightRef: MutableRefObject<Body | null>;
   mouseRef: MutableRefObject<Body | null>;
   bombRef: MutableRefObject<Body | null>;
-  nestjsSocketRef: MutableRefObject<Socket | null>;
-  explodeBomb: () => void;
-  winGame: () => void;
-  loseGame: () => void;
+  engineRef: MutableRefObject<Engine | null>;
 }
 
 const useSimulation = ({
@@ -22,71 +18,39 @@ const useSimulation = ({
   rightArmRightRef,
   mouseRef,
   bombRef,
-  nestjsSocketRef,
-  explodeBomb,
-  winGame,
-  loseGame,
+  engineRef,
 }: UseSimulationProps) => {
+  
   useEffect(() => {
+    const applyContinuousForce = () => {
+      if (mouseRef.current) {
+        Body.applyForce(mouseRef.current, mouseRef.current.position, { x: 0.04, y: 0 });
+        Body.setAngle(mouseRef.current, 0);
+      }
+    };
+
     if (
       isSimStarted &&
       leftArmLeftRef.current &&
       rightArmRightRef.current &&
       leftArmLeftRef.current.vertices.length > 1 &&
-      rightArmRightRef.current.vertices.length > 1
+      rightArmRightRef.current.vertices.length > 1 &&
+      mouseRef.current &&
+      bombRef.current
     ) {
-      const fixedRef1 = {
-        x: leftArmLeftRef.current.position.x,
-        y: leftArmLeftRef.current.position.y,
-        width: Math.abs(leftArmLeftRef.current.vertices[1].x - leftArmLeftRef.current.vertices[0].x),
-        angle: leftArmLeftRef.current.angle,
-      };
-      const fixedRef2 = {
-        x: rightArmRightRef.current.position.x,
-        y: rightArmRightRef.current.position.y,
-        width: Math.abs(rightArmRightRef.current.vertices[1].x - rightArmRightRef.current.vertices[0].x),
-        angle: rightArmRightRef.current.angle,
-      };
+      // 왼팔 및 오른팔 충돌 ON
+      leftArmLeftRef.current.collisionFilter.mask = 0xffff;
+      rightArmRightRef.current.collisionFilter.mask = 0xffff;
 
-      fetch("/simulation-start", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fixedRef1,
-          fixedRef2,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.isBombed) {
-            explodeBomb();
-          }
-          if (data.isGameClear) {
-            winGame();
-          } else {
-            loseGame();
-          }
-        })
-        .catch((error) => console.error("Error sending simulation start:", error));
+      // 쥐를 움직이기 위해 static 해제
+      Body.setStatic(mouseRef.current, false);
+      Body.setStatic(bombRef.current, false);
+      Events.on(engineRef.current, "beforeUpdate", applyContinuousForce);
     }
-  }, [isSimStarted]);
 
-  useEffect(() => {
-    if (isSimStarted) {
-      const handleMouseJourney = (data: any) => {
-        Body.setPosition(mouseRef.current!, { x: data.mousePos.x, y: data.mousePos.y });
-        Body.setPosition(bombRef.current!, { x: data.bombPos.x, y: data.bombPos.y });
-        Body.setAngle(bombRef.current!, data.bombAngle);
-      };
-
-      nestjsSocketRef.current?.on("mouse-journey", handleMouseJourney);
-
-      return () => {
-        nestjsSocketRef.current?.off("mouse-journey", handleMouseJourney);
-      };
-    }
+    return () => {
+      Events.off(engineRef.current, "beforeUpdate", applyContinuousForce);
+    };
   }, [isSimStarted]);
 };
 

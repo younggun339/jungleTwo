@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import CreateRoom from "./components/CreateRoom";
-import Game2 from "./components/Game2";
+import Game from "./components/Game";
 // import Room from "./components/Room";
 import LoginCheck from "./components/LoginCheck";
 import RoomCheck from "./components/RoomCheck";
 import "./styles/App.css";
 import "./styles/game.css";
 import "./styles/home.css";
-import SSE from "./components/SSE";
-import Wse from "./components/websocket";
 /**
  * App 컴포넌트는 웹 애플리케이션의 메인 라우팅을 담당합니다.
  * 이 구성 요소는 사이트의 여러 페이지로의 라우팅을 관리합니다.
@@ -31,7 +29,7 @@ const App: React.FC = () => {
         <Route
           path="/game/:gameRoomID"
           element={
-            <RoomCheck>{userName && <Game2 userName={userName} />}</RoomCheck>
+            <RoomCheck>{userName && <Game userName={userName} />}</RoomCheck>
           }
         />
       </Routes>

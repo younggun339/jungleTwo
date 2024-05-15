@@ -33,9 +33,9 @@ const ChangeName = () => {
 
   return (
     <div>
-    <button onClick={openModal} className="refreshRoom" >
+    <div onClick={openModal}>
     닉네임 변경
-    </button>
+    </div>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <h2>닉네임변경</h2>
         <p>변경할 닉네임</p>

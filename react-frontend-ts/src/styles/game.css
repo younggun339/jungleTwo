@@ -31,7 +31,7 @@ html, body {
   position: absolute; /* 부모 기준 위치 */
   width: 50%; /* 전체 너비의 50% */
   height: 100%;
-  z-index: 100;
+  z-index: 0;
   opacity: 0.3;
   transform: scaleX(-1);
 }
@@ -41,7 +41,7 @@ html, body {
   right: 0; /* 오른쪽 정렬 */
   width: 50%; /* 전체 너비의 50% */
   height: 100%;
-  z-index: 100;
+  z-index: 0;
   opacity: 0.3;
   transform: scaleX(-1);
 }
@@ -51,11 +51,12 @@ canvas {
   height: 100%;
 }
 
-#start-button {
+#ready-button {
   position: absolute;
+  bottom: 8%;
   z-index: 3; /* 버튼을 렌더러 위로 올리기 */
   background-color: #fff;
-  padding: 50px 100px;
+  padding: 50px 70px;
   border: 2px solid #000;
   border-radius: 5px;
   cursor: pointer;
@@ -71,6 +72,25 @@ canvas {
   font-weight: bold;
   color: red; /* 적당한 색상으로 조정 */
   z-index: 4;
+}
+
+#time-limit {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px;
+  font-weight: bold;
+  color: blue; /* 적당한 색상으로 조정 */
+  z-index: 4;
+}
+
+#tutorial-image-1, #tutorial-image-2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
 }
 
 #loading-overlay {
@@ -116,4 +136,16 @@ canvas {
   color: white;
   padding: 20px 0;
   text-align: center;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 10;
 }

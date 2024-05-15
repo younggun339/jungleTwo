@@ -7,8 +7,10 @@ import ChangeName from "./ChangeName"
 const CreateRoom = ({ userName }) => {
   const [rooms, setRooms] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
-  const isLoggedIn = userName !== "";
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const isLoggedIn = userName !== null;
 
+  console.log(userName)
   console.log(isLoggedIn)
 
   const handleCreateRoom = (event) => {
@@ -73,10 +75,6 @@ const CreateRoom = ({ userName }) => {
     refreshRoom();
   }, []);
 
-  const togglePasswordInput = () => {
-    setShowPassword(!showPassword);
-  };
-
   const logout = () => {
     fetch("https://zzrot.store/logout")
       .then(() => {
@@ -91,17 +89,29 @@ const CreateRoom = ({ userName }) => {
     window.location.assign("https://zzrot.store/");
   };
 
+  const profileClick = () => {
+    setIsMenuVisible(!isMenuVisible); // 상태를 토글합니다.
+  }
+
   return (
     <div>
         <div className='totalContain'>
             <div className='header'> 
             {isLoggedIn ? (
-              <div className="profile" >
+              <div className="profile" onClick={profileClick} >
                 <img src="/images/profile.png"/>
                 {userName}
+                {isMenuVisible && (
+                <div className="menu">
+                  <ul>
+                    <li><ChangeName/></li>
+                    <li onClick={logout}>로그아웃</li>
+                  </ul>
+                </div>
+              )}
               </div>
             ) : (
-              <button className='loginButton'>
+              <button className='loginButton' onClick={login}>
                 Login
               </button>
             )}

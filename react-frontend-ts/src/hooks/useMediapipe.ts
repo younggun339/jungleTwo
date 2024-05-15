@@ -4,7 +4,7 @@ import { Body } from 'matter-js';
 import { Camera } from "@mediapipe/camera_utils";
 import { Hands, Results as HandsResults } from '@mediapipe/hands';
 import { Pose, Results as PoseResults } from '@mediapipe/pose';
-import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
+import { updateLsideSkeleton } from "../utils/updateSkeleton";
 import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 import { WebRTCResult } from './useWebRTC';
 

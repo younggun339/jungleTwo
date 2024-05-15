@@ -9,16 +9,13 @@ interface VideoProps {
   onLoaded?: () => void;
 }
 
-const Video: React.FC<VideoProps> = ({ peer, peers, myIndexRef, onLoaded }) => {
+const Video: React.FC<VideoProps> = ({ peer, peers, myIndexRef }) => {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     peer.on("stream", (stream: MediaStream) => {
       if (ref.current) {
         ref.current.srcObject = stream;
-        if (onLoaded) {
-          onLoaded();
-        }
       }
     });
 

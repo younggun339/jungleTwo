@@ -4,7 +4,7 @@ import * as posenet from '@tensorflow-models/posenet';
 import * as tf from '@tensorflow/tfjs';
 // import * as tf from '@tensorflow/tfjs';
 // import '@tensorflow/tfjs-backend-webgl';
-import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
+import { updateLsideSkeleton } from "../utils/updateSkeleton";
 import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 
 const useTensorFlow = (

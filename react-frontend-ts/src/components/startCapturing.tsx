@@ -8,13 +8,15 @@ import { Socket } from "socket.io-client";
  * @param canvasRef - 캔버스 태그의 ref.
  * @param socketRef - Socket.IO 클라이언트 인스턴스의 ref.
  * @param myIndex - 현재 사용자의 인덱스를 나타내는 ref.
+ * @param isSimStarted - 시뮬레이션이 시작되었는지 여부를 나타내는 상태.
  * @returns 정리 함수 (캡처 중지를 위해 호출)
  */
 const startCapturing = (
   videoRef: RefObject<HTMLVideoElement>,
   canvasRef: RefObject<HTMLCanvasElement>,
   socketRef: RefObject<Socket | null>,
-  myIndex: RefObject<number>
+  myIndex: RefObject<number>,
+  isSimStarted: boolean
 ): (() => void) => {
   const video = videoRef.current;
   const canvas = canvasRef.current;
@@ -22,7 +24,7 @@ const startCapturing = (
   if (!canvas || !video) return () => {};
 
   const context = canvas.getContext("2d");
-
+  
   if (!context) return () => {};
 
   // 캔버스 크기를 비디오와 동일하게 설정
@@ -39,6 +41,12 @@ const startCapturing = (
 
   // 이미지를 주기적으로 캡처하고 WebSocket을 통해 전송
   const interval = setInterval(() => {
+    if (isSimStarted) {
+      clearInterval(interval);
+      window.removeEventListener("resize", resizeCanvas);
+      return;
+    }
+    
     if (video.readyState === video.HAVE_ENOUGH_DATA) {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -49,6 +57,7 @@ const startCapturing = (
       // 이미지 데이터를 서버로 전송 (socketRef.current가 null이 아닌지 확인)
       if (socketRef.current) {
         if (myIndex.current === 0) {
+          console.log("찍는중");
           socketRef.current.emit("image-capture-R", { image: imageData });
         } else {
           socketRef.current.emit("image-capture-L", { image: imageData });
@@ -56,6 +65,7 @@ const startCapturing = (
       }
     }
   }, 200);
+
   return () => {
     clearInterval(interval);
     window.removeEventListener("resize", resizeCanvas);

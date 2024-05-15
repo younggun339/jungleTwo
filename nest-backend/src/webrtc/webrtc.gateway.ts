@@ -120,18 +120,20 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // 방에 사용자 추가
     if (!this.room_user[roomName]) {
       this.room_user[roomName] = [];
+      this.room_user[roomName].push([client.id, payload.userName, false]);
     }
-    this.room_user[roomName].push([client.id, payload.userName, false]);
-    this.user_room[client.id] = roomName;
-
+    
     // 모든 사용자에게 현재 준비 상태 전송
     const players = this.room_user[roomName];
     for (let i = 0; i < players.length; i++) {
       const [clientId, name, isReady] = players[i];
       if (name === payload.userName) {
-        players[i] = [client.id, name, true];
+        players[i] = [clientId, name, true];
       }
-      this.server.to(name).emit("response-ready", players);
     }
+
+    this.room_user[roomName].forEach((user) => {
+      this.server.to(user[0]).emit('response-ready', players);
+    });
   }
 }
