@@ -30,9 +30,9 @@ mp_hands = mp.solutions.hands
 pose = mpPose.Pose()
 hands = mp_hands.Hands()
 
-@socketio.on('flask-connect')
-def handleConnect():
-    print('Client connected')
+# @socketio.on('flask-connect')
+# def handleConnect():
+#     print('Client connected')
 
 def decode_image(image_data):
     nparr = np.frombuffer(image_data, np.uint8)
@@ -126,16 +126,16 @@ def generate_numbers():
 
 data_store = {}  # 데이터 스토어로 분석 결과를 저장
 
-@app.route('/stream/')
-def stream():
-    def event_stream():
-        while True:
-            if data_store:
-                data = json.dumps(data_store)
-                yield f"data: {data}\n\n"
-                data_store.clear()  # 데이터 전송 후 클리어
-            time.sleep(1)  # 데이터 확인 주기
-    return Response(event_stream(), mimetype='text/event-stream')
+# @app.route('/stream/')
+# def stream():
+#     def event_stream():
+#         while True:
+#             if data_store:
+#                 data = json.dumps(data_store)
+#                 yield f"data: {data}\n\n"
+#                 data_store.clear()  # 데이터 전송 후 클리어
+#             time.sleep(1)  # 데이터 확인 주기
+#     return Response(event_stream(), mimetype='text/event-stream')
 
 # WebSocket 경로
 
