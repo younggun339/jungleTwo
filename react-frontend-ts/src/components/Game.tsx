@@ -170,6 +170,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     isSimStarted,
     countdown,
     timeLimit,
+    resultState,
     setIsPlayerReady,
     setIsGameStarted,
     setIsTutorialImage1End,
@@ -198,6 +199,18 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
   // 다음 스테이지 버튼 클릭 시 처리 로직
   const handleNextStage = () => {
+    resetStageObjects[currentStage - 1](
+      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      setIsGameStarted,
+      setIsSimStarted,
+      setIsTutorialImage1End,
+      setIsTutorialImage2End,
+      setShowModal,
+      setResultState,
+      setCountdown,
+      setTimeLimit,
+      setIsPlayerReady
+    );
     setCurrentStage((prevStage) => Math.min(prevStage + 1, 5)); // 최대 5스테이지
     setShowModal(false);
   };
@@ -258,7 +271,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       {isTutorialImage2End && countdown && countdown > 0 && (
         <div id="countdown">{countdown}</div>
       )}
-      {isSimStarted && timeLimit && timeLimit > 0 && (
+      {isSimStarted && !resultState && timeLimit && timeLimit > 0 && (
         <div id="time-limit">{timeLimit}</div>
       )}
 

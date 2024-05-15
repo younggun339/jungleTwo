@@ -31,7 +31,7 @@ const useStage1Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.5;
+    engine.world.gravity.y = 0.15;
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
