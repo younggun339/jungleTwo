@@ -116,21 +116,23 @@ def generate_numbers():
         yield f"data: {data}\n\n"
         time.sleep(1)
 
-@app.route('/stream/')
-def stream():
-    print("streaming", flush=True)
-    return Response(stream_results(), mimetype='text/event-stream')
+# @app.route('/stream/')
+# def stream():
+#     print("streaming", flush=True)
+#     return Response(stream_results(), mimetype='text/event-stream')
 
 data_store = {}  # 데이터 스토어로 분석 결과를 저장
 
-def stream_results():
-    """스트림 생성 함수. 클라이언트에게 실시간 데이터를 전송."""
-    while True:
-        if data_store:
-            data = json.dumps(data_store)
-            yield f'data: {data}\n\n'
-            data_store.clear()  # 데이터 전송 후 클리어
-        time.sleep(1)  # 데이터 확인 주기
+@app.route('/stream/')
+def stream():
+    def event_stream():
+        while True:
+            if data_store:
+                data = json.dumps(data_store)
+                yield f"data: {data}\n\n"
+                data_store.clear()  # 데이터 전송 후 클리어
+            time.sleep(1)  # 데이터 확인 주기
+    return Response(event_stream(), mimetype='text/event-stream')
 
 @app.route('/image-capture-R', methods=['POST'])
 def handle_image_capture():
@@ -148,27 +150,27 @@ def handle_image_capture():
         joint1End = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_WRIST]
         # 분석 결과를 데이터 스토어에 저장
         # print(joint1Start)
-        data_store['body-coords-L'] = {
+        data_store['body-coords-R'] = {
             'joint1Start': {'x': joint1Start.x, 'y': joint1Start.y},
             'joint1End': {'x': joint1End.x, 'y': joint1End.y}
         }
-        stream_results();
+        # stream_results();
     return jsonify(success=True)        
 
-app.register_blueprint(sse, url_prefix= 'image-capture-R' )
-def server_side_event():
-    """데이터 스토어를 업데이트하고 클라이언트에게 실시간으로 전송"""
+# BackgroundScheduler를 이용해 데이터 스토어를 주기적으로 업데이트하는 함수
+def update_data_store():
+    """데이터 스토어를 업데이트하는 함수"""
     with app.app_context():
         if 'body-coords-L' in data_store:
             print(data_store['body-coords-L'])
-            sse.publish(data_store['body-coords-L'], type='body-coords-L')
         if 'body-coords-R' in data_store:
-            sse.publish(data_store['body-coords-R'], type='body-coords-R')
-        print(f"Data sent at {datetime.datetime.now()}")
+            print(data_store['body-coords-R'])
+        print(f"Data updated at {datetime.datetime.now()}")
+
 
 # BackgroundScheduler를 이용해 주기적인 작업 설정
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(server_side_event, 'interval', seconds=10)
+sched.add_job(update_data_store, 'interval', seconds=1)
 sched.start()
 
 if __name__ == "__main__":
