@@ -9,6 +9,7 @@ import RoomCheck from "./components/RoomCheck";
 import "./styles/App.css";
 import "./styles/game.css";
 import "./styles/home.css";
+import SSE from "./components/SSE";
 /**
  * App 컴포넌트는 웹 애플리케이션의 메인 라우팅을 담당합니다.
  * 이 구성 요소는 사이트의 여러 페이지로의 라우팅을 관리합니다.
@@ -29,11 +30,10 @@ const App: React.FC = () => {
         <Route
           path="/game/:gameRoomID"
           element={
-            <RoomCheck>
-              {userName && <Game2 userName={userName} />}
-            </RoomCheck>
+            <RoomCheck>{userName && <Game2 userName={userName} />}</RoomCheck>
           }
         />
+        <Route path="/SSE" element={<SSE />} />
       </Routes>
     </Router>
   );

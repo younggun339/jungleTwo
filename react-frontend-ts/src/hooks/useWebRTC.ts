@@ -19,19 +19,19 @@ const pcConfig = {
   ],
 };
 
-// const retryFetch = async (url, options, retries = 20) => {
-//   for (let i = 0; i < retries; i++) {
-//     try {
-//       const response = await fetch(url, options);
-//       if (!response.ok) {
-//         throw new Error("Network response was not ok");
-//       }
-//       return response;
-//     } catch (error) {
-//       if (i === retries - 1) throw error;
-//     }
-//   }
-// };
+const retryFetch = async (url: any, options: any, retries = 20) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response;
+    } catch (error) {
+      if (i === retries - 1) throw error;
+    }
+  }
+};
 
 const useWebRTC = (
   nestjsSocketRef: MutableRefObject<Socket | null>,
@@ -40,9 +40,6 @@ const useWebRTC = (
   rightArmRightRef: MutableRefObject<Body | null>,
   canvasSize: { x: number; y: number },
   canvasRef: MutableRefObject<HTMLCanvasElement | null>,
-  setIsGameStarted: (isGameStarted: boolean) => void,
-  setIsGoalReached: (isGoalReached: boolean) => void,
-  setCountdown: (countdown: number) => void,
   userName: string
 ): WebRTCResult => {
   const peersRef = useRef<PeerObject[]>([]);
@@ -68,6 +65,11 @@ const useWebRTC = (
       .then((stream) => {
         if (userVideo.current) {
           userVideo.current.srcObject = stream;
+          console.log("stream: ", stream);
+          console.log("userVideo: ", userVideo.current);
+          console.log("canvasRef: ", canvasRef.current);
+          console.log("nestjsSocketRef: ", nestjsSocketRef.current);
+          console.log("indexRef: ", indexRef.current);
           startCapturing(
             stream,
             userVideo,
@@ -96,17 +98,18 @@ const useWebRTC = (
             }
           });
 
-          nestjsSocketRef.current.on("delete", (data: string) => {
-            fetch("https://zzrot.store/room/delete", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ room_id: data }),
-            })
-            .catch(error => {
-              console.error('Error:', error);
-          });
+          nestjsSocketRef.current.on("delete", async (data: string) => {
+            try {
+              await retryFetch("https://zzrot.store/room/delete", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ room_id: data }),
+              });
+            } catch (error) {
+              console.error("Fetch failed after retries", error);
+            }
           });
 
           nestjsSocketRef.current.on("all-users", (users: string[]) => {
@@ -155,12 +158,6 @@ const useWebRTC = (
             const peers = peersRef.current.filter((p) => p.peerID !== id);
             peersRef.current = peers;
             setPeers(peers);
-          });
-
-          nestjsSocketRef.current!.on("game-started", () => {
-            setIsGameStarted(true);
-            setIsGoalReached(false);
-            setCountdown(3);
           });
         }
       });

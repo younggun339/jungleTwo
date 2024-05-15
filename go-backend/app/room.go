@@ -130,6 +130,7 @@ func DeleteAllRoom(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteRoom(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("삭제")
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		fmt.Println(err)

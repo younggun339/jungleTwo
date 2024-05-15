@@ -1,13 +1,10 @@
 // Game2.tsx
-
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Engine, Body } from "matter-js";
 import { io, Socket } from "socket.io-client";
 import useMatterSetup from "../hooks/useMatterSetupTemplate";
 import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
-import useMediapipe from "../hooks/useMediapipe";
-import useTensorFlow from "../hooks/useTensorFlow";
 import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
 import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 import Video from "./Video";
@@ -19,23 +16,28 @@ interface Game2Props {
 
 const Game2: React.FC<Game2Props> = ({ userName }) => {
   const nestjsSocketRef = useRef<Socket | null>(null);
+  const flaskSocketRef = useRef<Socket | null>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef(Engine.create());
   const canvasSize = { x: 1600, y: 600 };
+  const canvasRef = useRef(null);
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
+  const mouseRef = useRef<Body | null>(null);
+  const bombRef = useRef<Body | null>(null);
   // TODO: userParam으로 "game/"+id 이렇게 바꿔야댐
   // const gameRoomId = "game";
   const { gameRoomID } = useParams<{ gameRoomID: string }>();
   const gameRoomId = "game/" + gameRoomID;
 
   const [showModal, setShowModal] = useState(true);
-  const [isSimStarted, setIsSimStarted] = useState(false);
-  const [isGameStarted, setIsGameStarted] = useState(false);
-  const [isGoalReached, setIsGoalReached] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(3);
   const [isRightCamLoaded, setIsRightCamLoaded] = useState(false);
   const [isMyCamLoaded, setIsMyCamLoaded] = useState(false);
+
+  const [isSimStarted, setIsSimStarted] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(false);
+  const [isGoalReached, setIsGoalReached] = useState(false);
   const [isPlayer1Ready, setIsPlayer1Ready] = useState(false);
   const [isPlayer2Ready, setIsPlayer2Ready] = useState(false);
 
@@ -44,17 +46,35 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
     nestjsSocketRef.current.emit("user-signal", { gameRoomID, userName });
   }, []);
 
-  const startGame = () => {
+  useEffect(() => {
+    if (flaskSocketRef.current) {
+      flaskSocketRef.current.disconnect();
+    }
+    flaskSocketRef.current = io("https://zzrot.store/socket.io/mediapipe/", {
+      path: "/socket.io/mediapipe/",
+    });
+    flaskSocketRef.current.emit("flask-connect", () => {
+      console.log("flask socket connected");
+    });
+    return () => {
+      // 컴포넌트 언마운트 시 소켓 연결 닫기
+      if (flaskSocketRef.current && flaskSocketRef.current.connected) {
+        flaskSocketRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  const readyGame = () => {
     console.log("if 전: ", isGameStarted);
     if (!isGameStarted) {
-      setIsGameStarted(true);
+      setIsGameStarted(true); // <--
       setIsGoalReached(false);
       console.log("if 후: ", isGameStarted);
       setCountdown(3);
       setShowModal(false);
 
       if (nestjsSocketRef.current) {
-        nestjsSocketRef.current.emit('start-game', { roomId: gameRoomId });
+        nestjsSocketRef.current.emit('ready-game', { roomId: gameRoomId });
       }
     }
   };
@@ -66,108 +86,62 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       leftArmLeftRef,
       rightArmRightRef,
       canvasSize,
-      setIsGameStarted,
-      setIsGoalReached,
-      setCountdown,
-      userName,
+      canvasRef,
+      userName
     ) as WebRTCResult;
 
-
-  if (isPlayer1Ready && isPlayer2Ready) {
-    useMatterSetup(
-      canvasSize,
-      sceneRef,
-      engineRef,
-      leftArmLeftRef,
-      rightArmRightRef,
-      nestjsSocketRef,
-      setIsSimStarted,
-      setIsGameStarted,
-      setIsGoalReached,
-    );
-  }
-
-  // useMediapipe({
-  //   userVideo,
-  //   indexRef,
-  //   peers,
-  //   sendLeftHandJoint,
-  //   sendRightHandJoint,
-  //   leftArmLeftRef,
-  //   rightArmRightRef,
-  //   canvasSize,
-  // });
-
-  type CoordsData = {
-    joint1Start: { x: number; y: number };
-    joint1End: { x: number; y: number };
-  };
+    if (isPlayer1Ready && isPlayer2Ready) {
+      useMatterSetup({
+        canvasSize,
+        sceneRef,
+        engineRef,
+        leftArmLeftRef,
+        rightArmRightRef,
+        nestjsSocketRef},
+        setIsSimStarted,
+        setIsGameStarted,
+        setIsGoalReached
+      );
+    }
 
   // =============== 게임 시작 이벤트 ===============
   // 왼팔 및 오른팔 사각형의 위치를 매 프레임마다 업데이트
+  interface BodyCoordsL {
+    joint1: { x: number; y: number };
+    joint2: { x: number; y: number };
+  }
+
+  interface BodyCoordsR {
+    joint1: { x: number; y: number };
+    joint2: { x: number; y: number };
+  }
 
   useEffect(() => {
-    const handleLeftsideBodyCoords = (data: CoordsData) => {
-      const { joint1Start, joint1End } = data;
-      updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
-    };
-    const handleRightsideBodyCoords = (data: CoordsData) => {
-      const { joint1Start, joint1End } = data;
-      updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
+    const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
+      const { joint1, joint2 } = data;
+      updateLsideSkeleton(leftArmLeftRef, joint1, joint2, canvasSize);
+      sendLeftHandJoint({ joint1, joint2 });
     };
 
-    if (!isGameStarted) {
-      nestjsSocketRef.current?.on("body-coords-L", handleLeftsideBodyCoords);
-      nestjsSocketRef.current?.on("body-coords-R", handleRightsideBodyCoords);
+    const handleRightsideBodyCoords = (data: BodyCoordsR) => {
+      const { joint1, joint2 } = data;
+      updateRsideSkeleton(rightArmRightRef, joint1, joint2, canvasSize);
+      sendRightHandJoint({ joint1, joint2 });
+    };
+
+    if (!isSimStarted) {
+      flaskSocketRef.current?.on("body-coords-L", handleLeftsideBodyCoords);
+      flaskSocketRef.current?.on("body-coords-R", handleRightsideBodyCoords);
     } else {
-      nestjsSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
-      nestjsSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
+      flaskSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
+      flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
     }
 
-    const fixedRef1 = {
-      x: leftArmLeftRef.current?.position.x ?? 0,
-      y: leftArmLeftRef.current?.position.y ?? 0,
-      width:
-        (leftArmLeftRef.current?.vertices[1]?.x ?? 0) -
-        (leftArmLeftRef.current?.vertices[0]?.x ?? 0),
-      height:
-        (leftArmLeftRef.current?.vertices[1]?.y ?? 0) -
-        (leftArmLeftRef.current?.vertices[0]?.y ?? 0),
-      angle: leftArmLeftRef.current?.angle ?? 0,
-    };
-    const fixedRef2 = {
-      x: rightArmRightRef.current?.position.x ?? 0,
-      y: rightArmRightRef.current?.position.y ?? 0,
-      width:
-        (rightArmRightRef.current?.vertices[1]?.x ?? 0) -
-        (rightArmRightRef.current?.vertices[0]?.x ?? 0),
-      height:
-        (rightArmRightRef.current?.vertices[1]?.y ?? 0) -
-        (rightArmRightRef.current?.vertices[0]?.y ?? 0),
-      angle: rightArmRightRef.current?.angle ?? 0,
-    };
-
-    fetch("/simulation-start", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fixedRef1,
-        fixedRef2,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) =>
-        console.error("Error sending simulation start:", error)
-      );
-
     return () => {
-      nestjsSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
-      nestjsSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
+      flaskSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
+      flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
     };
-  }, [isGameStarted]);
+  }, [isSimStarted]);
 
   useEffect(() => {
     if (isGameStarted && countdown && countdown > 0) {
@@ -204,13 +178,14 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
           style={{ order: indexRef.current }}
           onLoadedData={() => setIsMyCamLoaded(true)}
         />
-
+        <canvas ref={canvasRef} style={{ display: "none" }} />
         {peers.slice(indexRef.current).map((peer, index) => (
           <Video
             key={`${peer.peerID}-${index}`}
             peer={peer.peer}
             peers={peers}
             myIndexRef={0}
+            onLoaded={() => setIsRightCamLoaded(true)}
           />
         ))}
       </div>
@@ -219,8 +194,8 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
         <div id="countdown">{countdown}</div>
       )}
       {!isGameStarted && (
-        <button onClick={startGame} id="start-button">
-          Start Game
+        <button onClick={readyGame} id="start-button">
+          Ready Game
         </button>
       )}
 

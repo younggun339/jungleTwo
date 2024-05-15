@@ -1,18 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Engine, Render, World } from "matter-js";
 import { initializeGameObjects } from "../utils/initializeGameObjects";
+import useSimulation from "../hooks/useSimulation";
+import { resetGameObjects } from "../utils/resetGameObjects";
 
-const useMatterSetup = (refs) => {
+const useMatterSetup = (refs, setIsSimStarted, setIsGameStarted, setIsGoalReached) => {
   const {
     canvasSize,
     sceneRef,
     engineRef,
     leftArmLeftRef,
     rightArmRightRef,
-    mouseRef,
-    bombRef,
-    nestjsSocketRef
+    nestjsSocketRef,
+    isSimStarted
   } = refs;
+
+  const mouseRef = useRef(null);
+  const bombRef = useRef(null);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -50,6 +54,24 @@ const useMatterSetup = (refs) => {
       render.context = null;
     };
   }, []);
+
+  useSimulation({
+    isSimStarted,
+    leftArmLeftRef,
+    rightArmRightRef,
+    mouseRef,
+    bombRef,
+    nestjsSocketRef,
+    explodeBomb: () => console.log("bomb exploded"),
+    winGame: () => {
+      alert("game cleared");
+      resetGameObjects(mouseRef, bombRef, setIsSimStarted, setIsGameStarted);
+    },
+    loseGame: () => {
+      alert("game over");
+      resetGameObjects(mouseRef, bombRef, setIsSimStarted, setIsGameStarted);
+    },
+  });
 };
 
 export default useMatterSetup;

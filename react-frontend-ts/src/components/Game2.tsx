@@ -1,13 +1,10 @@
 // Game2.tsx
-
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Engine, Body } from "matter-js";
 import { io, Socket } from "socket.io-client";
 import useMatterSetup from "../hooks/useMatterSetup";
 import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
-import useSimulation from "../hooks/useSimulation";
-import { resetGameObjects } from "../utils/resetGameObjects";
 import { updateLsideSkeleton } from "../utils/updateLsideSkeleton";
 import { updateRsideSkeleton } from "../utils/updateRsideSkeleton";
 import Video from "./Video";
@@ -31,28 +28,30 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   // TODO: userParam으로 "game/"+id 이렇게 바꿔야댐
   // const gameRoomId = "game";
   const { gameRoomID } = useParams<{ gameRoomID: string }>();
-  const gameRoomId = "game/" + gameRoomID;
 
   const [showModal, setShowModal] = useState(true);
-  const [isSimStarted, setIsSimStarted] = useState(false);
-  const [isGameStarted, setIsGameStarted] = useState(false);
-  const [isGoalReached, setIsGoalReached] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(3);
   const [isRightCamLoaded, setIsRightCamLoaded] = useState(false);
   const [isMyCamLoaded, setIsMyCamLoaded] = useState(false);
+  
+  const [isSimStarted, setIsSimStarted] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(false);
+  const [isGoalReached, setIsGoalReached] = useState(false);
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
 
+  // 인게임 및 통신 관련 소켓
   useEffect(() => {
     nestjsSocketRef.current = io("https://zzrot.store/");
     nestjsSocketRef.current.emit("user-signal", { gameRoomID, userName });
   }, []);
 
+  // mediapipie 관련 소켓
   useEffect(() => {
     if (flaskSocketRef.current) {
       flaskSocketRef.current.disconnect();
     }
     flaskSocketRef.current = io("https://zzrot.store/socket.io/mediapipe/", {
       path: "/socket.io/mediapipe/",
-      transports: ["websocket"],
     });
     flaskSocketRef.current.emit("flask-connect", () => {
       console.log("flask socket connected");
@@ -65,32 +64,36 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
     };
   }, []);
 
-  const startGame = () => {
-    console.log("if 전: ", isGameStarted);
-    if (!isGameStarted) {
-      setIsGameStarted(true); // <--
-      setIsGoalReached(false);
-      console.log("if 후: ", isGameStarted);
-      setCountdown(3);
-      setShowModal(false);
-
-      if (nestjsSocketRef.current) {
-        // nestjsSocketRef.current.emit('start-game', { roomId: gameRoomId });
-      }
+  const readyGame = () => {
+    if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.emit("ready-game", { roomName: gameRoomID, userName });
+      setIsPlayerReady(true);
     }
   };
+  
+  useEffect(() => {
+    if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.on("response-ready", (players: [string, string, boolean][]) => {
+        const readyPlayers = players.filter((player: [string, string, boolean]) => player[2] === true);
+        console.log("현재 준비완료한 플레이어: ", readyPlayers.length);
+        if (readyPlayers.length === 2) {
+          alert("all users are ready!");
+          setIsGameStarted(true);
+          setIsGoalReached(false);
+          setCountdown(3);
+        }
+      });
+    }
+  }, []);
 
   const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } =
     useWebRTC(
       nestjsSocketRef,
-      gameRoomId,
+      gameRoomID,
       leftArmLeftRef,
       rightArmRightRef,
       canvasSize,
       canvasRef,
-      setIsGameStarted,
-      setIsGoalReached,
-      setCountdown,
       userName
     ) as WebRTCResult;
 
@@ -100,28 +103,12 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
     engineRef,
     leftArmLeftRef,
     rightArmRightRef,
-    mouseRef,
-    bombRef,
     nestjsSocketRef,
-  });
-
-  useSimulation({
-    isSimStarted,
-    leftArmLeftRef,
-    rightArmRightRef,
-    mouseRef,
-    bombRef,
-    nestjsSocketRef,
-    explodeBomb: () => console.log("bomb exploded"),
-    winGame: () => {
-      alert("game cleared");
-      resetGameObjects(mouseRef, bombRef, setIsSimStarted, setIsGameStarted);
-    },
-    loseGame: () => {
-      alert("game over");
-      resetGameObjects(mouseRef, bombRef, setIsSimStarted, setIsGameStarted);
-    },
-  });
+    isSimStarted },
+    setIsSimStarted,
+    setIsGameStarted,
+    setIsGoalReached
+  );
 
   // =============== 게임 시작 이벤트 ===============
   // 왼팔 및 오른팔 사각형의 위치를 매 프레임마다 업데이트
@@ -212,9 +199,9 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       {isGameStarted && countdown && countdown > 0 && (
         <div id="countdown">{countdown}</div>
       )}
-      {!isGameStarted && (
-        <button onClick={startGame} id="start-button">
-          Start Game
+      {!isPlayerReady && (
+        <button onClick={readyGame} id="start-button">
+          준비 완료
         </button>
       )}
 

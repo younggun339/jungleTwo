@@ -31,7 +31,7 @@ const Home: React.FC = () => {
           <img
             src="/images/web_light_sq_SU@2x.png"
             alt="Google login"
-            style={{ width: "130px", height: "auto", marginRight: "10px"  }}
+            style={{ width: "130px", height: "auto", marginRight: "10px" }}
             onClick={handleGoogleLogin}
           />
         </div>

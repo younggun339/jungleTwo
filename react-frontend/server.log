@@ -1,5 +1,0 @@
-
-> all@0.1.0 start
-> react-scripts --max-http-header-size=2048 start
-
-Something is already running on port 3000.
