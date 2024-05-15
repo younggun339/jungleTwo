@@ -4,7 +4,6 @@ import { Socket } from "socket.io-client";
 /**
  * 비디오 스트림에서 이미지를 캡처하고, 이를 WebSocket을 통해 서버로 전송하는 함수.
  *
- * @param stream - 비디오 스트림 객체.
  * @param videoRef - 비디오 태그의 ref.
  * @param canvasRef - 캔버스 태그의 ref.
  * @param socketRef - Socket.IO 클라이언트 인스턴스의 ref.
@@ -12,7 +11,6 @@ import { Socket } from "socket.io-client";
  * @returns 정리 함수 (캡처 중지를 위해 호출)
  */
 const startCapturing = (
-  stream: MediaStream,
   videoRef: RefObject<HTMLVideoElement>,
   canvasRef: RefObject<HTMLCanvasElement>,
   socketRef: RefObject<Socket | null>,
@@ -20,7 +18,6 @@ const startCapturing = (
 ): (() => void) => {
   const video = videoRef.current;
   const canvas = canvasRef.current;
-  console.log("video: ", video);
   // 캔버스가 없다면 함수 종료
   if (!canvas || !video) return () => {};
 
@@ -47,7 +44,7 @@ const startCapturing = (
 
       // 캔버스에서 이미지를 Base64 문자열로 추출
       const imageData = canvas.toDataURL("image/jpeg");
-      console.log(imageData.slice(0, 100) + "...");
+      // console.log(imageData.slice(0, 100) + "...");
 
       // 이미지 데이터를 서버로 전송 (socketRef.current가 null이 아닌지 확인)
       if (socketRef.current) {
@@ -58,30 +55,11 @@ const startCapturing = (
         }
       }
     }
-  }, 500);
+  }, 200);
   return () => {
     clearInterval(interval);
     window.removeEventListener("resize", resizeCanvas);
   };
-  // console.log(imageData.slice(0, 100) + "...");
-  // 서버로 이미지 데이터 전송
-  // const url =
-  //   myIndex.current === 0 ? "/image-capture-R" : "/image-capture-R";
-  // fetch(url, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ image: imageData }),
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log("Image sent successfully:", data);
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error sending image:", error);
-  //   });
 };
-// }, 500);
 
 export default startCapturing;

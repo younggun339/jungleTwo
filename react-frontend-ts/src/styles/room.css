@@ -1,421 +1,260 @@
-@import url('https://fonts.googleapis.com/css2?family=Dongle&family=Nanum+Gothic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Orbit&display=swap');
 
-a {
-  text-decoration: none;
-}
-
-.profile {
-  width: 3%;
-}
-
-.Container {
-  margin: 40px;
-  display: flex;
-  flex-direction: column;
-  /* 세로로 정렬 */
-}
-
-.Logo {
-  margin-bottom: 20px;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-  /* 로고 아래 여백 */
-}
-
-.SplitContainer {
-  display: flex;
-}
-
-.CreateRoomContainer {
-  padding: 0 10px;
-  /* 좌우 여백 조절 */
-  align-items: center;
-}
-.CreateRoom {
-  text-align: center;
-  line-height: 2.5;
-  border: 2px solid #ccc;
-  /* 테두리 추가 */
-  border-radius: 20px;
-  /* 테두리의 모서리를 둥글게 만듭니다. */
-  padding: 20px;
-  padding-top: 50px;
-  padding-bottom: 80px;
-  /* 내부 여백 설정 */
-}
-
-.RoomListContainer {
-  margin: 40px;
-  flex: 1;
-  padding: 0 10px;
-  /* 좌우 여백 조절 */
-}
-
-.roomButton {
-  width: 100%;
-  height: 300px;
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: 2px solid #007bff;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  /* 링크의 밑줄 제거 */
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  /* 호버 시 부드러운 전환 효과 추가 */
-  margin-bottom: 10px;
-}
-
-.roomButton:hover {
-  background-color: #0056b3;
-  /* 호버 시 배경색 변경 */
-  border-color: #0056b3;
-  /* 호버 시 테두리 색상 변경 */
-  cursor: pointer;
-}
-
-.inputGroup {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column; /* 세로 방향으로 아이템을 나열합니다. */
-  align-items: center; /* 아이템을 수평으로 가운데 정렬합니다. */
-}
-.label {
-  margin-right: 10px;
-  font-size: 16px;
-}
-
-.inputField {
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s;
-}
-
-.inputField:focus {
-  outline: none;
-  border-color: #007bff;
-}
-
-.List a {
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: 2px solid #007bff;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-}
-.refreshButton{
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: 2px solid #007bff;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  /* 링크의 밑줄 제거 */
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  /* 호버 시 부드러운 전환 효과 추가 */
-}
-
-/* 삭제해도 상관 없어유*/
 body{
-  font-family: "Nanum Gothic", sans-serif;
-  text-align: center;
-  background-color: white;
-  display: flex;
-  justify-content: center; /* 수평 가운데 정렬 */
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    height: 100vh;
+    /* background-image: url('/images/bg.webp'); */
+    background-size: cover;
 }
-.CreateRoom2{
-  --bg: #fff;
-  --text: #382b22;
-  --light-pink: #fff0f0;
-  --pink: #ffe9e9;
-  --dark-pink: #f9c4d2;
-  --pink-border: #b18597;
-  --pink-shadow: #ffe3e2;
-  text-align: center;
-  width: 300pt;
-  height: 200pt;
-  line-height: 2.5;
-  margin-bottom: 20px;
-  font-weight: 600;
-  color: var(--text);
-  text-transform: uppercase;
-  padding: 1.25em 2em;
-  background: var(--light-pink);
-  border: 2px solid var(--pink-border);
-  border-radius: 0.75em;
-  transform-style: preserve-3d;
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-.CreateRoom2 input{
-  display: block; 
-  margin: 0 auto;
-  width: 90%; 
-}
-.inputField2 {
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #b18597;
-  border-radius: 4px;
-  transition: border-color 0.3s;
-}
-.inputField2:focus {
-  outline: none;
-  border-color: #382b22;
-}
-.CreateRoom2::before {
-  position: absolute;
-  content: '';
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--dark-pink);
-  border-radius: inherit;
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0.625em 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0.75em, -1em);
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-.roomButtonText{
-  font-size: 17px;
-  padding-top: 15px;
-}
-button.roomButton2{
-  --text: #382b22;
-  --light-pink: #ffffe0;
-  --pink: #fff2cc;
-  --dark-pink: #edcb95;
-  --pink-border: #cc9900;
-  --pink-shadow: #ffe699;
-  font-family: "Nanum Gothic", sans-serif;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  width: 500px;
-  height: 200px;
-  margin-bottom: 30px;
-  font-weight: 600;
-  color: var(--text);
-  text-transform: uppercase;
-  padding: 1.25em 2em;
-  background: var(--light-pink);
-  border: 2px solid var(--pink-border);
-  border-radius: 0.75em;
-  transform-style: preserve-3d;
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-
-button.roomButton2::before {
-  position: absolute;
-  content: '';
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--dark-pink);
-  border-radius: inherit;
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0.625em 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0.75em, -1em);
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-button.roomButton2:hover {
-  cursor: pointer;
-  background: var(--pink);
-  transform: translate(0, 0.25em);
-}
-button.roomButton2:hover::before {
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0.5em 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0.5em, -1em);
-}
-
-button.roomButton2:active {
-  background: var(--pink);
-  transform: translate(0em, 0.75em);
-}
-
-button.roomButton2:active::before {
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0, -1em);
-}
-
-button.refreshRoom{
-  --bg: #fff;
-  --text: #382b22;
-  --light-pink: #fff0f0;
-  --pink: #ffe9e9;
-  --dark-pink: #f9c4d2;
-  --pink-border: #b18597;
-  --pink-shadow: #ffe3e2;
-  font-family: "Nanum Gothic", sans-serif;
-  font-size: 12px;
-  float: right;
-  margin-bottom: 20px;
-  font-weight: 600;
-  color: var(--text);
-  text-transform: uppercase;
-  padding: 1.25em 2em;
-  background: var(--light-pink);
-  border: 2px solid var(--pink-border);
-  border-radius: 0.75em;
-  transform-style: preserve-3d;
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-
-button.refreshRoom::before {
-  position: absolute;
-  content: '';
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--dark-pink);
-  border-radius: inherit;
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0.625em 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0.75em, -1em);
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-
-button.refreshRoom:hover {
-  cursor: pointer;
-  background: var(--pink);
-  transform: translate(0, 0.25em);
-}
-
-button.refreshRoom:hover::before {
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0.5em 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0.5em, -1em);
-}
-
-button.refreshRoom:active {
-  background: var(--pink);
-  transform: translate(0em, 0.75em);
-}
-
-button.refreshRoom:active::before {
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0, -1em);
-}
-.RoomListContainer2{
-  --text: #382b22;
-  --light-pink: #ffffe0;
-  --pink: #e6d3d3;
-  --dark-pink: #edcb95;
-  --pink-border: #cc9900;
-  --pink-shadow: #ffe699;
-  display: flex;
-  justify-content: center;
-  width: 450pt;
-  line-height: 2.5;
-  margin-left: 50px;
-  margin-bottom: 20px;
-  font-weight: 600;
-  color: var(--text);
-  text-transform: uppercase;
-  padding: 1.25em 2em;
-  background: var(--light-pink);
-  border: 2px solid var(--pink-border);
-  border-radius: 0.75em;
-  transform-style: preserve-3d;
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-.RoomListContainer2:before {
-  position: absolute;
-  content: '';
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--dark-pink);
-  border-radius: inherit;
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0.625em 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0.75em, -1em);
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
-}
-.RoomListContainerButtons{
-  display: flex;
-  justify-content: center;
-  button.refreshRoom{
-    margin: 15px;
-  }
-}
-@media (max-width: 1600px) {
-  .Logo{
-    width: 100%;
-  }
-
-  .RoomListContainer2 {
-    width: 100%;
-    font-size: 12px;
-
-    button.refreshRoom{
-      width: 20%;
-      font-size: 10px;
-      margin-right: 10px;
-    }
-
-  }
-  .CreateRoom2{
-    width: 90%;
-    h1{
-      font-size: 18px;
-    }
-    button.refreshRoom{
-      width: 35%;
-      font-size: 10px;
-    }
-    button.refreshRoom2{
-      width: 800px;
-      font-size: 10px;
-    }
-  }
-  .roomButton2{
-    width: 200px;
-    h3{
-      font-size: 17px;
-    }
-    img{
-      width: 80pt;
-    }
+.totalContain {
+    /* border: solid; */
+    height: 95vh;
     display: flex;
-    justify-content: space-between;
-  }
-  .RoomListContainerButtons{
+    flex-direction: column;
+}
+
+.header {
+    /* border: solid; */
+    height: 20rem;
     display: flex;
-    justify-content: center;
-    button.refreshRoom{
-      width: 8rem;
-      height: 3rem;
-      margin: 10px;
-    }
-    margin-bottom: 10px;
-  }
-  .hi{
-    h1{
-      font-size: 1.8em;
-    }
-    width:100%;
-    display: flex;
-    flex-direction:column;
+    font-size: 5rem;
     align-items: center;
+    justify-content: space-between;
+    .loginButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 12rem;
+        height: 3rem;
+        font-size: 1.5rem;
+        margin-left: 2rem;
+    }
+    .logo {
+    margin-left: auto;
+    margin-right: auto;
+    }
+    
+    .searchInput {
+    width: 50rem;
+    height: 4rem;
+    font-size: 2rem;
+    margin-right: 1rem;
+    border: solid 0.3rem #b39ddb;
+    border-radius: 1rem;
+    }
+  
+    .roomSearch {
+    width: 11rem;
+    height: 5rem;
+    font-size: 1.5rem;
+    }
+
+    .profile {
+    white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+    font-size: 1.5rem;
+    }
+    .profile > img {
+    width: 30%;
+    }
+}
+
+.contain {
+    width: 85%;
+    height: 70rem;
+    margin: auto;
+    display: flex;
+}
+
+.createRoomContain {
+    width: 30%;
+    height: 50rem;
+    margin-right: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color:  rgba(237, 231, 246, 0.8);
+    border-radius: 1rem;
+    .createButton{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 5rem;
+        font-size: 2rem;
+        opacity: 1;
+    }
+    .title { 
+    font-weight: bolder;
+    font-size: 5rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    opacity: 1;
+    }
+    .createRoom {
+        width: 80%;
+        height: 35rem;
+        border: solid;
+        background-color: #9575cd;
+        font-size: 2rem;
+        border-color: #b39ddb;
+        border-radius: 1rem;
+        opacity: 1;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        p{
+            font-weight: bold;
+            color: rgb(45, 44, 44);
+        }
+    }
+    .inputField {
+        font-size: 2rem;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box; 
+        margin-bottom: 1px;
+        border: solid 0.3rem #b39ddb;
+        border-radius: 1rem;
+        opacity: 1;
+    }
+}
+button {
+    font-family: "IBM Plex Sans KR", sans-serif;
+    --text: #ede7f6;
+    --light-pink: #673ab7;
+    --pink: #7e57c2;
+    --dark-pink: #512dab;
+    --pink-border: #2e1793;
+    --pink-shadow: #b39ddb;
+    font-weight: 600;
+    color: var(--text);
+    text-transform: uppercase;
+    padding: 1.25em 2em;
+    background: var(--light-pink);
+    border: 2px solid var(--pink-border);
+    border-radius: 0.75em;
+    transform-style: preserve-3d;
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+      background 150ms cubic-bezier(0, 0, 0.58, 1);
   }
-  .Lock{
-    width: 2rem !important;
+  
+  button::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--dark-pink);
+    border-radius: inherit;
+    box-shadow: 0 0 0 2px var(--pink-border), 0 0.625em 0 0 var(--pink-shadow);
+    transform: translate3d(0, 0.75em, -1em);
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+      box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+  }
+  button:hover {
+    cursor: pointer;
+    background: var(--pink);
+    transform: translate(0, 0.25em);
+  }
+  button:hover::before {
+    box-shadow: 0 0 0 2px var(--pink-border), 0 0.5em 0 0 var(--pink-shadow);
+    transform: translate3d(0, 0.5em, -1em);
+  }
+  
+  button:active {
+    background: var(--pink);
+    transform: translate(0em, 0.75em);
+  }
+  
+  button:active::before {
+    box-shadow: 0 0 0 2px var(--pink-border), 0 0 var(--pink-shadow);
+    transform: translate3d(0, 0, -1em);
   }
 
+.roomListContain {
+    width: 66.67%;
+    background-color:  rgba(237, 231, 246, 0.8);
+    border-radius: 1rem;
+    .roomList{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        max-height: 60rem;
+        overflow-y: auto;
+    }
+    .room {
+        width: 90%;
+        height: 10rem;
+        border: solid #b39ddb;
+        margin-top: 1rem;
+        margin-right: 1rem;
+        background-color: #9575cd;
+        border-radius: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .roomText{
+            width: 80%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+            .roomName{
+            width: 40%;
+            background-color: #7e57c2;
+            border-radius: 1rem;
+            font-weight: bold;
+            color: rgb(240, 240, 240);
+            font-size: 2.5rem;
+            padding: auto;
+             }
+            .nickname{
+            width: 30%;
+            color: white;
+            font-weight: bold;
+            background-color: #7e57c2;
+            border-radius: 1rem;
+            font-size: 2rem;
+            }
+            .go{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            margin-right: 10px;
+            width: 9rem;
+            height: 4rem;
+            }
+        }
+
+    }
+    .roomListHeader {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        .headerText {
+            display: flex;
+            justify-content: center;
+            width: 80%;
+            font-weight: bolder;
+            font-size: 5rem;
+        }
+        .refreshButton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 1rem; 
+        font-size: 2rem;
+        width: 15rem;
+        height: 5rem;
+        }
+    }
 }

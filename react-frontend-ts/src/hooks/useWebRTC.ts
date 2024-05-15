@@ -41,9 +41,6 @@ const useWebRTC = (
   rightArmRightRef: MutableRefObject<Body | null>,
   canvasSize: { x: number; y: number },
   canvasRef: MutableRefObject<HTMLCanvasElement | null>,
-  setIsGameStarted: (isGameStarted: boolean) => void,
-  setIsGoalReached: (isGoalReached: boolean) => void,
-  setCountdown: (countdown: number) => void,
   userName: string
 ): WebRTCResult => {
   const peersRef = useRef<PeerObject[]>([]);
@@ -70,7 +67,6 @@ const useWebRTC = (
         if (userVideo.current) {
           userVideo.current.srcObject = stream;
           startCapturing(
-            stream,
             userVideo,
             canvasRef,
             flaskSocketRef,
@@ -160,9 +156,9 @@ const useWebRTC = (
           });
 
           nestjsSocketRef.current!.on("game-started", () => {
-            setIsGameStarted(true);
-            setIsGoalReached(false);
-            setCountdown(3);
+            // setIsGameStarted(true);
+            // setIsGoalReached(false);
+            // setCountdown(3);
           });
         }
       });

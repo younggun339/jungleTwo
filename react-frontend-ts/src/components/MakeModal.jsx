@@ -43,19 +43,17 @@ const RoomModal = ({ room }) => {
   };
 
   return (
-    <div>
-      <button className="roomButton2" onClick={openModal} >
-          <img src="/images/mouse.webp" alt="mouse" /> 
-          <div className='roomButtonText'>
-          <h3>{room.room_name}</h3>
-          <h5>{room.room_master}</h5>
-          </div>
+    <div className='room'>
           {room.room_pw !== "" ? (
-            <img src="/images/jamkka.png" alt="room image" className='Lock' />
+            <img src='/images/lock.png' style={{width:'70px',height:'70px',marginLeft:'20px'}}></img>
             ) : (
-            <div></div>
+            <img src='/images/cheese.png' style={{width:'70px',height:'70px',marginLeft:'20px'}}></img>
           )}
-      </button>
+          <div className='roomText'>
+          <div className='roomName'>{room.room_name}</div>
+          <div className='nickname'>{room.room_master}</div>
+          <button className='go' onClick={openModal}>입장</button>
+          </div>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <h2>방 정보</h2>
         <p>제목: {room.room_name}</p>

@@ -17,7 +17,8 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   private users: User = {};
-  private room_user: { [key: string]: [string, string][] } = {};
+  // roomName: [socketID, userName, isReady][]
+  private room_user: { [key: string]: [string, string, boolean][] } = {};
   private user_room: { [key: string]: string } = {};
 
   handleConnection(client: Socket) {
@@ -89,35 +90,48 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
       id: client.id,
     });
   }
+  @SubscribeMessage('user-signal')
+  handleUserSignal(client: Socket, data: { gameRoomID: string; userName: string }) {
+    const { gameRoomID, userName } = data;
+    if (!this.room_user[gameRoomID]) {
+      this.room_user[gameRoomID] = [];
+    }
 
-  @SubscribeMessage('start-game')
-  handleStartGame(client: Socket, payload: { roomId: string }) {
-    console.log('someone started game in room:', payload.roomId);
-    const usersInThisRoom = this.users[payload.roomId].filter(
-      (id) => id !== client.id,
-    );
-    if (usersInThisRoom) {
-      usersInThisRoom.forEach((userId) => {
-        this.server.to(userId).emit('game-started');
+    if (!this.user_room[client.id]) {
+      this.user_room[client.id] = gameRoomID;
+    }
+
+    this.room_user[gameRoomID].push([client.id, userName, false]);
+    console.log(`${gameRoomID} 방에 입장 : ${this.room_user[gameRoomID]}`);
+    console.log(`현재 유저 ${userName}의 방: ${this.user_room[client.id]}`);
+
+
+    setTimeout(() => {
+      this.room_user[gameRoomID].forEach((user) => {
+        this.server.to(user[0]).emit('user', this.room_user[gameRoomID]);
       });
+    }, 2000);
+  }
+
+  @SubscribeMessage('ready-game')
+  handleStartGame(client: Socket, payload: { roomName: string, userName: string }) {
+    const roomName = payload.roomName;
+
+    // 방에 사용자 추가
+    if (!this.room_user[roomName]) {
+      this.room_user[roomName] = [];
+    }
+    this.room_user[roomName].push([client.id, payload.userName, false]);
+    this.user_room[client.id] = roomName;
+
+    // 모든 사용자에게 현재 준비 상태 전송
+    const players = this.room_user[roomName];
+    for (let i = 0; i < players.length; i++) {
+      const [clientId, name, isReady] = players[i];
+      if (name === payload.userName) {
+        players[i] = [client.id, name, true];
+      }
+      this.server.to(name).emit("response-ready", players);
     }
   }
-    @SubscribeMessage('user-signal')
-    handleUserSignal(client: Socket, data: { gameRoomID: string; userName: string }) {
-      const { gameRoomID, userName } = data;
-      if (!this.room_user[gameRoomID]) {
-        this.room_user[gameRoomID] = [];
-      }
-  
-      if (!this.user_room[client.id]) {
-        this.user_room[client.id] = gameRoomID;
-      }
-  
-      this.room_user[gameRoomID].push([client.id, userName]);
-      console.log(`${gameRoomID} 방에 입장 : ${this.room_user[gameRoomID]}`);
-      console.log(`현재 유저 ${userName}의 방: ${this.user_room[client.id]}`);
-      this.room_user[gameRoomID].forEach((user) => {
-        this.server.to(user[0]).emit('user', this.room_user[gameRoomID]);
-      });
-    }
-  }
+}

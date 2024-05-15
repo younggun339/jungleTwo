@@ -65,11 +65,9 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   }, []);
 
   const readyGame = () => {
-    console.log("if 전: ", isGameStarted);
     if (!isGameStarted) {
       setIsGameStarted(true); // <--
       setIsGoalReached(false);
-      console.log("if 후: ", isGameStarted);
       setCountdown(3);
       setShowModal(false);
 

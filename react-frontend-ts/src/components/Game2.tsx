@@ -23,10 +23,6 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   const canvasRef = useRef(null);
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
-  const mouseRef = useRef<Body | null>(null);
-  const bombRef = useRef<Body | null>(null);
-  // TODO: userParam으로 "game/"+id 이렇게 바꿔야댐
-  // const gameRoomId = "game";
   const { gameRoomID } = useParams<{ gameRoomID: string | undefined }>();
   if (!gameRoomID) {
     throw new Error("gameRoomID is required but was not provided");
@@ -44,10 +40,12 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
 
   // 인게임 및 통신 관련 소켓
   useEffect(() => {
-    nestjsSocketRef.current = io("https://zzrot.store/");
+    nestjsSocketRef.current = io("https://zzrot.store/", {
+      path: "/nestSocket",
+    });
 
     nestjsSocketRef.current.on("connect", () => {
-      nestjsSocketRef.current.emit("user-signal", { gameRoomID, userName });
+      nestjsSocketRef.current?.emit("user-signal", { gameRoomID, userName });
     });
   }, []);
 
@@ -56,8 +54,8 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
     if (flaskSocketRef.current) {
       flaskSocketRef.current.disconnect();
     }
-    flaskSocketRef.current = io("https://zzrot.store/socket.io/mediapipe/", {
-      path: "/socket.io/",
+    flaskSocketRef.current = io("https://zzrot.store/", {
+      path: "/flaskSocket",
     });
     flaskSocketRef.current.emit("flask-connect", () => {
       console.log("flask socket connected");
@@ -88,7 +86,6 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
           const readyPlayers = players.filter(
             (player: [string, string, boolean]) => player[2] === true
           );
-          console.log("현재 준비완료한 플레이어: ", readyPlayers.length);
           if (readyPlayers.length === 2) {
             alert("all users are ready!");
             setIsGameStarted(true);
@@ -130,32 +127,34 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   // =============== 게임 시작 이벤트 ===============
   // 왼팔 및 오른팔 사각형의 위치를 매 프레임마다 업데이트
   interface BodyCoordsL {
-    joint1: { x: number; y: number };
-    joint2: { x: number; y: number };
+    joint1Start: { x: number; y: number };
+    joint1End: { x: number; y: number };
   }
 
   interface BodyCoordsR {
-    joint1: { x: number; y: number };
-    joint2: { x: number; y: number };
+    joint1Start: { x: number; y: number };
+    joint1End: { x: number; y: number };
   }
 
   useEffect(() => {
     const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
-      const { joint1, joint2 } = data;
-      updateLsideSkeleton(leftArmLeftRef, joint1, joint2, canvasSize);
-      sendLeftHandJoint({ joint1, joint2 });
+      const { joint1Start, joint1End } = data;
+      console.log("joint1Start: ", joint1Start.x, "joint1End: ", joint1End.x);
+      updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
+      sendLeftHandJoint({ joint1Start, joint1End });
     };
 
     const handleRightsideBodyCoords = (data: BodyCoordsR) => {
-      const { joint1, joint2 } = data;
-      updateRsideSkeleton(rightArmRightRef, joint1, joint2, canvasSize);
-      sendRightHandJoint({ joint1, joint2 });
+      const { joint1Start, joint1End } = data;
+      updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
+      sendRightHandJoint({ joint1Start, joint1End });
     };
 
-    if (!isSimStarted) {
-      flaskSocketRef.current?.on("body-coords-L", handleLeftsideBodyCoords);
-      flaskSocketRef.current?.on("body-coords-R", handleRightsideBodyCoords);
-    } else {
+    if (!isSimStarted && indexRef.current === 0) {
+      flaskSocketRef.current?.on("body-coords-R", handleLeftsideBodyCoords);
+    } else if (!isSimStarted && indexRef.current === 1) {
+      flaskSocketRef.current?.on("body-coords-L", handleRightsideBodyCoords);
+    } else if (isSimStarted) {
       flaskSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
       flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
     }
@@ -164,124 +163,7 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       flaskSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
       flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
     };
-  }, [isSimStarted]);
-  // 좌우측 데이터를 처리하는 함수에 대한 타입 정의
-
-  // WebSocket 메시지의 타입 정의
-  // interface WebSocketMessage {
-  //   type: 'body-coords-L' | 'body-coords-R';
-  //   message: BodyCoords;
-  // }
-
-  // function App() {
-  //   const [isSimStarted, setIsSimStarted] = useState<boolean>(false);
-  //   const flaskSocketRef = useRef<WebSocket | null>(null);
-
-  //   useEffect(() => {
-  //     // WebSocket 연결 초기화
-  //     const handleLeftsideBodyCoords = (data: BodyCoords) => {
-  //       const { joint1, joint2 } = data;
-  //       updateLsideSkeleton(leftArmLeftRef, joint1, joint2, canvasSize);
-  //       sendLeftHandJoint({ joint1, joint2 });
-  //     };
-
-  //     const handleRightsideBodyCoords = (data: BodyCoords) => {
-  //       const { joint1, joint2 } = data;
-  //       updateRsideSkeleton(rightArmRightRef, joint1, joint2, canvasSize);
-  //       sendRightHandJoint({ joint1, joint2 });
-  //     };
-  //     flaskSocketRef.current = new WebSocket('ws://localhost:5000/echo');
-
-  //     flaskSocketRef.current.onopen = () => {
-  //       console.log('WebSocket Connected');
-  //     };
-
-  //     flaskSocketRef.current.onclose = () => {
-  //       console.log('WebSocket Disconnected');
-  //     };
-
-  //     // 메시지 수신 핸들러
-  //     flaskSocketRef.current.onmessage = (event) => {
-  //       const data: WebSocketMessage = JSON.parse(event.data);
-  //       if (data.type === 'body-coords-L') {
-  //         handleLeftsideBodyCoords(data.message);
-  //       } else if (data.type === 'body-coords-R') {
-  //         handleRightsideBodyCoords(data.message);
-  //       }
-  //     };
-
-  //     return () => {
-  //       flaskSocketRef.current?.close();
-  //     };
-  //   }, []);
-
-  // const [eventSource, setEventSource] = useState<EventSource | null>(null);
-  // useEffect(() => {
-  //   const handleLeftsideBodyCoords = (data: any) => {
-  //     const { joint1Start, joint1End } = data;
-  //     updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
-  //     sendLeftHandJoint({ joint1Start, joint1End });
-  //   };
-
-  //   const handleRightsideBodyCoords = (data: any) => {
-  //     const { joint1Start, joint1End } = data;
-  //     updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
-  //     sendRightHandJoint({ joint1Start, joint1End });
-  //   };
-  //   const newEventSource = new EventSource("https://zzrot.store/stream/");
-
-  //   // 'body-coords-L' 이벤트를 수신하기 위한 리스너
-  //   newEventSource.addEventListener(
-  //     "body-coords-L",
-  //     function (event) {
-  //       console.log("Received 'body-coords-L' data");
-  //       const data = JSON.parse(event.data);
-  //       console.log(data);
-  //       handleLeftsideBodyCoords(data);
-  //     },
-  //     false
-  //   );
-
-  //   // 'body-coords-R' 이벤트를 수신하기 위한 리스너
-  //   newEventSource.addEventListener(
-  //     "body-coords-R",
-  //     function (event) {
-  //       console.log("Received 'body-coords-R' data");
-  //       const data = JSON.parse(event.data);
-  //       console.log(data);
-  //       handleRightsideBodyCoords(data);
-  //     },
-  //     false
-  //   );
-  //   newEventSource.addEventListener(
-  //     "error",
-  //     function (event) {
-  //       console.log(event);
-  //     },
-  //     false
-  //   );
-
-  //   newEventSource.onmessage = (event: MessageEvent) => {
-  //     const data = JSON.parse(event.data);
-  //     console.log("onmassage");
-  //     console.log(data);
-  //     if (data["body-coords-L"]) {
-  //       console.log("body-coords-L");
-  //       handleLeftsideBodyCoords(data["body-coords-L"]);
-  //     }
-  //     if (data["body-coords-R"]) {
-  //       handleRightsideBodyCoords(data["body-coords-R"]);
-  //     }
-  //   };
-
-  //   setEventSource(newEventSource);
-
-  //   return () => {
-  //     eventSource?.close();
-  //   };
-  // }, []);
-
-  // eventSource?.addEventListener("message", (event) => {});
+  }, [isSimStarted, indexRef.current]);
 
   useEffect(() => {
     if (isGameStarted && countdown && countdown > 0) {

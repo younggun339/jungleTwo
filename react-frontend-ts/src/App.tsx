@@ -34,7 +34,6 @@ const App: React.FC = () => {
             <RoomCheck>{userName && <Game2 userName={userName} />}</RoomCheck>
           }
         />
-        <Route path="/WSE" element={<Wse />} />
       </Routes>
     </Router>
   );
