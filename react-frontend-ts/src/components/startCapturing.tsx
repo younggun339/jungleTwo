@@ -62,7 +62,7 @@ const startCapturing = (
 
       // 캔버스에서 이미지를 Base64 문자열로 추출
       const imageData = canvas.toDataURL("image/jpeg");
-      console.log(imageData.slice(0, 100) + "...");
+      // console.log(imageData.slice(0, 100) + "...");
       // 서버로 이미지 데이터 전송
       const url =
         myIndex.current === 0 ? "/image-capture-R" : "/image-capture-R";

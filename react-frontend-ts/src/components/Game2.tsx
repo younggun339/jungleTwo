@@ -27,13 +27,16 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   const bombRef = useRef<Body | null>(null);
   // TODO: userParam으로 "game/"+id 이렇게 바꿔야댐
   // const gameRoomId = "game";
-  const { gameRoomID } = useParams<{ gameRoomID: string }>();
+  const { gameRoomID } = useParams<{ gameRoomID: string | undefined }>();
+  if (!gameRoomID) {
+    throw new Error("gameRoomID is required but was not provided");
+  }
 
   const [showModal, setShowModal] = useState(true);
   const [countdown, setCountdown] = useState<number | null>(3);
   const [isRightCamLoaded, setIsRightCamLoaded] = useState(false);
   const [isMyCamLoaded, setIsMyCamLoaded] = useState(false);
-  
+
   const [isSimStarted, setIsSimStarted] = useState(false);
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [isGoalReached, setIsGoalReached] = useState(false);
@@ -66,23 +69,31 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
 
   const readyGame = () => {
     if (nestjsSocketRef.current) {
-      nestjsSocketRef.current.emit("ready-game", { roomName: gameRoomID, userName });
+      nestjsSocketRef.current.emit("ready-game", {
+        roomName: gameRoomID,
+        userName,
+      });
       setIsPlayerReady(true);
     }
   };
-  
+
   useEffect(() => {
     if (nestjsSocketRef.current) {
-      nestjsSocketRef.current.on("response-ready", (players: [string, string, boolean][]) => {
-        const readyPlayers = players.filter((player: [string, string, boolean]) => player[2] === true);
-        console.log("현재 준비완료한 플레이어: ", readyPlayers.length);
-        if (readyPlayers.length === 2) {
-          alert("all users are ready!");
-          setIsGameStarted(true);
-          setIsGoalReached(false);
-          setCountdown(3);
+      nestjsSocketRef.current.on(
+        "response-ready",
+        (players: [string, string, boolean][]) => {
+          const readyPlayers = players.filter(
+            (player: [string, string, boolean]) => player[2] === true
+          );
+          console.log("현재 준비완료한 플레이어: ", readyPlayers.length);
+          if (readyPlayers.length === 2) {
+            alert("all users are ready!");
+            setIsGameStarted(true);
+            setIsGoalReached(false);
+            setCountdown(3);
+          }
         }
-      });
+      );
     }
   }, []);
 
@@ -97,14 +108,16 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       userName
     ) as WebRTCResult;
 
-  useMatterSetup({
-    canvasSize,
-    sceneRef,
-    engineRef,
-    leftArmLeftRef,
-    rightArmRightRef,
-    nestjsSocketRef,
-    isSimStarted },
+  useMatterSetup(
+    {
+      canvasSize,
+      sceneRef,
+      engineRef,
+      leftArmLeftRef,
+      rightArmRightRef,
+      nestjsSocketRef,
+      isSimStarted,
+    },
     setIsSimStarted,
     setIsGameStarted,
     setIsGoalReached
@@ -148,6 +161,41 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
     };
   }, [isSimStarted]);
+
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
+  useEffect(() => {
+    const handleLeftsideBodyCoords = (data: any) => {
+      const { joint1Start, joint1End } = data;
+      updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
+      sendLeftHandJoint({ joint1Start, joint1End });
+    };
+
+    const handleRightsideBodyCoords = (data: any) => {
+      const { joint1Start, joint1End } = data;
+      updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
+      sendRightHandJoint({ joint1Start, joint1End });
+    };
+    const newEventSource = new EventSource("http://zzrot.store/stream/");
+
+    newEventSource.onmessage = (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      console.log("onmassage");
+      console.log(data);
+      if (data["body-coords-L"]) {
+        console.log("body-coords-L");
+        handleLeftsideBodyCoords(data["body-coords-L"]);
+      }
+      if (data["body-coords-R"]) {
+        handleRightsideBodyCoords(data["body-coords-R"]);
+      }
+    };
+
+    setEventSource(newEventSource);
+
+    return () => {
+      eventSource?.close();
+    };
+  }, []);
 
   useEffect(() => {
     if (isGameStarted && countdown && countdown > 0) {

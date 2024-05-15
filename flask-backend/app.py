@@ -137,14 +137,14 @@ def handle_image_capture():
     image_bytes = base64.b64decode(image_data)
     image = Image.open(io.BytesIO(image_bytes))
     frame = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-    print("Image Object:", image)
+    # print("Image Object:", image)
     # 이미지 분석
     results = pose.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
     if results.pose_landmarks:
         joint1Start = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_ELBOW]
         joint1End = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_WRIST]
         # 분석 결과를 데이터 스토어에 저장
-        print(joint1Start)
+        # print(joint1Start)
         data_store['body-coords-L'] = {
             'joint1Start': {'x': joint1Start.x, 'y': joint1Start.y},
             'joint1End': {'x': joint1End.x, 'y': joint1End.y}
