@@ -45,48 +45,43 @@ const startCapturing = (
     if (video.readyState === video.HAVE_ENOUGH_DATA) {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      //     // 캔버스에서 이미지를 Base64 문자열로 추출
-      //     const imageData = canvas.toDataURL("image/jpeg");
-      //     console.log(imageData.slice(0, 100) + "...");
-
-      //     // 이미지 데이터를 서버로 전송 (socketRef.current가 null이 아닌지 확인)
-      //     if (socketRef.current) {
-      //       if (myIndex.current === 0) {
-      //         socketRef.current.emit("image-capture-R", { image: imageData });
-      //       } else {
-      //         socketRef.current.emit("image-capture-L", { image: imageData });
-      //       }
-      //     }
-      //   }
-      // }, 500);
-
       // 캔버스에서 이미지를 Base64 문자열로 추출
       const imageData = canvas.toDataURL("image/jpeg");
-      // console.log(imageData.slice(0, 100) + "...");
-      // 서버로 이미지 데이터 전송
-      const url =
-        myIndex.current === 0 ? "/image-capture-R" : "/image-capture-R";
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ image: imageData }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Image sent successfully:", data);
-        })
-        .catch((error) => {
-          console.error("Error sending image:", error);
-        });
+      console.log(imageData.slice(0, 100) + "...");
+
+      // 이미지 데이터를 서버로 전송 (socketRef.current가 null이 아닌지 확인)
+      if (socketRef.current) {
+        if (myIndex.current === 0) {
+          socketRef.current.emit("image-capture-R", { image: imageData });
+        } else {
+          socketRef.current.emit("image-capture-L", { image: imageData });
+        }
+      }
     }
   }, 500);
-
   return () => {
     clearInterval(interval);
     window.removeEventListener("resize", resizeCanvas);
   };
+  // console.log(imageData.slice(0, 100) + "...");
+  // 서버로 이미지 데이터 전송
+  // const url =
+  //   myIndex.current === 0 ? "/image-capture-R" : "/image-capture-R";
+  // fetch(url, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({ image: imageData }),
+  // })
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     console.log("Image sent successfully:", data);
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error sending image:", error);
+  //   });
 };
+// }, 500);
 
 export default startCapturing;

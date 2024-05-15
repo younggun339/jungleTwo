@@ -45,7 +45,10 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   // 인게임 및 통신 관련 소켓
   useEffect(() => {
     nestjsSocketRef.current = io("https://zzrot.store/");
-    nestjsSocketRef.current.emit("user-signal", { gameRoomID, userName });
+
+    nestjsSocketRef.current.on("connect", () => {
+      nestjsSocketRef.current.emit("user-signal", { gameRoomID, userName });
+    });
   }, []);
 
   // mediapipie 관련 소켓
@@ -54,7 +57,7 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       flaskSocketRef.current.disconnect();
     }
     flaskSocketRef.current = io("https://zzrot.store/socket.io/mediapipe/", {
-      path: "/socket.io/mediapipe/",
+      path: "/socket.io/",
     });
     flaskSocketRef.current.emit("flask-connect", () => {
       console.log("flask socket connected");
@@ -100,6 +103,7 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
   const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } =
     useWebRTC(
       nestjsSocketRef,
+      flaskSocketRef,
       gameRoomID,
       leftArmLeftRef,
       rightArmRightRef,
