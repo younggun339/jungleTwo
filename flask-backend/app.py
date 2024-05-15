@@ -1,7 +1,7 @@
 # app.py
 from flask import Flask, Response, request, jsonify, session
 from flask_socketio import SocketIO, emit
-from flask_sse import sse
+from flask_sockets import Sockets
 from flask_cors import CORS
 import base64
 from PIL import Image
@@ -14,6 +14,8 @@ import mediapipe as mp
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 import datetime
+from gevent import pywsgi
+from geventwebsocket.handler import WebSocketHandler
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,6 +23,7 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__, static_folder='../react-frontend-ts/build', static_url_path='/')
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app, resources={r"/stream/*": {"origins": "*"}})  # Allow CORS for all domains
+sockets = Sockets(app)
 
 mpPose = mp.solutions.pose
 mp_hands = mp.solutions.hands
@@ -134,9 +137,21 @@ def stream():
             time.sleep(1)  # 데이터 확인 주기
     return Response(event_stream(), mimetype='text/event-stream')
 
+# WebSocket 경로
+
+@sockets.route('/stream/')
+def stream_socket(ws):
+    print("stream")
+    while not ws.closed:
+        message = ws.receive()
+        if message:
+            print("Received message:", message)
+            ws.send(message)
+
+
 @app.route('/image-capture-R', methods=['POST'])
 def handle_image_capture():
-    print("Received image data")
+    # print("Received image data")
     content = request.json
     image_data = content['image'].split(",")[1]
     image_bytes = base64.b64decode(image_data)
@@ -150,11 +165,20 @@ def handle_image_capture():
         joint1End = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_WRIST]
         # 분석 결과를 데이터 스토어에 저장
         # print(joint1Start)
-        data_store['body-coords-R'] = {
-            'joint1Start': {'x': joint1Start.x, 'y': joint1Start.y},
-            'joint1End': {'x': joint1End.x, 'y': joint1End.y}
-        }
+        # data_store['body-coords-R'] = {
+        #     'joint1Start': {'x': joint1Start.x, 'y': joint1Start.y},
+        #     'joint1End': {'x': joint1End.x, 'y': joint1End.y}
+        # }
         # stream_results();
+          # 결과 데이터 구성
+        data = {
+            'type': 'body-coords-R',
+            'message': {
+                'joint1Start': {'x': joint1Start.x, 'y': joint1Start.y},
+                'joint1End': {'x': joint1End.x, 'y': joint1End.y}
+            }
+        }
+        # ws.send(json.dumps(data))
     return jsonify(success=True)        
 
 # BackgroundScheduler를 이용해 데이터 스토어를 주기적으로 업데이트하는 함수
@@ -168,10 +192,19 @@ def update_data_store():
         print(f"Data updated at {datetime.datetime.now()}")
 
 
-# BackgroundScheduler를 이용해 주기적인 작업 설정
-sched = BackgroundScheduler(daemon=True)
-sched.add_job(update_data_store, 'interval', seconds=1)
-sched.start()
+# # BackgroundScheduler를 이용해 주기적인 작업 설정
+# sched = BackgroundScheduler(daemon=True)
+# sched.add_job(update_data_store, 'interval', seconds=1)
+# sched.start()
 
 if __name__ == "__main__":
-    app.run(app, debug=True, ssl_context=('cert.pem', 'key.pem'), threaded=False)
+    # from gevent import pywsgi
+    # from geventwebsocket.handler import WebSocketHandler
+
+    # server = pywsgi.WSGIServer(('', 5000), app, handler_class=WebSocketHandler)
+    # print("Server listening on: http://localhost:5000")
+    # server.serve_forever()
+    # app.run(app, debug=True, ssl_context=('cert.pem', 'key.pem'), threaded=False)
+    server = pywsgi.WSGIServer(('0.0.0.0', 5000), app, handler_class=WebSocketHandler, ssl_context=('cert.pem', 'key.pem'))
+    print("서버 시작")
+    server.serve_forever()

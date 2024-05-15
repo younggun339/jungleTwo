@@ -19,7 +19,7 @@ const pcConfig = {
   ],
 };
 
-const retryFetch = async (url: any, options: any, retries = 20) => {
+const retryFetch = async (url, options, retries = 20) => {
   for (let i = 0; i < retries; i++) {
     try {
       const response = await fetch(url, options);
@@ -40,6 +40,9 @@ const useWebRTC = (
   rightArmRightRef: MutableRefObject<Body | null>,
   canvasSize: { x: number; y: number },
   canvasRef: MutableRefObject<HTMLCanvasElement | null>,
+  setIsGameStarted: (isGameStarted: boolean) => void,
+  setIsGoalReached: (isGoalReached: boolean) => void,
+  setCountdown: (countdown: number) => void,
   userName: string
 ): WebRTCResult => {
   const peersRef = useRef<PeerObject[]>([]);
@@ -65,11 +68,6 @@ const useWebRTC = (
       .then((stream) => {
         if (userVideo.current) {
           userVideo.current.srcObject = stream;
-          console.log("stream: ", stream);
-          console.log("userVideo: ", userVideo.current);
-          console.log("canvasRef: ", canvasRef.current);
-          console.log("nestjsSocketRef: ", nestjsSocketRef.current);
-          console.log("indexRef: ", indexRef.current);
           startCapturing(
             stream,
             userVideo,
@@ -98,17 +96,17 @@ const useWebRTC = (
             }
           });
 
-          nestjsSocketRef.current.on("delete", async (data: string) => {
+          nestjsSocketRef.current.on('delete', async (data: string) => {
             try {
               await retryFetch("https://zzrot.store/room/delete", {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ room_id: data }),
               });
             } catch (error) {
-              console.error("Fetch failed after retries", error);
+              console.error('Fetch failed after retries', error);
             }
           });
 
@@ -158,6 +156,12 @@ const useWebRTC = (
             const peers = peersRef.current.filter((p) => p.peerID !== id);
             peersRef.current = peers;
             setPeers(peers);
+          });
+
+          nestjsSocketRef.current!.on("game-started", () => {
+            setIsGameStarted(true);
+            setIsGoalReached(false);
+            setCountdown(3);
           });
         }
       });

@@ -10,6 +10,7 @@ import "./styles/App.css";
 import "./styles/game.css";
 import "./styles/home.css";
 import SSE from "./components/SSE";
+import Wse from "./components/websocket";
 /**
  * App 컴포넌트는 웹 애플리케이션의 메인 라우팅을 담당합니다.
  * 이 구성 요소는 사이트의 여러 페이지로의 라우팅을 관리합니다.
@@ -33,7 +34,7 @@ const App: React.FC = () => {
             <RoomCheck>{userName && <Game2 userName={userName} />}</RoomCheck>
           }
         />
-        <Route path="/SSE" element={<SSE />} />
+        <Route path="/WSE" element={<Wse />} />
       </Routes>
     </Router>
   );
