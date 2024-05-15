@@ -25,7 +25,7 @@ function SSE() {
   return (
     <div>
       <header>
-        <p>Received number: {number}</p>
+        <p>Received number</p>
       </header>
     </div>
   );

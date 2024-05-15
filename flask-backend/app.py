@@ -1,6 +1,7 @@
 # app.py
 from flask import Flask, Response, request, jsonify, session
 from flask_socketio import SocketIO, emit
+from flask_sse import sse
 from flask_cors import CORS
 import base64
 from PIL import Image
@@ -11,6 +12,8 @@ import numpy as np
 import cv2
 import mediapipe as mp
 import logging
+from apscheduler.schedulers.background import BackgroundScheduler
+import datetime
 
 logging.basicConfig(level=logging.INFO)
 
@@ -149,7 +152,24 @@ def handle_image_capture():
             'joint1Start': {'x': joint1Start.x, 'y': joint1Start.y},
             'joint1End': {'x': joint1End.x, 'y': joint1End.y}
         }
+        stream_results();
     return jsonify(success=True)        
+
+app.register_blueprint(sse, url_prefix= 'image-capture-R' )
+def server_side_event():
+    """데이터 스토어를 업데이트하고 클라이언트에게 실시간으로 전송"""
+    with app.app_context():
+        if 'body-coords-L' in data_store:
+            print(data_store['body-coords-L'])
+            sse.publish(data_store['body-coords-L'], type='body-coords-L')
+        if 'body-coords-R' in data_store:
+            sse.publish(data_store['body-coords-R'], type='body-coords-R')
+        print(f"Data sent at {datetime.datetime.now()}")
+
+# BackgroundScheduler를 이용해 주기적인 작업 설정
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(server_side_event, 'interval', seconds=10)
+sched.start()
 
 if __name__ == "__main__":
     app.run(app, debug=True, ssl_context=('cert.pem', 'key.pem'), threaded=False)

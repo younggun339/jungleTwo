@@ -175,7 +175,38 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
       sendRightHandJoint({ joint1Start, joint1End });
     };
-    const newEventSource = new EventSource("http://zzrot.store/stream/");
+    const newEventSource = new EventSource("https://zzrot.store/stream/");
+
+    // 'body-coords-L' 이벤트를 수신하기 위한 리스너
+    newEventSource.addEventListener(
+      "body-coords-L",
+      function (event) {
+        console.log("Received 'body-coords-L' data");
+        const data = JSON.parse(event.data);
+        console.log(data);
+        handleLeftsideBodyCoords(data);
+      },
+      false
+    );
+
+    // 'body-coords-R' 이벤트를 수신하기 위한 리스너
+    newEventSource.addEventListener(
+      "body-coords-R",
+      function (event) {
+        console.log("Received 'body-coords-R' data");
+        const data = JSON.parse(event.data);
+        console.log(data);
+        handleRightsideBodyCoords(data);
+      },
+      false
+    );
+    newEventSource.addEventListener(
+      "error",
+      function (event) {
+        console.log(event);
+      },
+      false
+    );
 
     newEventSource.onmessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data);
@@ -196,6 +227,8 @@ const Game2: React.FC<Game2Props> = ({ userName }) => {
       eventSource?.close();
     };
   }, []);
+
+  eventSource?.addEventListener("message", (event) => {});
 
   useEffect(() => {
     if (isGameStarted && countdown && countdown > 0) {
