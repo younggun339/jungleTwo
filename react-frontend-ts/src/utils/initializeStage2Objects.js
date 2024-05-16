@@ -91,9 +91,9 @@ export const initializeStage2Objects = (
     //사라지는 벽
     const collapsesGround = (engine, mouse) => {
       if (
-        925 <= mouse.position.x &&
-        mouse.position.x <= 930 &&
-        217 === Math.floor(mouse.position.y)
+        925 <= mouseRef.current.position.x &&
+        mouseRef.current.position.x <= 930 &&
+        217 === Math.floor(mouseRef.current.position.y)
       ) {
         Composite.remove(engine.world, ground);
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
@@ -523,7 +523,7 @@ export const initializeStage2Objects = (
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
           if (!(cat.render.fillStyle === "red")) {
-            alert("게임오버");
+            setResultState(4);
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {
             cat.collisionFilter = {
@@ -539,7 +539,7 @@ export const initializeStage2Objects = (
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
           mouseRef.current.isStatic = true;
-          alert("게임 클리어!");
+            setResultState(0);
         }
         //------------cheese--------------
         //------------leftArm------------

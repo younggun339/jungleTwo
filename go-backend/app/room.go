@@ -146,5 +146,23 @@ func DeleteRoom(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func SearchRoom(w http.ResponseWriter, r *http.Request) {
-	GetRoom(mySQL, "")
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var newRoom RoomState
+	json.Unmarshal(body, &newRoom)
+
+	roomList := GetRoom(mySQL, newRoom.RoomName)
+
+	jsonData, err := json.Marshal(roomList)
+
+	if err != nil {
+		fmt.Println("Error marshaling JSON:", err)
+		return
+	}
+
+	fmt.Println(string(jsonData))
+	fmt.Fprint(w, string(jsonData))
 }

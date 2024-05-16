@@ -30,7 +30,7 @@ const useStage1Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.15;
+    engine.world.gravity.y = 0.5;
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -165,7 +165,8 @@ const useStage3Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.5;
+    engine.world.gravity.y = 0.15;
+    engine.world.gravity.x = 0.04;
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -232,7 +233,8 @@ const useStage4Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.5;
+    engine.world.gravity.y = 0.15;
+    engine.world.gravity.x = 0.04;
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -299,7 +301,8 @@ const useStage5Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.5;
+    engine.world.gravity.y = 0.15;
+    engine.world.gravity.x = 0.04;
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,

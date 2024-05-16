@@ -326,7 +326,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           )}
           {resultState === 2 && (
             <div>
-              <h1> 바닥 함정에 떨어졌습니다! </h1>
+              <h1> 아뜨뜨뜨뜨! </h1>
               <img src="/images/resultState_spiketrap.png" alt="Trap" />
               <button onClick={handleRetry}>다시하기</button>
               <button onClick={handleNextStage}>다음스테이지</button>
@@ -335,6 +335,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           {resultState === 3 && (
             <div>
               <h1> 폭탄에 닿았습니다! </h1>
+              <img src="/images/resultState_bomb.png" alt="Bomb" />
+              <button onClick={handleRetry}>다시하기</button>
+              <button onClick={handleNextStage}>다음스테이지</button>
+            </div>
+          )}
+          {resultState === 4 && (
+            <div>
+              <h1> 고양이에게 잡혔습니다! </h1>
               <img src="/images/resultState_bomb.png" alt="Bomb" />
               <button onClick={handleRetry}>다시하기</button>
               <button onClick={handleNextStage}>다음스테이지</button>

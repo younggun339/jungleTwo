@@ -5,13 +5,11 @@ import ChangeName from "./ChangeName"
 
 
 const CreateRoom = ({ userName }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const isLoggedIn = userName !== null;
-
-  console.log(userName)
-  console.log(isLoggedIn)
 
   const handleCreateRoom = (event) => {
     event.preventDefault(); // 기본 제출 행동 방지
@@ -92,6 +90,30 @@ const CreateRoom = ({ userName }) => {
   const profileClick = () => {
     setIsMenuVisible(!isMenuVisible); // 상태를 토글합니다.
   }
+  const searchRoom = () => {
+    const search = document.getElementById('search').value; 
+    event.preventDefault();
+    fetch("https://zzrot.store/room/search", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({room_name:search}),
+    })
+      .then(response => response.json())
+      .then(data => {
+        setRooms(data)
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   return (
     <div>
@@ -104,7 +126,10 @@ const CreateRoom = ({ userName }) => {
                 {isMenuVisible && (
                 <div className="menu">
                   <ul>
-                    <li><ChangeName/></li>
+                    <li onClick={(event) => { event.stopPropagation(); openModal(); }}>
+                    닉네임 변경
+                    <ChangeName isOpen={modalIsOpen} closeModal={closeModal} />
+                    </li>
                     <li onClick={logout}>로그아웃</li>
                   </ul>
                 </div>
@@ -116,10 +141,10 @@ const CreateRoom = ({ userName }) => {
               </button>
             )}
                 <img src='/images/logo.png' className='logo'></img>
-                <form className='serch'>
-                    <input placeholder='방검색' className='searchInput'></input>
+                <form className='search' onSubmit={searchRoom}>
+                    <input placeholder='방검색' className='searchInput' id="search"></input>
                     <button className='roomSearch'>
-                        serch
+                        search
                     </button>
                 </form>
             </div>

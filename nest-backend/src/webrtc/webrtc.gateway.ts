@@ -17,7 +17,6 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   private users: User = {};
-  // roomName: [socketID, userName, isReady][]
   private room_user: { [key: string]: [string, string, boolean][] } = {};
   private user_room: { [key: string]: string } = {};
 
@@ -35,18 +34,17 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
             break;
         }
     }
-
-    if (this.room_user[roomName].length === 0) {
-        this.server.to(roomName).emit('delete', roomName);
-        this.server.socketsLeave(roomName);
-        delete this.room_user[roomName];
-        console.log('빈방: ' + roomName);
-    } else {
-        for (let i = 0; i < this.room_user[roomName].length; i++) {
-            const users = this.room_user[roomName][i];
-            this.server.to(users[0]).emit('user', this.room_user[roomName]);
-        }
+    for (let i = 0; i < this.room_user[roomName].length; i++) {
+        const users = this.room_user[roomName][i];
+        this.server.to(users[0]).emit('user', this.room_user[roomName]);
     }
+
+    Object.keys(this.room_user).forEach(roomName => {
+      const users = this.room_user[roomName]; 
+      if (users?.[0] == "" && users?.[1] == "") {
+
+      }
+    });
 }
 
   @SubscribeMessage('join-room')

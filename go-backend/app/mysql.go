@@ -102,14 +102,12 @@ func CreateRoom(db *sql.DB, room RoomState) {
 func GetRoom(db *sql.DB, search string) []RoomState {
 	roomList := []RoomState{}
 
-	var (
-		query string
-		args  []interface{}
-	)
+	var query string
+	var args []interface{} // 빈 슬라이스로 초기화
 
 	if search != "" {
-		query = "SELECT * FROM room_table WHERE room_id = ?"
-		args = append(args, search)
+		query = "SELECT * FROM room_table WHERE room_name LIKE ?"
+		args = append(args, "%"+search+"%") // 검색어에 % 와일드카드 추가
 	} else {
 		query = "SELECT * FROM room_table"
 	}
@@ -117,7 +115,7 @@ func GetRoom(db *sql.DB, search string) []RoomState {
 	rows, err := db.Query(query, args...)
 	if err != nil {
 		fmt.Println("Error querying database:", err)
-		return roomList
+		return roomList // 에러 발생 시 빈 roomList 반환
 	}
 	defer rows.Close()
 
