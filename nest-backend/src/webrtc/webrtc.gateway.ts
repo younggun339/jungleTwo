@@ -39,12 +39,15 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.server.to(users[0]).emit('user', this.room_user[roomName]);
     }
 
-    Object.keys(this.room_user).forEach(roomName => {
-      const users = this.room_user[roomName]; 
-      if (users?.[0] == "" && users?.[1] == "") {
-
-      }
-    });
+    setTimeout(() => {
+      Object.keys(this.room_user).forEach(roomName => {
+        const users = this.room_user[roomName]; 
+        if (users.length === 1) {
+          console.log(roomName);
+          this.server.emit('delete', roomName);
+        }
+      });
+    }, 2000);
 }
 
   @SubscribeMessage('join-room')

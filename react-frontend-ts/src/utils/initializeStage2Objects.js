@@ -166,7 +166,7 @@ export const initializeStage2Objects = (
     //좌우반전 아이템 위에서부터 차례대로
     const box1 = createBox(1530, canvasSize.y - 410, 50, 50, {
       render: {
-        sprite: { texture: "/assets/Pointer_0.png", yScale: 1, xScale: 1 },
+        sprite: { texture: "/assets/Pointer_0.png", xScale: 1, yScale:1 },
       },
     });
     const box2 = createBox(295, canvasSize.y - 150, 50, 50);

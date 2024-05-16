@@ -320,7 +320,7 @@ export const initializeStage3Objects = (
       isStatic: true,
       render:{
         sprite: {
-            texture: "/assets/catOpen.png",
+            texture: "/assets/CatOpen.png",
             xScale: 0.17,
             yScale: 0.17,
           },
