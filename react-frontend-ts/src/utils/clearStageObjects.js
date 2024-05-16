@@ -13,7 +13,7 @@ import { Body } from 'matter-js';
  * @param {Function} setIsPlayerReady - The function to set the player state.
  */
 // ================================================ STAGE 1 ====================================================
-export function resetStage1Objects(
+export function clearStage1Objects(
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -58,7 +58,7 @@ export function resetStage1Objects(
 }
 
 // ================================================ STAGE 2 ====================================================
-export function resetStage2Objects(
+export function clearStage2Objects(
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -103,7 +103,7 @@ export function resetStage2Objects(
 }
 
 // ================================================ STAGE 3 ====================================================
-export function resetStage3Objects(
+export function clearStage3Objects(
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -148,7 +148,7 @@ export function resetStage3Objects(
 }
 
 // ================================================ STAGE 4 ====================================================
-export function resetStage4Objects(
+export function clearStage4Objects(
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -193,7 +193,7 @@ export function resetStage4Objects(
 }
 
 // ================================================ STAGE 5 ====================================================
-export function resetStage5Objects(
+export function clearStage5Objects(
   refs,
   setIsGameStarted,
   setIsSimStarted,

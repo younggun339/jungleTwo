@@ -164,11 +164,7 @@ export const initializeStage2Objects = (
     });
 
     //좌우반전 아이템 위에서부터 차례대로
-    const box1 = createBox(1530, canvasSize.y - 410, 50, 50, {
-      render: {
-        sprite: { texture: "/assets/Pointer_0.png", xScale: 1, yScale:1 },
-      },
-    });
+    const box1 = createBox(1530, canvasSize.y - 410, 50, 50);
     const box2 = createBox(295, canvasSize.y - 150, 50, 50);
     const box3 = createBox(970, canvasSize.y - 387, 50, 50);
     const box4 = createBox(1295, canvasSize.y - 147, 50, 50);
@@ -186,14 +182,20 @@ export const initializeStage2Objects = (
     const jumpPad = Bodies.rectangle(1300, canvasSize.y - 300, 20, 20, {
       isStatic: true,
       render: {
-        fillStyle: "yellow",
+        sprite:{
+          texture:'/assets/JumpPad_0.png',
+          yScale :2
+        }
       },
     });
     //점프대-2
     const jumpPad2 = Bodies.rectangle(1365, canvasSize.y - 340, 20, 20, {
       isStatic: true,
       render: {
-        fillStyle: "yellow",
+        sprite:{
+          texture:'/assets/JumpPad_0.png',
+          yScale : 2
+        }
       },
     });
     //슈퍼점프대-1
@@ -245,74 +247,74 @@ export const initializeStage2Objects = (
       Bodies.rectangle(230, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png", yScale: 1., xScale: 1.5 },
         },
       }),
       Bodies.rectangle(280, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
         },
       }),
       Bodies.rectangle(330, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png",  yScale: 1.2, xScale: 1.5},
         },
       }),
       Bodies.rectangle(380, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
         },
       }),
       Bodies.rectangle(430, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
         },
       }),
       Bodies.rectangle(480, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5},
         },
       }),
 
       Bodies.rectangle(230, 50, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png",  yScale: 1.2, xScale: 1.5 },
         },
       }),
       Bodies.rectangle(280, 50, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
         },
       }),
       Bodies.rectangle(330, 50, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5},
         },
       }),
       Bodies.rectangle(380, 50, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
         },
       }),
       Bodies.rectangle(430, 50, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png",  yScale: 1.2, xScale: 1.5 },
         },
       }),
       Bodies.rectangle(480, 50, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1 },
+          sprite: { texture: "/assets/Fire_0.png",  yScale: 1.2, xScale: 1.5 },
         },
       }),
     ];
@@ -422,7 +424,47 @@ export const initializeStage2Objects = (
       }
     );
     //---------------피어가만든기물-----------------
+// 이미지를 순환시키기 위한 로직
+let lastUpdateTime = 0;
+let currentFrame = 0;
+Events.on(engine, "beforeUpdate", function (event) {
+  console.log("beforeupdate");
+  const currentTime = event.timestamp;
+  let frameDuration = 300; // 매 초마다 이미지 변경
 
+  if (currentTime - lastUpdateTime > frameDuration) {
+    lastUpdateTime = currentTime;
+    currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
+
+    // 각 이미지를 로드한 후에만 이미지 변경
+    loadImage(`/assets/Pointer_${currentFrame}.png`, function() {
+        box1.render.sprite.texture = `/assets/Pointer_${currentFrame}.png`;
+        box2.render.sprite.texture = `/assets/Pointer_${currentFrame}.png`;
+    });
+        // 각 이미지를 로드한 후에만 이미지 변경
+        loadImage(`/assets/JumpPad_${currentFrame}.png`, function() {
+          jumpPad.render.sprite.texture = `/assets/JumpPad_${currentFrame}.png`;
+          jumpPad2.render.sprite.texture = `/assets/JumpPad_${currentFrame}.png`;
+      });
+      fire.forEach((body) => {
+        loadImage(`/assets/Fire_${currentFrame}.png`, function() {
+          body.render.sprite.texture = `/assets/Fire_${currentFrame}.png`;
+        });
+      });
+
+
+    // 이하 동일
+  }
+});
+
+// 이미지 로드 함수 정의
+function loadImage(url, callback) {
+  const img = new Image();
+  img.onload = function() {
+      callback();
+  };
+  img.src = url;
+}
     // // 이미지를 순환시키기 위한 로직
     // let lastUpdateTime = 0;
     // let currentFrame = 0;

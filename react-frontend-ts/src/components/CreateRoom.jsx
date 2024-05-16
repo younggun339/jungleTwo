@@ -87,9 +87,6 @@ const CreateRoom = ({ userName }) => {
     window.location.assign("https://zzrot.store/");
   };
 
-  const profileClick = () => {
-    setIsMenuVisible(!isMenuVisible); // 상태를 토글합니다.
-  }
   const searchRoom = () => {
     const search = document.getElementById('search').value; 
     event.preventDefault();
@@ -120,10 +117,9 @@ const CreateRoom = ({ userName }) => {
         <div className='totalContain'>
             <div className='header'> 
             {isLoggedIn ? (
-              <div className="profile" onClick={profileClick} >
+              <div className="profile" >
                 <img src="/images/profile.png"/>
                 {userName}
-                {isMenuVisible && (
                 <div className="menu">
                   <ul>
                     <li onClick={(event) => { event.stopPropagation(); openModal(); }}>
@@ -133,7 +129,6 @@ const CreateRoom = ({ userName }) => {
                     <li onClick={logout}>로그아웃</li>
                   </ul>
                 </div>
-              )}
               </div>
             ) : (
               <button className='loginButton' onClick={login}>

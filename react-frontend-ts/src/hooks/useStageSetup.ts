@@ -46,6 +46,7 @@ const useStage1Setup = (
         background: "transparent",
       },
     });
+    
 
     if (!engine.world) {
       console.error("World not initialized");
@@ -54,7 +55,7 @@ const useStage1Setup = (
 
     initializeStage1Objects(
       engine,
-      { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      { render, canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       isTutorialImage2End,
       setResultState
     );

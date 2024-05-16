@@ -1,4 +1,4 @@
-import {
+import Matter, {
   Engine,
   World,
   Bodies,
@@ -6,6 +6,7 @@ import {
   Body,
   Vector,
   Composite,
+  Render,
 } from "matter-js";
 import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
@@ -16,13 +17,23 @@ export const initializeStage1Objects = (
   isTutorialImage2End,
   setResultState
 ) => {
-  const { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } =
+  const { render, canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } =
     refs;
 
   const walls = [
-    Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { sprite:{texture:'/sprite/Wall.png', yScale:0.85,xScale:0.1 }} } ), //좌
+    Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, {
+      isStatic: true,
+      render: {
+        sprite: { texture: "/sprite/Wall.png", yScale: 0.85, xScale: 0.1 },
+      },
+    }), //좌
     //Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 50, { isStatic: true, render: { fillStyle: 'red' } }), //하
-    Bodies.rectangle(1600, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { sprite:{texture:'/sprite/Wall.png', yScale:0.85,xScale:0.1 }} }), //우
+    Bodies.rectangle(1600, canvasSize.y / 2, 50, canvasSize.y, {
+      isStatic: true,
+      render: {
+        sprite: { texture: "/sprite/Wall.png", yScale: 0.85, xScale: 0.1 },
+      },
+    }), //우
   ];
 
   if (!isTutorialImage2End) {
@@ -80,220 +91,288 @@ export const initializeStage1Objects = (
     };
 
     const floors = [
-      Bodies.rectangle(250, canvasSize.y - 300, 350, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.31 } } }),
-      Bodies.rectangle(635, canvasSize.y - 300, 100, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.09 } } }),
-      Bodies.rectangle(1200, canvasSize.y - 400, 700, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.6 } } }),
-      Bodies.rectangle(1180, canvasSize.y - 140, 100, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.4,xScale:0.4} } }),
-      Bodies.rectangle(1380, canvasSize.y - 140, 100, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.4,xScale:0.4} } }),
+      Bodies.rectangle(250, canvasSize.y - 300, 350, 25, {
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.31 },
+        },
+      }),
+      Bodies.rectangle(635, canvasSize.y - 300, 100, 25, {
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.09 },
+        },
+      }),
+      Bodies.rectangle(1200, canvasSize.y - 400, 700, 25, {
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.6 },
+        },
+      }),
+      Bodies.rectangle(1180, canvasSize.y - 140, 100, 25, {
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.4 },
+        },
+      }),
+      Bodies.rectangle(1380, canvasSize.y - 140, 100, 25, {
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.4 },
+        },
+      }),
       //Bodies.rectangle(300, canvas.y - 140, 300, 25, { isStatic: true, render: { fillStyle: 'blue' } }),
-  ]
+    ];
 
-  const floor = Bodies.rectangle(300, canvasSize.y - 140, 300, 25, {
-      isStatic: true, render: { sprite:{ texture:'/sprite/Ground4.png', yScale:0.4,xScale:0.8 } },
-      collisionFilter: {
-          category: 0x0004, // category 4
-          mask: 0xFFFF // 모든 category와 충돌
-      },
-  });
-
-  // bombGround
-  const bombGround = Bodies.rectangle(1280, canvasSize.y - 140, 100, 25, { isStatic: true, render: {
-    sprite:{
-        texture:'/assets/BrokenGround_0.png',
-        xScale:3,
-        yScale:3.5
-    }
-} });
-
-  //사라지는바닥
-  const ground = Bodies.rectangle(995, 320, 100, 25, {
+    const floor = Bodies.rectangle(300, canvasSize.y - 140, 300, 25, {
       isStatic: true,
       render: {
-        fillStyle: 'yellow'
-    }
-  });
-  //--------------------------벽 및 바닥--------------------------
+        sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.8 },
+      },
+      collisionFilter: {
+        category: 0x0004, // category 4
+        mask: 0xffff, // 모든 category와 충돌
+      },
+    });
 
-//----------------------------region 아이템----------------------------
-        //폭탄
-        bombRef.current = Bodies.circle(1285, 300, 20, {
-          isStatic: true,
-            render: {
-                sprite:{
-                    texture:'/assets/Bomb_0.png'
-                }
-            },
-      });
-
-      //좌우반전 아이템 위에서부터 차례대로
-      const box1 = createBox(1250, canvasSize.y - 317, 50, 50);
-      const box2 = createBox(995, canvasSize.y - 180, 50, 50);
-      const box3 = createBox(1500, canvasSize.y - 207, 50, 50);
-      const box4 = createBox(1295, canvasSize.y - 147, 50, 50);
-
-      const box5 = createBox(1115, canvasSize.y - 207, 50, 50);
-
-      //기울어진땅..?
-      const panel = Bodies.rectangle(768, canvasSize.y - 350, 210, 25, {
-          isStatic: true,
-          angle: -Math.PI / 6, // 45도를 라디안으로 변환
-          render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.4,xScale:0.85 } }
-      })
-
-      //점프대-1
-      const jumpPad = Bodies.rectangle(1270, canvasSize.y - 0, 20, 20, {
-          isStatic: true,
-          render: {
-              fillStyle: 'yellow'
-          }
-      });
-      //점프대-2
-      const jumpPad2 = Bodies.rectangle(1353, canvasSize.y - 100, 20, 20, {
-          isStatic: true,
-          render: {
-              fillStyle: 'yellow'
-          }
-      });
-      //슈퍼점프대-1
-      const superJumppad = Bodies.rectangle(1420, canvasSize.y - 120, 20, 20, {
-          isStatic: true,
-          render: {
-              fillStyle: 'red'
-          }
-      });
-
-      //-------------------------------------------------------------
-      // portal 생성
-      const portal1 = Bodies.rectangle(100, 295, 25, 25, {
-          isStatic: true,
-          render: {
-              fillStyle: "aqua",
-          },
-      });
-
-      // portal 생성
-      const portal2 = Bodies.rectangle(1500, 125, 25, 25, {
-          isStatic: true,
-          render: {
-              fillStyle: "aqua",
-          },
-      });
-      //----------------------------------------------------------------
-      //----------------------------------------------------------------
-      // portal 생성
-      const portal3 = Bodies.rectangle(905, 300, 25, 25, {
-          isStatic: true,
-          render: {
-              fillStyle: "white",
-          },
-      });
-
-      // portal 생성
-      const portal4 = Bodies.rectangle(1110, 350, 25, 25, {
-          isStatic: true,
-          render: {
-              fillStyle: "white",
-          },
-      });
-      //----------------------------------------------------------------
-
-      // 불
-      const fire = Bodies.rectangle(1150, 163, 50, 50,
-          {
-              isStatic: true,
-              render: {
-                sprite: {
-                    texture: '/assets/Fire_0.png'
-                }
-            },
-          }
-      );
-
-      //불1
-      const fire1 = Bodies.rectangle(1250, 405, 50, 50,
-          {
-              isStatic: true,
-              render: {
-                  fillStyle: "red",
-              },
-          }
-      );
-
-      //불2
-      // const fire2 = Bodies.rectangle(1500, 63, 50, 50,
-      //     {
-      //         isStatic: true,
-      //         render: {
-      //             fillStyle: "red",
-      //         },
-      //     }
-      // );
-
-
-      //불3
-      const fire2 = Bodies.rectangle(1480, 283, 50, 50,
-          {
-              isStatic: true,
-              render: {
-                  fillStyle: "red",
-              },
-          }
-      );
-
-      // 추
-      const weight = Bodies.rectangle(300, 350, 40, 40, {
-          isStatic: true,
-          render: {
-            sprite:{
-                texture:'/assets/Weight_0.png'
-            }
+    // bombGround
+    const bombGround = Bodies.rectangle(1280, canvasSize.y - 140, 100, 25, {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "/assets/BrokenGround_0.png",
+          xScale: 3,
+          yScale: 3.5,
         },
-          collisionFilter: {
-              category: 0x0002, // category 2
-              mask: 0xFFFF ^ 0x0001 // 모든 category와 충돌하되 category 1과는 충돌하지 않음
-          }
-      });
-      //Body.setVelocity(weight,{x: -0.35, y:-0.3})
+      },
+    });
 
+    //사라지는바닥
+    const ground = Bodies.rectangle(995, 320, 100, 25, {
+      isStatic: true,
+      render: {
+        fillStyle: "yellow",
+      },
+    });
+    //--------------------------벽 및 바닥--------------------------
 
+    //----------------------------region 아이템----------------------------
+    //폭탄
+    bombRef.current = Bodies.circle(1285, 300, 20, {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "/assets/Bomb_0.png",
+          xScale:2,
+          yScale:2
+        },
+      },
+    });
 
-      //고양이버튼-1
-      const catButton = Bodies.rectangle(630, canvasSize.y - 317, 40, 10, {
+    //좌우반전 아이템 위에서부터 차례대로
+    const box1 = createBox(1250, canvasSize.y - 317, 50, 50);
+    const box2 = createBox(995, canvasSize.y - 180, 50, 50);
+    const box3 = createBox(1500, canvasSize.y - 207, 50, 50);
+    const box4 = createBox(1295, canvasSize.y - 147, 50, 50);
 
-          isStatic: true,
-          render: {
-              fillStyle: 'purple'
-          }
-      });
-      //고양이버튼-1
-      const catButton2 = Bodies.rectangle(1050, canvasSize.y - 367, 40, 10, {
-          isStatic: true,
-          render: {
-              fillStyle: 'purple'
-          }
-      });
+    const box5 = createBox(1115, canvasSize.y - 207, 50, 50);
 
-      // 고양이 생성
-      const cat = Bodies.rectangle(300, canvasSize.y - 198, 200, 90, {
-          isStatic: true,
+    //기울어진땅..?
+    const panel = Bodies.rectangle(768, canvasSize.y - 350, 210, 25, {
+      isStatic: true,
+      angle: -Math.PI / 6, // 45도를 라디안으로 변환
+      render: {
+        sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.85 },
+      },
+    });
 
-      });
-      //----------------------------end region 아이템----------------------------
+    //점프대-1
+    const jumpPad = Bodies.rectangle(1270, canvasSize.y - 0, 20, 20, {
+      isStatic: true,
+      render: {
+        fillStyle: "yellow",
+      },
+    });
+    //점프대-2
+    const jumpPad2 = Bodies.rectangle(1353, canvasSize.y - 100, 20, 20, {
+      isStatic: true,
+      render: {
+        fillStyle: "yellow",
+      },
+    });
+    //슈퍼점프대-1
+    const superJumppad = Bodies.rectangle(1420, canvasSize.y - 120, 20, 20, {
+      isStatic: true,
+      render: {
+        fillStyle: "red",
+      },
+    });
+
+    //-------------------------------------------------------------
+    // portal 생성
+    const portal1 = Bodies.rectangle(100, 295, 25, 25, {
+      isStatic: true,
+      render: {
+        fillStyle: "aqua",
+      },
+    });
+
+    // portal 생성
+    const portal2 = Bodies.rectangle(1500, 125, 25, 25, {
+      isStatic: true,
+      render: {
+        fillStyle: "aqua",
+      },
+    });
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    // portal 생성
+    const portal3 = Bodies.rectangle(905, 300, 25, 25, {
+      isStatic: true,
+      render: {
+        fillStyle: "white",
+      },
+    });
+
+    // portal 생성
+    const portal4 = Bodies.rectangle(1110, 350, 25, 25, {
+      isStatic: true,
+      render: {
+        fillStyle: "white",
+      },
+    });
+    //----------------------------------------------------------------
+
+    // 불
+    const fire = Bodies.rectangle(1150, 163, 50, 50, {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "/assets/Fire_0.png",
+        },
+      },
+    });
+
+    //불1
+    const fire1 = Bodies.rectangle(1250, 405, 50, 50, {
+      isStatic: true,
+      render: {
+        fillStyle: "red",
+      },
+    });
+
+    //불2
+    // const fire2 = Bodies.rectangle(1500, 63, 50, 50,
+    //     {
+    //         isStatic: true,
+    //         render: {
+    //             fillStyle: "red",
+    //         },
+    //     }
+    // );
+
+    //불3
+    const fire2 = Bodies.rectangle(1480, 283, 50, 50, {
+      isStatic: true,
+      render: {
+        fillStyle: "red",
+      },
+    });
+
+    // 추
+    const weight = Bodies.rectangle(300, 350, 40, 40, {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "/assets/Weight_0.png",
+          xScale:2.5,
+          yScale:2.5,
+        },
+      },
+      collisionFilter: {
+        category: 0x0002, // category 2
+        mask: 0xffff ^ 0x0001, // 모든 category와 충돌하되 category 1과는 충돌하지 않음
+      },
+    });
+    //Body.setVelocity(weight,{x: -0.35, y:-0.3})
+
+    //고양이버튼-1
+    const catButton = Bodies.rectangle(630, canvasSize.y - 317, 40, 10, {
+      isStatic: true,
+      render: {
+        fillStyle: "purple",
+      },
+    });
+    //고양이버튼-1
+    const catButton2 = Bodies.rectangle(1050, canvasSize.y - 367, 40, 10, {
+      isStatic: true,
+      render: {
+        fillStyle: "purple",
+      },
+    });
+
+    // 고양이 생성
+    const cat = Bodies.rectangle(300, canvasSize.y - 198, 200, 90, {
+      isStatic: true,
+    });
+    //----------------------------end region 아이템----------------------------
 
     //------------------------------region 쥐---------------------------------
     // 쥐 생성
-   mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
+    mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
       restitution: 0, // 반발 계수
-      friction: 0.8,    // 마찰 계수
+      friction: 0.8, // 마찰 계수
       render: {
-        fillStyle: "blue",
-    },
-      collisionFilter: {
-          category: 0x0004, // category 4
-          mask: 0xFFFF // 모든 category와 충돌
+        fillStyle: "transparent",
+        strokeStyle: "transparen"
       },
+      collisionFilter: {
+        category: 0x0004, // category 4
+        mask: 0xffff, // 모든 category와 충돌
+      },
+    });
 
-  });
+      const mouseImages = [
+        "/assets/MouseWalk_0.png",
+        "/assets/MouseWalk_1.png",
+        "/assets/MouseWalk_2.png",
+        "/assets/MouseWalk_3.png",
+      ];
+      let currentImageIndex = 0;
+
+      // 매초마다 이미지를 변경하는 로직
+      setInterval(() => {
+        currentImageIndex = (currentImageIndex + 1) % mouseImages.length;
+      }, 100);
+      const scaleMultiplier = 2;
+      // 커스텀 렌더링 함수
+      function handleMouseRender(event) {
+        const context = render.context;
+        const bodies = Matter.Composite.allBodies(engine.world);
+
+        for (let body of bodies) {
+          if (body.circleRadius) {
+            const { x, y } = body.position;
+            const img = new Image();
+            img.src = mouseImages[currentImageIndex];
+            const yOffset = img.height / 2; // 이미지의 높이의 절반
+
+            const scale = (body.circleRadius * 2 * scaleMultiplier) / img.width; // 스케일을 조절합니다.
+            context.save();
+            context.translate(x, y- yOffset);
+            context.drawImage(
+                img,
+                -body.circleRadius * scaleMultiplier,
+                -body.circleRadius * scaleMultiplier,
+                body.circleRadius * 2 * scaleMultiplier,
+                body.circleRadius * 2 * scaleMultiplier
+            );
+            context.restore();
+          }
+        }
+      }
+    // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
+    Events.on(render, "afterRender", handleMouseRender);
     //----------------------------end region 쥐-------------------------------
 
     //----------------내가만든기물------------------
@@ -352,7 +431,7 @@ export const initializeStage1Objects = (
     );
     //---------------피어가만든기물-----------------
 
-    // // 이미지를 순환시키기 위한 로직
+    // 이미지를 순환시키기 위한 로직
     // let lastUpdateTime = 0;
     // let currentFrame = 0;
     // Events.on(engine, "beforeUpdate", function (event) {
@@ -367,12 +446,9 @@ export const initializeStage1Objects = (
     //     box2.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
     //     jumpPad.render.sprite.texture = `/assets/jumpPad_${currentFrame}.png`;
     //     jumpPad2.render.sprite.texture = `/assets/jumpPad_${currentFrame}.png`;
-    //     fire.forEach((body) => {
-    //       body.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //     });
-    //     // fire.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //     // fire1.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //     // fire2.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
+    //     fire.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
+    //     fire.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
+    //     fire2.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
     //     portal1.render.sprite.texture = `/assets/portal_${currentFrame}.png`;
     //     portal2.render.sprite.texture = `/assets/portal_${currentFrame}.png`;
     //     portal3.render.sprite.texture = `/assets/portal2_${currentFrame}.png`;
@@ -384,24 +460,64 @@ export const initializeStage1Objects = (
     //   }
     // });
 
+// 이미지를 순환시키기 위한 로직
+let lastUpdateTime = 0;
+let currentFrame = 0;
+Events.on(engine, "beforeUpdate", function (event) {
+  console.log("beforeupdate");
+  const currentTime = event.timestamp;
+  let frameDuration = 100; // 매 초마다 이미지 변경
 
-        // cheese
-        const cheese = Bodies.rectangle(1400, 163, 50, 50,
-          {
-              isStatic: true,
-              render: {
-                sprite: {
-                    texture: "/sprite/Cheese.png",
-                    xScale: 2,
-                    yScale: 2,
-                  },
-            },
-          }
-      );
+  if (currentTime - lastUpdateTime > frameDuration) {
+    lastUpdateTime = currentTime;
+    currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
+
+    // 각 이미지를 로드한 후에만 이미지 변경
+    loadImage(`/assets/Fire_${currentFrame}.png`, function() {
+        fire.render.sprite.texture = `/assets/Fire_${currentFrame}.png`;
+    });
+    loadImage(`/assets/Bomb_${currentFrame}.png`, function() {
+      bombRef.current.render.sprite.texture = `/assets/Bomb_${currentFrame}.png`;
+  });
+    // 이하 동일
+  }
+});
+
+// 이미지 로드 함수 정의
+function loadImage(url, callback) {
+  const img = new Image();
+  img.onload = function() {
+      callback();
+  };
+  img.src = url;
+}
+    // cheese
+    const cheese = Bodies.rectangle(1400, 163, 50, 50, {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "/sprite/Cheese.png",
+          xScale: 2,
+          yScale: 2,
+        },
+      },
+    });
 
     cat.render.zIndex = 5;
 
-    World.add(engine.world, [cheese, mouseRef.current, leftArmLeftRef.current, rightArmRightRef.current, ...floors, panel, fire, bombRef.current, bombGround, weight, floor]);
+    World.add(engine.world, [
+      cheese,
+      mouseRef.current,
+      leftArmLeftRef.current,
+      rightArmRightRef.current,
+      ...floors,
+      panel,
+      fire,
+      bombRef.current,
+      bombGround,
+      weight,
+      floor,
+    ]);
 
     // 충돌 감지
     Events.on(engine, "collisionStart", (event) => {
@@ -418,15 +534,15 @@ export const initializeStage1Objects = (
           (bodyA === catButton && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
-          catButton.render.sprite.texture = '/assets/CatButtonPush.png'
+          catButton.render.sprite.texture = "/assets/CatButtonPush.png";
           catButton.render.sprite.xScale = 0.05;
           catButton.render.sprite.yScale = 0.05;
           catButton.collisionFilter = {
             group: 0,
           }; // catButton의 충돌 필터 변경
-          cat.render.sprite.texture = '/assets/CatClose.png';
+          cat.render.sprite.texture = "/assets/CatClose.png";
           cat.render.sprite.xScale = 0.17;
-          cat.render.sprite.yScale = 0.17;; // cat의 색상을 빨간색으로 변경
+          cat.render.sprite.yScale = 0.17; // cat의 색상을 빨간색으로 변경
         }
         // mouse과 catButton2이 충돌했을 때
         if (
@@ -434,15 +550,15 @@ export const initializeStage1Objects = (
           (bodyA === catButton2 && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
-          catButton2.render.sprite.texture = '/assets/CatButtonPush.png'
+          catButton2.render.sprite.texture = "/assets/CatButtonPush.png";
           catButton2.render.sprite.xScale = 0.05;
           catButton2.render.sprite.yScale = 0.05;
           catButton2.collisionFilter = {
             group: 0,
           }; // catButton의 충돌 필터 변경
-          cat.render.sprite.texture = '/assets/CatClose.png';
+          cat.render.sprite.texture = "/assets/CatClose.png";
           cat.render.sprite.xScale = 0.17;
-          cat.render.sprite.yScale = 0.17;; // cat의 색상을 빨간색으로 변경
+          cat.render.sprite.yScale = 0.17; // cat의 색상을 빨간색으로 변경
         }
         // mouse과 cat이 충돌했을 때
         if (
@@ -450,7 +566,7 @@ export const initializeStage1Objects = (
           (bodyA === cat && bodyB === mouseRef.current)
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
-          if (!(cat.render.sprite.texture === '/assets/CatClose.png')) {
+          if (!(cat.render.sprite.texture === "/assets/CatClose.png")) {
             alert("게임오버");
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {

@@ -33,10 +33,10 @@ export const useStage1Start = (
     isSimStarted,
     countdown,
     timeLimit,
-    5, // firstImageTime
-    5, // secondImageTime
-    15, // chatTime
-    20, // simTime
+    1, // firstImageTime
+    1, // secondImageTime
+    1, // chatTime
+    1, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -82,8 +82,8 @@ export const useStage2Start = (
     timeLimit,
     1, // firstImageTime
     1, // secondImageTime
-    15, // chatTime
-    20, // simTime
+    1, // chatTime
+    1, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -129,8 +129,8 @@ export const useStage3Start = (
     timeLimit,
     1, // firstImageTime
     1, // secondImageTime
-    15, // chatTime
-    20, // simTime
+    1, // chatTime
+    1, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -176,8 +176,8 @@ export const useStage4Start = (
     timeLimit,
     1, // firstImageTime
     1, // secondImageTime
-    15, // chatTime
-    20, // simTime
+    1, // chatTime
+    1, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -223,8 +223,8 @@ export const useStage5Start = (
     timeLimit,
     1, // firstImageTime
     1, // secondImageTime
-    15, // chatTime
-    20, // simTime
+    1, // chatTime
+    1, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -269,7 +269,7 @@ const useStageStart = (
           const readyPlayers = players.filter(
             (player: [string, string, boolean]) => player[2] === true
           );
-          if (readyPlayers.length === 2) {
+          if (readyPlayers.length === 1) {
             setIsGameStarted(true);
             setResultState(null);
           }

@@ -1,14 +1,22 @@
-import { Bodies } from 'matter-js';
+import { Bodies } from "matter-js";
 
 const createBox = (x, y, xs, ys) => {
-    return Bodies.rectangle(x, y, xs, ys, {
-        isStatic: true,
-        render: {
-            fillStyle: 'green'
-        }
-    });
-};
+  const originalHeight = 48; // 이미지 원본 높이
+  const yScale = 2; // 이미지 확대 비율
+  const yOffset = 1 - (originalHeight * yScale) / (2 * ys); // yOffset 추가 조정
 
+  return Bodies.rectangle(x, y, xs, ys, {
+    isStatic: true,
+    render: {
+      sprite: {
+        texture: "/assets/Pointer_0.png",
+        xScale: 2,
+        yScale: 1.8,
+        yOffset: yOffset,
+      },
+    },
+  });
+};
 export default createBox;
 
 //how to use the plot-twist item

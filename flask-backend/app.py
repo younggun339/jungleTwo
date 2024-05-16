@@ -18,7 +18,11 @@ CORS(app)  # Allow CORS for all domains
 mpPose = mp.solutions.pose
 mp_hands = mp.solutions.hands
 pose = mpPose.Pose()
-hands = mp_hands.Hands()
+# hands = mp_hands.Hands()
+hands = mp_hands.Hands(static_image_mode=False,
+                       max_num_hands=1,
+                       min_detection_confidence=0.3,
+                       min_tracking_confidence=0.3)
 
 @socketio.on('flask-connect')
 def handleConnect():
@@ -49,21 +53,16 @@ def handle_image_capture(data):
     # print("OpenCV Image Array:", frame)
     # print("")
     # Mediapipe로 포즈 분석
-    results = pose.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-    if results.pose_landmarks:
-        # 특정 조인트 좌표 추출
-        joint1Start = results.pose_landmarks.landmark[mpPose.PoseLandmark.LEFT_ELBOW]
-        joint1End = results.pose_landmarks.landmark[mpPose.PoseLandmark.LEFT_WRIST]
-        # print("joint1Start:")
-        # print("  x:", joint1Start.x)
-        # print("  y:", joint1Start.y)
-        # print("joint1End:")
-        # print("  x:", joint1End.x)
-        # print("  y:", joint1End.y)
-
-        # 추출한 스켈레톤 정보를 클라이언트로 송신
-        socketio.emit('body-coords-L', {'joint1Start': {'x': joint1Start.x, 'y': joint1Start.y},
-                               'joint1End': {'x': joint1End.x, 'y': joint1End.y}})
+    results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    if results.multi_hand_landmarks:
+        for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+            if handedness.classification[0].label == 'Left':
+                thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+                index_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+                socketio.emit('body-coords-R', {
+                    'joint1Start': {'x': thumb_tip.x, 'y': thumb_tip.y},
+                    'joint1End': {'x': index_finger_tip.x, 'y':index_finger_tip.y},
+                    })
 
 
 
@@ -88,23 +87,16 @@ def handle_image_capture(data):
     # print("")
 
     # Mediapipe로 포즈 분석
-    results = pose.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-    if results.pose_landmarks:
-        # 특정 조인트 좌표 추출
-        joint1Start = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_ELBOW]
-        joint1End = results.pose_landmarks.landmark[mpPose.PoseLandmark.RIGHT_WRIST]
-        # print("joint1Start:")
-        # print("  x:", joint1Start.x)
-        # print("  y:", joint1Start.y)
-        # print("joint1End:")
-        # print("  x:", joint1End.x)
-        # print("  y:", joint1End.y)
-
-        # 추출한 스켈레톤 정보를 클라이언트로 송신
-        socketio.emit('body-coords-R', {'joint1Start': {'x': joint1Start.x, 'y': joint1Start.y},
-                               'joint1End': {'x': joint1End.x, 'y': joint1End.y}})
-
-
+    results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    if results.multi_hand_landmarks:
+        for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+            if handedness.classification[0].label == 'Right':
+                thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
+                index_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+                socketio.emit('body-coords-R', {
+                    'joint1Start': {'x': thumb_tip.x, 'y': thumb_tip.y},
+                    'joint1End': {'x': index_finger_tip.x, 'y':index_finger_tip.y},
+                    })
 # @socketio.on('image-capture-R')
 # def handle_image_capture(data):
 #     print("Received image data")

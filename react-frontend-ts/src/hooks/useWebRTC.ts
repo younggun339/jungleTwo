@@ -224,25 +224,25 @@ const useWebRTC = (
     });
   };
 
-  useEffect(() => {
-    let stopCapturing: (() => void) | undefined;
+  // useEffect(() => {
+  //   let stopCapturing: (() => void) | undefined;
   
-    if (isTutorialImage2End && !isSimStarted) {
-      stopCapturing = startCapturing(
-        userVideo,
-        canvasRef,
-        flaskSocketRef,
-        indexRef,
-        isSimStarted,
-      );
-    }
+  //   if (isTutorialImage2End && !isSimStarted) {
+  //     stopCapturing = startCapturing(
+  //       userVideo,
+  //       canvasRef,
+  //       flaskSocketRef,
+  //       indexRef,
+  //       isSimStarted,
+  //     );
+  //   }
   
-    return () => {
-      if (stopCapturing) {
-        stopCapturing();
-      }
-    };
-  }, [isTutorialImage2End, isSimStarted]);
+  //   return () => {
+  //     if (stopCapturing) {
+  //       stopCapturing();
+  //     }
+  //   };
+  // }, [isTutorialImage2End, isSimStarted]);
 
   return { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint };
 };

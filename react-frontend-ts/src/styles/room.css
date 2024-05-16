@@ -18,53 +18,144 @@ body {
 }
 
 .header {
-  /* border: solid; */
-  height: 20rem;
   display: flex;
-  font-size: 5rem;
-  align-items: center;
   justify-content: space-between;
-  .loginButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 12rem;
-    height: 3rem;
-    font-size: 1.5rem;
-    margin-left: 2rem;
-  }
-  .logo {
-    margin-left: auto;
-    margin-right: auto;
-  }
+  align-items: center;
+  background-color: #E6E6FA;
+}
 
-  .searchInput {
-    width: 50rem;
-    height: 4rem;
-    font-size: 2rem;
-    margin-right: 1rem;
-    border: solid 0.3rem #b39ddb;
-    border-radius: 1rem;
-  }
+/* Styles for profile section */
+.profile {
+  position: relative; 
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 12px;
+  background-color: white; /* 흰색 배경 */
+  padding: 12px; /* 내부 여백 추가 */
+  border-radius: 5px; /* 둥근 모서리 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  overflow: hidden; /* 메뉴가 넘치는 것을 방지 */
+  transition: width 0.3s ease; /* 너비 변경 애니메이션 */
+}
 
-  .roomSearch {
-    width: 11rem;
-    height: 5rem;
-    font-size: 1.5rem;
+.profile:hover {
+  width: 300px; /* 마우스 오버 시 너비 확장 */
+}
+
+.profile:hover .menu {
+  display: block; /* 마우스 오버 시 메뉴 표시 */
+  transform: translateX(0);
+}
+
+.profile img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+
+/* .menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  padding: 5px;
+  display: none; 
+  position: absolute; 
+  top: 0;
+  right: 0; 
+  transform: translateX(100%); 
+  transition: transform 0.3s ease;
+} */
+
+.menu ul {
+  display: flex; /* 메뉴 항목 가로 배치 */
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu ul li {
+  margin-left: 35px; /* 메뉴 항목 간 간격 */
+  cursor: pointer;
+}
+
+/* Styles for login button */
+.loginButton {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Styles for logo */
+.logo {
+  width: 100px;
+  height: auto;
+}
+
+/* Styles for search form */
+.search {
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  padding: 12px; /* Increase padding for a larger input */
+  margin-right: 12px; /* Increase margin for spacing */
+  border: 2px solid #4B0082; /* Change border color and thickness */
+  border-radius: 5px; /* Add border radius for a rounded look */
+  font-size: 18px; /* Increase font size for better readability */
+  outline: none; /* Remove default outline */
+  transition: border-color 0.3s; /* Add transition for a smooth effect */
+
+  /* Add box shadow for a subtle effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.searchInput:focus {
+  border-color: #a831fd; /* Change border color on focus */
+}
+
+.roomSearch {
+  margin-right: 12px;
+  padding: 10px 20px; /* Increase padding for a larger button */
+  background-color: #4B0082; /* Same blue as input border */
+  color: #fff;
+  border: none;
+  border-radius: 5px; /* Match input border radius */
+  cursor: pointer;
+  font-size: 16px; /* Match input font size */
+  outline: none; /* Remove default outline */
+  transition: background-color 0.3s; /* Add transition for hover effect */
+
+  /* Add box shadow for a subtle effect, similar to input but lighter */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); 
+}
+
+.roomSearch:hover {
+  background-color: #a831fd; /* Darker blue on hover */
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 10px 0;
   }
 
   .profile {
-    white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
-    font-size: 1.5rem;
+    margin-bottom: 10px;
   }
-  .profile > img {
-    width: 30%;
-  }
+
   .menu {
-    position: absolute; /* 또는 relative */
-    width: 200px; /* 메뉴 너비 */
-    background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 그림자 효과 (선택 사항) */
+    position: static;
+    display: block;
   }
 }
 
@@ -160,10 +251,9 @@ button::before {
   bottom: 0;
   background: var(--dark-pink);
   border-radius: inherit;
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0.625em 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0.75em, -1em);
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
-    box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* 그림자 범위, 색상, 투명도 조절 */
+  transform: translate3d(0, 0.25em, -0.25em); /* 이동 거리 감소 */
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out; /* 트랜지션 시간 및 타이밍 함수 변경 */
 }
 button:hover {
   cursor: pointer;

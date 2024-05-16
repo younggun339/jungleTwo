@@ -64,6 +64,28 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [resultState, setResultState] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
 
+  //get coordinates
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    const canvas = event.target as HTMLCanvasElement;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+  
+    setMousePos({ x: mouseX, y: mouseY });
+    console.log('Mouse clicked at (' + mouseX + ', ' + mouseY + ')');
+  };
+  
+  const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    const canvas = event.target as HTMLCanvasElement;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+  
+    setMousePos({ x: mouseX, y: mouseY });
+    console.log('Mouse released at (' + mouseX + ', ' + mouseY + ')');
+  };
   // 인게임 및 통신 관련 소켓
   useEffect(() => {
     nestjsSocketRef.current = io("https://zzrot.store/", {
@@ -152,13 +174,13 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
       const { joint1Start, joint1End } = data;
       updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
-      sendLeftHandJoint(joint1Start, joint1End);
+      // sendLeftHandJoint(joint1Start, joint1End);
     };
 
     const handleRightsideBodyCoords = (data: BodyCoordsR) => {
       const { joint1Start, joint1End } = data;
       updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
-      sendRightHandJoint(joint1Start, joint1End);
+      // sendRightHandJoint(joint1Start, joint1End);
     };
 
     if (isTutorialImage2End && !isSimStarted && indexRef.current === 0) {
@@ -260,7 +282,12 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           playsInline
           style={{ order: indexRef.current }}
         />
-        <canvas ref={canvasRef} style={{ display: "none" }} />
+        <canvas
+          ref={canvasRef}
+          className="canvas-transparent"
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+        />
 
         {peers.slice(indexRef.current).map((peer, index) => (
           <Video
