@@ -127,10 +127,10 @@ export const useStage3Start = (
     isSimStarted,
     countdown,
     timeLimit,
-    5, // firstImageTime
-    5, // secondImageTime
-    25, // chatTime
-    15, // simTime
+    1, // firstImageTime
+    1, // secondImageTime
+    1, // chatTime
+    1, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -174,10 +174,10 @@ export const useStage4Start = (
     isSimStarted,
     countdown,
     timeLimit,
-    5, // firstImageTime
-    5, // secondImageTime
-    30, // chatTime
-    20, // simTime
+    1, // firstImageTime
+    1, // secondImageTime
+    1, // chatTime
+    1, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -221,10 +221,10 @@ export const useStage5Start = (
     isSimStarted,
     countdown,
     timeLimit,
-    5, // firstImageTime
-    5, // secondImageTime
-    30, // chatTime
-    60, // simTime
+    1, // firstImageTime
+    1, // secondImageTime
+    1, // chatTime
+    1, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,

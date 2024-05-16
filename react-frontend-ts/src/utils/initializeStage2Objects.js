@@ -85,7 +85,7 @@ export const initializeStage2Objects = (
 
     // 충돌 시 호출될 burnMouse 함수
     function burnMouse() {
-      Body.setStatic(mouseRef, true);
+      Body.setStatic(mouseRef.current, true);
     }
 
     //사라지는 벽
@@ -656,7 +656,7 @@ export const initializeStage2Objects = (
               (bodyA === fireBody && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === fireBody)
             ) {
-              alert("game over");
+              setResultState(2);
               burnMouse(); // 충돌 시 burnMouse 함수 호출
             }
           });
@@ -673,7 +673,7 @@ export const initializeStage2Objects = (
           ) {
             // 충돌 시 crashMouse 함수 호출
             crashMouse();
-            alert("game over");
+            setResultState(2);
           }
         });
       }
