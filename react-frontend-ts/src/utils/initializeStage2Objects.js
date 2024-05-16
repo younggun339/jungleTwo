@@ -539,7 +539,7 @@ export const initializeStage2Objects = (
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
           mouseRef.current.isStatic = true;
-            setResultState(0);
+          setResultState(0);
         }
         //------------cheese--------------
         //------------leftArm------------

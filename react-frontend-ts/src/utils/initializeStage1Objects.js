@@ -20,9 +20,9 @@ export const initializeStage1Objects = (
     refs;
 
   const walls = [
-    Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { fillStyle: 'red' }, }), //좌
-            //Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 50, { isStatic: true, render: { fillStyle: 'red' } }), //하
-            Bodies.rectangle(1600, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { fillStyle: 'red' } }), //우
+    Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { sprite:{texture:'/sprite/Wall.png', yScale:0.85,xScale:0.1 }} } ), //좌
+    //Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 50, { isStatic: true, render: { fillStyle: 'red' } }), //하
+    Bodies.rectangle(1600, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { sprite:{texture:'/sprite/Wall.png', yScale:0.85,xScale:0.1 }} }), //우
   ];
 
   if (!isTutorialImage2End) {
@@ -68,28 +68,28 @@ export const initializeStage1Objects = (
     }
 
     //사라지는 벽
-    const collapsesGround = (engine, mouse) => {
+    const collapsesGround = (engine, mouseRef) => {
       if (
-        750 <= mouse.position.x &&
-        mouse.position.x <= 755 &&
-        117 === Math.floor(mouse.position.y) &&
-        mouse.velocity.x >= 0
+        750 <= mouseRef.current.position.x &&
+        mouseRef.current.position.x <= 755 &&
+        117 === Math.floor(mouseRef.current.position.y) &&
+        mouseRef.current.velocity.x >= 0
       ) {
         Composite.remove(engine.world, ground);
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
     };
 
     const floors = [
-      Bodies.rectangle(250, canvasSize.y - 300, 350, 25, { isStatic: true, render: { fillStyle: 'blue' } }),
-      Bodies.rectangle(635, canvasSize.y - 300, 100, 25, { isStatic: true, render: { fillStyle: 'blue' } }),
-      Bodies.rectangle(1200, canvasSize.y - 400, 700, 25, { isStatic: true, render: { fillStyle: 'blue' } }),
-      Bodies.rectangle(1180, canvasSize.y - 140, 100, 25, { isStatic: true, render: { fillStyle: 'blue' } }),
-      Bodies.rectangle(1380, canvasSize.y - 140, 100, 25, { isStatic: true, render: { fillStyle: 'blue' } }),
+      Bodies.rectangle(250, canvasSize.y - 300, 350, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.31 } } }),
+      Bodies.rectangle(635, canvasSize.y - 300, 100, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.09 } } }),
+      Bodies.rectangle(1200, canvasSize.y - 400, 700, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.6 } } }),
+      Bodies.rectangle(1180, canvasSize.y - 140, 100, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.4,xScale:0.4} } }),
+      Bodies.rectangle(1380, canvasSize.y - 140, 100, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.4,xScale:0.4} } }),
       //Bodies.rectangle(300, canvas.y - 140, 300, 25, { isStatic: true, render: { fillStyle: 'blue' } }),
   ]
 
   const floor = Bodies.rectangle(300, canvasSize.y - 140, 300, 25, {
-      isStatic: true, render: { fillStyle: 'blue' },
+      isStatic: true, render: { sprite:{ texture:'/sprite/Ground4.png', yScale:0.4,xScale:0.8 } },
       collisionFilter: {
           category: 0x0004, // category 4
           mask: 0xFFFF // 모든 category와 충돌
@@ -97,14 +97,20 @@ export const initializeStage1Objects = (
   });
 
   // bombGround
-  const bombGround = Bodies.rectangle(1280, canvasSize.y - 140, 100, 25, { isStatic: true, render: { fillStyle: 'purple' } });
+  const bombGround = Bodies.rectangle(1280, canvasSize.y - 140, 100, 25, { isStatic: true, render: {
+    sprite:{
+        texture:'/assets/BrokenGround_0.png',
+        xScale:3,
+        yScale:3.5
+    }
+} });
 
   //사라지는바닥
   const ground = Bodies.rectangle(995, 320, 100, 25, {
       isStatic: true,
       render: {
-          fillStyle: 'yellow'
-      }
+        fillStyle: 'yellow'
+    }
   });
   //--------------------------벽 및 바닥--------------------------
 
@@ -112,9 +118,11 @@ export const initializeStage1Objects = (
         //폭탄
         bombRef.current = Bodies.circle(1285, 300, 20, {
           isStatic: true,
-          render: {
-              fillStyle: "indigo",
-          },
+            render: {
+                sprite:{
+                    texture:'/assets/Bomb_0.png'
+                }
+            },
       });
 
       //좌우반전 아이템 위에서부터 차례대로
@@ -129,7 +137,7 @@ export const initializeStage1Objects = (
       const panel = Bodies.rectangle(768, canvasSize.y - 350, 210, 25, {
           isStatic: true,
           angle: -Math.PI / 6, // 45도를 라디안으로 변환
-          render: { fillStyle: 'blue' }
+          render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.4,xScale:0.85 } }
       })
 
       //점프대-1
@@ -194,8 +202,10 @@ export const initializeStage1Objects = (
           {
               isStatic: true,
               render: {
-                  fillStyle: "red",
-              },
+                sprite: {
+                    texture: '/assets/Fire_0.png'
+                }
+            },
           }
       );
 
@@ -234,8 +244,10 @@ export const initializeStage1Objects = (
       const weight = Bodies.rectangle(300, 350, 40, 40, {
           isStatic: true,
           render: {
-              fillStyle: "yellow",
-          },
+            sprite:{
+                texture:'/assets/Weight_0.png'
+            }
+        },
           collisionFilter: {
               category: 0x0002, // category 2
               mask: 0xFFFF ^ 0x0001 // 모든 category와 충돌하되 category 1과는 충돌하지 않음
@@ -274,8 +286,8 @@ export const initializeStage1Objects = (
       restitution: 0, // 반발 계수
       friction: 0.8,    // 마찰 계수
       render: {
-          fillStyle: 'blue'
-      },
+        fillStyle: "blue",
+    },
       collisionFilter: {
           category: 0x0004, // category 4
           mask: 0xFFFF // 모든 category와 충돌
@@ -378,8 +390,12 @@ export const initializeStage1Objects = (
           {
               isStatic: true,
               render: {
-                  fillStyle: "grey",
-              },
+                sprite: {
+                    texture: "/sprite/Cheese.png",
+                    xScale: 2,
+                    yScale: 2,
+                  },
+            },
           }
       );
 
@@ -451,7 +467,7 @@ export const initializeStage1Objects = (
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
           mouseRef.current.isStatic = true;
-          alert("게임 클리어!");
+          setResultState(0);
         }
         //------------cheese--------------
         //------------leftArm------------
@@ -784,7 +800,7 @@ export const initializeStage1Objects = (
     //----------leftArm---------
     Events.on(engine, "beforeUpdate", () => {
       // ------------사라지는 바닥------------
-      collapsesGround(engine, mouseRef.current);
+      collapsesGround(engine, mouseRef);
       //------------사라지는 바닥------------
 
       //---------rightArm---------

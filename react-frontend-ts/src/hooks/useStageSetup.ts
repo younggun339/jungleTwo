@@ -30,7 +30,11 @@ const useStage1Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.5;
+    if (isSimStarted) {
+      engine.world.gravity.y = 0.15;
+      engine.world.gravity.x = 0.04;
+      engine.timing.timeScale = 2;
+    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -65,7 +69,7 @@ const useStage1Setup = (
       Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End]);
+  }, [isTutorialImage2End, isSimStarted]);
 
   useSimulation({
     isSimStarted,
@@ -97,8 +101,11 @@ const useStage2Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.x = 0.04;
-    engine.world.gravity.y = 0.15;
+    if (isSimStarted) {
+      engine.world.gravity.y = 0.15;
+      engine.world.gravity.x = 0.04;
+      engine.timing.timeScale = 3;
+    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -133,7 +140,7 @@ const useStage2Setup = (
       Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End]);
+  }, [isTutorialImage2End, isSimStarted]);
 
   useSimulation({
     isSimStarted,
@@ -157,6 +164,7 @@ const useStage3Setup = (
 ) => {
   const engineRef = useRef<Engine>(Engine.create());
   const runner = Runner.create();
+  
 
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
@@ -165,8 +173,11 @@ const useStage3Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.15;
-    engine.world.gravity.x = 0.04;
+    if (isSimStarted) {
+      engine.world.gravity.y = 0.15;
+      engine.world.gravity.x = 0.04;
+      engine.timing.timeScale = 3;
+    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -201,7 +212,7 @@ const useStage3Setup = (
       Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End]);
+  }, [isTutorialImage2End, isSimStarted]);
 
   useSimulation({
     isSimStarted,
@@ -233,8 +244,11 @@ const useStage4Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.15;
-    engine.world.gravity.x = 0.04;
+    if (isSimStarted) {
+      engine.world.gravity.y = 0.15;
+      engine.world.gravity.x = 0.04;
+      engine.timing.timeScale = 3;
+    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -269,7 +283,7 @@ const useStage4Setup = (
       Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End]);
+  }, [isTutorialImage2End, isSimStarted]);
 
   useSimulation({
     isSimStarted,
@@ -301,8 +315,11 @@ const useStage5Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.15;
-    engine.world.gravity.x = 0.04;
+    if (isSimStarted) {
+      engine.world.gravity.y = 0.15;
+      engine.world.gravity.x = 0.04;
+      engine.timing.timeScale = 3;
+    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -337,7 +354,7 @@ const useStage5Setup = (
       Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End]);
+  }, [isTutorialImage2End, isSimStarted]);
 
   useSimulation({
     isSimStarted,

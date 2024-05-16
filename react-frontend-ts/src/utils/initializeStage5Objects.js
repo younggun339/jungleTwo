@@ -19,9 +19,9 @@ export const initializeStage5Objects = (
     refs;
 
   const walls = [
-    Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { fillStyle: 'red' }, }), //좌
+    Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { sprite:{texture:'/sprite/Wall.png', yScale:0.85,xScale:0.1 } }, }), //좌
     //Bodies.rectangle(canvasSize.width / 2, canvasSize.y, canvasSize.width, 50, { isStatic: true, render: { fillStyle: 'red' } }), //하
-    Bodies.rectangle(1600, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { fillStyle: 'red' } }), //우
+    Bodies.rectangle(1600, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { sprite:{texture:'/sprite/Wall.png', yScale:0.85,xScale:0.1 }}}), //우
   ];
 
   if (!isTutorialImage2End) {
@@ -81,30 +81,29 @@ const collapsesGround = (engine, mouseRef) => {
 };
 
 const floors = [
-  //col0
-  Bodies.rectangle(200, canvasSize.y - 500, 300, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //위왼-1-row0
-  Bodies.rectangle(770, canvasSize.y - 500, 540, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //위중-2-row1
-  Bodies.rectangle(1340, canvasSize.y - 500, 410, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //위오-3-row2
-  //col1
-  //Bodies.rectangle(375, canvasSize.y - 360, 650, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //상중왼-4-row0
-  Bodies.rectangle(1300, canvasSize.y - 360, 500, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //상중오-5-row1
-  Bodies.rectangle(835, canvasSize.y - 360, 50, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //상중오-5-row1
-  //col2      
-  Bodies.rectangle(150, canvasSize.y - 190, 200, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //하중왼-6-row0
-  Bodies.rectangle(800, canvasSize.y - 190, 900, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //하중중-7-row1
-  Bodies.rectangle(1475, canvasSize.y - 170, 150, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //하중오-8-row2
-  //col3
-  Bodies.rectangle(630, canvasSize.y - 100, 1180, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //하-9-row0
-  //Bodies.rectangle(800, canvasSize.y - 60, 1500, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //하-9-row0
-  //ground 4 cat button
-  Bodies.rectangle(770, canvasSize.y - 260, 100, 10, { isStatic: true, render: { fillStyle: 'blue' } }), //10
-  //temp wall
-  //Bodies.rectangle(canvasSize.width / 2, canvasSize.y/2, 10, 1000, { isStatic: true, render: { fillStyle: 'blue' } }),
+   //col0
+   Bodies.rectangle(200, canvasSize.y - 500, 300, 25, { isStatic: true, render: {sprite:{texture:'/sprite/Ground4.png', yScale:0.35,xScale:1.2}} }), //위왼-1-row0
+   Bodies.rectangle(770, canvasSize.y - 500, 540, 25, { isStatic: true, render: {sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.5 } } }), //위중-2-row1
+   Bodies.rectangle(1340, canvasSize.y - 500, 410, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.35,xScale:1.5}} }), //위오-3-row2
+   //col1
+   //Bodies.rectangle(375, canvasSize.y - 360, 650, 25, { isStatic: true, render: { fillStyle: 'blue' } }), //상중왼-4-row0
+   Bodies.rectangle(1300, canvasSize.y - 360, 500, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.45 }} }), //상중오-5-row1
+   Bodies.rectangle(835, canvasSize.y - 360, 50, 25, { isStatic: true, render: {sprite:{texture:'/sprite/Top.png', yScale:0.11,xScale:0.04 } } }), //상중오-5-row1
+   //col2      
+   Bodies.rectangle(150, canvasSize.y - 190, 200, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.35,xScale:0.8}} }), //하중왼-6-row0
+   Bodies.rectangle(800, canvasSize.y - 190, 900, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.79 } }} ), //하중중-7-row1
+   Bodies.rectangle(1475, canvasSize.y - 170, 150, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Ground4.png', yScale:0.35,xScale:0.7}} }), //하중오-8-row2
+   //col3
+   Bodies.rectangle(630, canvasSize.y - 100, 1180, 25, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:1.02 } } }), //하-9-row0
+   
+   //ground 4 cat button
+   Bodies.rectangle(770, canvasSize.y - 260, 100, 10, { isStatic: true, render: { sprite:{texture:'/sprite/Top.png', yScale:0.04,xScale:0.08 }} }), //10     
 ]
 
 //상중왼-4-row0
 const floor = Bodies.rectangle(390, canvasSize.y - 360, 690, 25, {
-  isStatic: true, render: { fillStyle: 'blue' },
+  isStatic: true,
+  render:  {sprite:{texture:'/sprite/Top.png', yScale:0.1,xScale:0.6 } },
   collisionFilter: {
       category: 0x0004, // category 4
       mask: 0xFFFF // 모든 category와 충돌
@@ -112,14 +111,24 @@ const floor = Bodies.rectangle(390, canvasSize.y - 360, 690, 25, {
 });
 
 // bombGround
-const bombGround = Bodies.rectangle(1090, canvasSize.y - 500, 100, 25, { isStatic: true, render: { fillStyle: 'purple' } });
+const bombGround = Bodies.rectangle(1090, canvasSize.y - 500, 100, 25, { isStatic: true,  render: {
+  sprite:{
+      texture:'/assets/BrokenGround_0.png',
+      xScale:3,
+      yScale:3.5
+  }
+}  });
 
 //사라지는바닥
 const ground = Bodies.rectangle(300, 410, 100, 25, {
   isStatic: true,
   render: {
-      fillStyle: 'yellow'
-  }
+    sprite:{
+        texture:'/assets/BrokenGround_0.png',
+        xScale:3,
+        yScale:3.5
+    }
+}
 });
   //--------------------------벽 및 바닥--------------------------
 
@@ -128,7 +137,9 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
         bombRef.current  = Bodies.circle(1085, 40, 20, {
           isStatic: true,
           render: {
-              fillStyle: "indigo",
+              sprite:{
+                texture:'/assets/Bomb_0.png'
+              }
           },
       });
 
@@ -139,39 +150,59 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
       //점프대-1
       const jumpPad = Bodies.rectangle(1270, canvasSize.y - 0, 20, 20, {
           isStatic: true,
-          render: {
-              fillStyle: 'yellow'
-          }
+          render : {
+            sprite: {
+            texture: "/assets/JumpPad_0.png",
+            xScale: 1,
+            yScale: 1,
+          },
+        }
       });
       //점프대-2
       const jumpPad2 = Bodies.rectangle(1353, canvasSize.y - 100, 20, 20, {
           isStatic: true,
-          render: {
-              fillStyle: 'yellow'
-          }
+          render : {
+            sprite: {
+            texture: "/assets/JumpPad_0.png",
+            xScale: 1,
+            yScale: 1,
+          },
+        }
       });
       //슈퍼점프대-1
       const superJumppad = Bodies.rectangle(770, canvasSize.y - 320, 20, 20, {
           isStatic: true,
-          render: {
-              fillStyle: 'red'
-          }
+          render : {
+            sprite: {
+            texture: "/assets/JumpPad2_0.png",
+            xScale: 1,
+            yScale: 1,
+          },
+        }
       });
 
       //-------------------------------------------------------------
       // portal 생성
       const portal1 = Bodies.rectangle(710, 165, 25, 25, {
           isStatic: true,
-          render: {
-              fillStyle: "aqua",
+          render : {
+            sprite: {
+            texture: "/assets/Portal_0.png",
+            xScale: 1,
+            yScale: 1,
           },
+        }
       });
 
       // portal 생성
       const portal2 = Bodies.rectangle(1410, 340, 25, 25, {
           isStatic: true,
           render: {
-              fillStyle: "aqua",
+            sprite: {
+              texture: "/assets/Portal_0.png",
+              xScale: 1,
+              yScale: 1,
+            },
           },
       });
       //----------------------------------------------------------------
@@ -180,7 +211,11 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
       const portal3 = Bodies.rectangle(810, 165, 25, 25, {
           isStatic: true,
           render: {
-              fillStyle: "white",
+            sprite: {
+              texture: "/assets/Portal2_0.png",
+              xScale: 1,
+              yScale: 1,
+            },
           },
       });
 
@@ -188,7 +223,11 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
       const portal4 = Bodies.rectangle(1110, 330, 25, 25, {
           isStatic: true,
           render: {
-              fillStyle: "white",
+             sprite: {
+             texture: "/assets/Portal2_0.png",
+              xScale: 1,
+              yScale: 1,
+            },
           },
       });
       //----------------------------------------------------------------
@@ -198,7 +237,11 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           {
               isStatic: true,
               render: {
-                  fillStyle: "red",
+                sprite: {
+                  texture: "/assets/Fire_0.png",
+                  xScale: 1,
+                  yScale: 1,
+                },
               },
           }
       );
@@ -208,7 +251,11 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           {
               isStatic: true,
               render: {
-                  fillStyle: "red",
+                sprite: {
+                  texture: "/assets/Fire_0.png",
+                  xScale: 1,
+                  yScale: 1,
+                },
               },
           }
       );
@@ -229,7 +276,11 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           {
               isStatic: true,
               render: {
-                  fillStyle: "red",
+                sprite: {
+                  texture: "/assets/Fire_0.png",
+                  xScale: 1,
+                  yScale: 1,
+                },
               },
           }
       );
@@ -238,7 +289,9 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
       const weight = Bodies.rectangle(550, 145, 40, 40, {
           isStatic: true,
           render: {
-              fillStyle: "yellow",
+            sprite:{
+              texture:'/assets/Weight_0.png'
+          }
           },
           collisionFilter: {
               category: 0x0002, // category 2
@@ -254,20 +307,35 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
 
           isStatic: true,
           render: {
-              fillStyle: 'purple'
+            sprite:{
+              texture:'/assets/CatButton.png',
+              xScale:0.05,
+              yScale: 0.05,
+          }
           }
       });
       //고양이버튼-1
       const catButton2 = Bodies.rectangle(835, canvasSize.y - 377, 40, 10, {
           isStatic: true,
           render: {
-              fillStyle: 'purple'
+            sprite:{
+              texture:'/assets/CatButton.png',
+              xScale:0.05,
+              yScale: 0.05,
+          }
           }
       });
 
       // 고양이 생성
       const cat = Bodies.rectangle(530, canvasSize.y - 250, 200, 90, {
           isStatic: true,
+          render: {
+            sprite: {
+                texture: "/assets/CatOpen.png",
+                xScale: 0.17,
+                yScale: 0.17,
+              },
+        },
 
       });
       //----------------------------end region 아이템----------------------------
@@ -279,7 +347,10 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
       restitution: 0, // 반발 계수
       friction: 0.8,    // 마찰 계수
       render: {
-          fillStyle: 'blue'
+        sprite: {
+          texture: "/assets/MouseWalk_0.png",
+        },
+
       },
       collisionFilter: {
           category: 0x0004, // category 4
@@ -300,22 +371,22 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
     //     angle: Math.PI,
     //     render: {sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:1.1} }
     // })
-    leftArmLeftRef.current = Bodies.rectangle(
-      canvasSize.x / 4,
-      canvasSize.y / 2,
-      0,
-      15,
-      {
-        isStatic: true,
-        angle: 0,
-        collisionFilter: { mask: 0 },
-        render: {
-          fillStyle: "blue",
-          strokeStyle: "black",
-          lineWidth: 1,
-        },
-      }
-    );
+    // leftArmLeftRef.current = Bodies.rectangle(
+    //   canvasSize.x / 4,
+    //   canvasSize.y / 2,
+    //   0,
+    //   15,
+    //   {
+    //     isStatic: true,
+    //     angle: 0,
+    //     collisionFilter: { mask: 0 },
+    //     render: {
+    //       fillStyle: "blue",
+    //       strokeStyle: "black",
+    //       lineWidth: 1,
+    //     },
+    //   }
+    // );
 
     //----------------내가만든기물------------------
 
@@ -327,22 +398,22 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
     //     angle: -Math.PI / 5, // 45도를 라디안으로 변환
     //     render: { sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:0.7} }
     // })
-    rightArmRightRef.current = Bodies.rectangle(
-      (canvasSize.x * 3) / 4,
-      canvasSize.y / 2,
-      0,
-      15,
-      {
-        isStatic: true,
-        angle: 0,
-        collisionFilter: { mask: 0 },
-        render: {
-          fillStyle: "blue",
-          strokeStyle: "black",
-          lineWidth: 1,
-        },
-      }
-    );
+    // rightArmRightRef.current = Bodies.rectangle(
+    //   (canvasSize.x * 3) / 4,
+    //   canvasSize.y / 2,
+    //   0,
+    //   15,
+    //   {
+    //     isStatic: true,
+    //     angle: 0,
+    //     collisionFilter: { mask: 0 },
+    //     render: {
+    //       fillStyle: "blue",
+    //       strokeStyle: "black",
+    //       lineWidth: 1,
+    //     },
+    //   }
+    // );
     //---------------피어가만든기물-----------------
 
     // // 이미지를 순환시키기 위한 로직
@@ -382,7 +453,11 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           {
               isStatic: true,
               render: {
-                  fillStyle: "grey",
+                sprite: {
+                  texture: "/sprite/Cheese.png",
+                  xScale: 2,
+                  yScale: 2,
+                },
               },
           }
       );
@@ -406,10 +481,15 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           (bodyA === catButton && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
+          catButton.render.sprite.texture = '/assets/CatButtonPush.png'
+          catButton.render.sprite.xScale = 0.05;
+          catButton.render.sprite.yScale = 0.05;
           catButton.collisionFilter = {
             group: 0,
           }; // catButton의 충돌 필터 변경
-          cat.render.fillStyle = "red"; // cat의 색상을 빨간색으로 변경
+          cat.render.sprite.texture = '/assets/CatClose.png';
+          cat.render.sprite.xScale = 0.17;
+          cat.render.sprite.yScale = 0.17;
         }
         // mouse과 catButton2이 충돌했을 때
         if (
@@ -417,10 +497,15 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           (bodyA === catButton2 && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
+          catButton2.render.sprite.texture = '/assets/CatButtonPush.png'
+          catButton2.render.sprite.xScale = 0.05;
+          catButton2.render.sprite.yScale = 0.05;
           catButton2.collisionFilter = {
             group: 0,
           }; // catButton의 충돌 필터 변경
-          cat.render.fillStyle = "red"; // cat의 색상을 빨간색으로 변경
+          cat.render.sprite.texture = '/assets/CatClose.png';
+          cat.render.sprite.xScale = 0.17;
+          cat.render.sprite.yScale = 0.17;
         }
         // mouse과 cat이 충돌했을 때
         if (
@@ -428,7 +513,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           (bodyA === cat && bodyB === mouseRef.current)
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
-          if (!(cat.render.fillStyle === "red")) {
+          if (!(cat.render.fillStyle ===  '/assets/CatClose.png')) {
             alert("게임오버");
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {
@@ -445,7 +530,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
           mouseRef.current.isStatic = true;
-          alert("게임 클리어!");
+          setResultState(0);
         }
         //------------cheese--------------
         //------------leftArm------------

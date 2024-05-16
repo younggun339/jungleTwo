@@ -64,7 +64,7 @@ const startCapturing = (
         }
       }
     }
-  }, 100);
+  }, 200);
 
   return () => {
     clearInterval(interval);

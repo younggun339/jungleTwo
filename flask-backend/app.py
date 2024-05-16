@@ -31,7 +31,7 @@ def decode_image(image_data):
 
 @socketio.on('image-capture-L')
 def handle_image_capture(data):
-    # print("Received image data")
+    print("Received image data")
     # Base64 문자열에서 이미지 데이터 디코딩
     # Base64 문자열에서 이미지 데이터 디코딩
     image_data = data['image'].split(",")[1]  # "data:image/jpeg;base64," 부분 제거
@@ -69,7 +69,7 @@ def handle_image_capture(data):
 
 @socketio.on('image-capture-R')
 def handle_image_capture(data):
-    # print("Received image data")
+    print("Received image data")
     # Base64 문자열에서 이미지 데이터 디코딩
     # Base64 문자열에서 이미지 데이터 디코딩
     image_data = data['image'].split(",")[1]  # "data:image/jpeg;base64," 부분 제거

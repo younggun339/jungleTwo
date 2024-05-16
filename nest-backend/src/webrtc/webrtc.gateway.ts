@@ -28,26 +28,49 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const roomName = this.user_room[client.id];
     delete this.user_room[client.id];
 
+    console.log(this.room_user)
+
     for (let i = 0; i < this.room_user[roomName].length; i++) {
         if (this.room_user[roomName][i][0] === client.id) {
             this.room_user[roomName].splice(i, 1);
             break;
         }
     }
+
+    
     for (let i = 0; i < this.room_user[roomName].length; i++) {
         const users = this.room_user[roomName][i];
         this.server.to(users[0]).emit('user', this.room_user[roomName]);
     }
 
-    setTimeout(() => {
-      Object.keys(this.room_user).forEach(roomName => {
-        const users = this.room_user[roomName]; 
-        if (users.length === 1) {
-          console.log(roomName);
-          this.server.emit('delete', roomName);
-        }
-      });
-    }, 2000);
+    Object.keys(this.room_user).forEach(roomName => {
+      const users = this.room_user[roomName]; 
+      if (users.length === 0) {
+          console.log(this.room_user);
+        
+          let retryCount = 0;
+          const maxRetryCount = 30; // 최대 재시도 횟수
+        
+          const emitDeleteEvent = () => {
+            this.server.emit('delete', roomName, (error) => {
+              if (error) {
+                retryCount++;
+                console.error('Failed to emit "delete" event:', error);
+        
+                if (retryCount < maxRetryCount) {
+                  setTimeout(emitDeleteEvent, 500);
+                } else {
+                  console.error('Failed to emit "delete" event after several retries');
+                }
+              } else {
+                console.log('Successfully emitted "delete" event');
+              }
+            });
+          };
+        
+          emitDeleteEvent(); // 초기 이벤트 전송
+        }
+    });
 }
 
   @SubscribeMessage('join-room')
@@ -112,6 +135,7 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.server.to(user[0]).emit('user', this.room_user[gameRoomID]);
       });
     }, 2000);
+
   }
 
   @SubscribeMessage('ready-game')

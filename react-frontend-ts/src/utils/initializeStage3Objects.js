@@ -533,7 +533,7 @@ export const initializeStage3Objects = (
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
           mouseRef.current.isStatic = true;
-          alert("게임 클리어!");
+          setResultState(0);
         }
         //------------cheese--------------
         //------------leftArm------------

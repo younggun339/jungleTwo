@@ -1,7 +1,7 @@
-body{
+body {
   background-color: white;
-  background-size: cover; 
-  background-repeat: no-repeat; 
+  background-size: cover;
+  background-repeat: no-repeat;
   background-position: center;
 }
 .wrapper {
@@ -11,7 +11,7 @@ body{
   height: 100vh;
 }
 
-.form-signin{
+.form-signin {
   --bg: #fff;
   --text: #382b22;
   --light-pink: #ffffff;
@@ -30,7 +30,8 @@ body{
   border: 2px solid var(--pink-border);
   border-radius: 10em;
   transform-style: preserve-3d;
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+    background 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 /* .form-signin::before {
   position: absolute;

@@ -18,7 +18,7 @@ const pcConfig = {
   ],
 };
 
-const retryFetch = async (url: any, options: any, retries = 20) => {
+const retryFetch = async (url: any, options: any, retries = 50) => {
   for (let i = 0; i < retries; i++) {
     try {
       const response = await fetch(url, options);

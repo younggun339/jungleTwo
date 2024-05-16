@@ -1,8 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Orbit&display=swap");
 
 body {
-  /* background-image: url('/public/images/background.webp') !important; */
+  /* background-image: url("/images/background.webp"); */
   /* src/styles/room.css에 있고, 이미지가 public/images/background.webp에 있다면, CSS 파일에서 이미지까지의 경로는 ../../../public/images/background.webp */
+
   font-family: "IBM Plex Sans KR", sans-serif;
   font-weight: 400;
   font-style: normal;
