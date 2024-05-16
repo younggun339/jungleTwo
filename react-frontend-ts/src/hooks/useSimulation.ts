@@ -1,7 +1,7 @@
 // useSimulation.ts
-import { useEffect } from 'react';
-import { MutableRefObject } from 'react';
-import { Engine, Body, Events } from 'matter-js';
+import { useEffect } from "react";
+import { MutableRefObject } from "react";
+import { Engine, Body, Events } from "matter-js";
 
 interface UseSimulationProps {
   isSimStarted: boolean;
@@ -20,11 +20,10 @@ const useSimulation = ({
   bombRef,
   engineRef,
 }: UseSimulationProps) => {
-  
   useEffect(() => {
     const applyContinuousForce = () => {
       if (mouseRef.current) {
-        Body.applyForce(mouseRef.current, mouseRef.current.position, { x: 0.04, y: 0 });
+        // Body.applyForce(mouseRef.current, mouseRef.current.position, { x: 0.04, y: 0 });
         Body.setAngle(mouseRef.current, 0);
       }
     };

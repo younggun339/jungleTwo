@@ -18,9 +18,8 @@ const useStage1Setup = (
   sceneRef: MutableRefObject<HTMLDivElement | null>,
   isSimStarted: boolean,
   isTutorialImage2End: boolean,
-  setResultState: (value: number) => void,
+  setResultState: (value: number) => void
 ) => {
-
   const engineRef = useRef<Engine>(Engine.create());
   const runner = Runner.create();
 
@@ -74,7 +73,7 @@ const useStage1Setup = (
     rightArmRightRef,
     mouseRef,
     bombRef,
-    engineRef
+    engineRef,
   });
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
@@ -86,9 +85,8 @@ const useStage2Setup = (
   sceneRef: MutableRefObject<HTMLDivElement | null>,
   isSimStarted: boolean,
   isTutorialImage2End: boolean,
-  setResultState: (value: number) => void,
+  setResultState: (value: number) => void
 ) => {
-
   const engineRef = useRef<Engine>(Engine.create());
   const runner = Runner.create();
 
@@ -99,7 +97,8 @@ const useStage2Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    engine.world.gravity.y = 0.5;
+    engine.world.gravity.x = 0.04;
+    engine.world.gravity.y = 0.15;
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -142,7 +141,7 @@ const useStage2Setup = (
     rightArmRightRef,
     mouseRef,
     bombRef,
-    engineRef
+    engineRef,
   });
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
@@ -154,9 +153,8 @@ const useStage3Setup = (
   sceneRef: MutableRefObject<HTMLDivElement | null>,
   isSimStarted: boolean,
   isTutorialImage2End: boolean,
-  setResultState: (value: number) => void,
+  setResultState: (value: number) => void
 ) => {
-
   const engineRef = useRef<Engine>(Engine.create());
   const runner = Runner.create();
 
@@ -210,7 +208,7 @@ const useStage3Setup = (
     rightArmRightRef,
     mouseRef,
     bombRef,
-    engineRef
+    engineRef,
   });
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
@@ -222,9 +220,8 @@ const useStage4Setup = (
   sceneRef: MutableRefObject<HTMLDivElement | null>,
   isSimStarted: boolean,
   isTutorialImage2End: boolean,
-  setResultState: (value: number) => void,
+  setResultState: (value: number) => void
 ) => {
-
   const engineRef = useRef<Engine>(Engine.create());
   const runner = Runner.create();
 
@@ -278,7 +275,7 @@ const useStage4Setup = (
     rightArmRightRef,
     mouseRef,
     bombRef,
-    engineRef
+    engineRef,
   });
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
@@ -290,9 +287,8 @@ const useStage5Setup = (
   sceneRef: MutableRefObject<HTMLDivElement | null>,
   isSimStarted: boolean,
   isTutorialImage2End: boolean,
-  setResultState: (value: number) => void,
+  setResultState: (value: number) => void
 ) => {
-
   const engineRef = useRef<Engine>(Engine.create());
   const runner = Runner.create();
 
@@ -346,11 +342,17 @@ const useStage5Setup = (
     rightArmRightRef,
     mouseRef,
     bombRef,
-    engineRef
+    engineRef,
   });
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
 };
 
-export { useStage1Setup, useStage2Setup, useStage3Setup, useStage4Setup, useStage5Setup }; 
+export {
+  useStage1Setup,
+  useStage2Setup,
+  useStage3Setup,
+  useStage4Setup,
+  useStage5Setup,
+};
 export default useStage1Setup;

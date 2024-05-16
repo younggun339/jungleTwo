@@ -2,11 +2,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
-import { useStage1Setup, useStage2Setup, useStage3Setup, useStage4Setup, useStage5Setup } from "../hooks/useStageSetup";
-import { useStage1Start, useStage2Start, useStage3Start, useStage4Start, useStage5Start } from "../hooks/useStageStart";
-import { resetStage1Objects, resetStage2Objects, resetStage3Objects, resetStage4Objects, resetStage5Objects } from "../utils/resetStageObjects";
+import {
+  useStage1Setup,
+  useStage2Setup,
+  useStage3Setup,
+  useStage4Setup,
+  useStage5Setup,
+} from "../hooks/useStageSetup";
+import {
+  useStage1Start,
+  useStage2Start,
+  useStage3Start,
+  useStage4Start,
+  useStage5Start,
+} from "../hooks/useStageStart";
+import {
+  resetStage1Objects,
+  resetStage2Objects,
+  resetStage3Objects,
+  resetStage4Objects,
+  resetStage5Objects,
+} from "../utils/resetStageObjects";
 import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
-import { updateLsideSkeleton, updateRsideSkeleton } from "../utils/updateSkeleton";
+import {
+  updateLsideSkeleton,
+  updateRsideSkeleton,
+} from "../utils/updateSkeleton";
 import Video from "./Video";
 import "../styles/game.css";
 
@@ -30,7 +51,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const flaskSocketRef = useRef<Socket | null>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+
   const [countdown, setCountdown] = useState<number | null>(null);
   const [timeLimit, setTimeLimit] = useState<number | null>(null);
   const [currentStage, setCurrentStage] = useState<number>(1);
@@ -97,27 +118,23 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     resetStage5Objects,
   ];
 
-  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = stageSetups[currentStage - 1](
-    canvasSize,
-    sceneRef,
-    isSimStarted,
-    isTutorialImage2End,
-    setResultState
-  );
+  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = stageSetups[
+    currentStage - 1
+  ](canvasSize, sceneRef, isSimStarted, isTutorialImage2End, setResultState);
 
   const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } =
-  useWebRTC(
-    nestjsSocketRef,
-    flaskSocketRef,
-    gameRoomID,
-    leftArmLeftRef,
-    rightArmRightRef,
-    canvasSize,
-    canvasRef,
-    userName,
-    isTutorialImage2End,
-    isSimStarted
-  ) as WebRTCResult;
+    useWebRTC(
+      nestjsSocketRef,
+      flaskSocketRef,
+      gameRoomID,
+      leftArmLeftRef,
+      rightArmRightRef,
+      canvasSize,
+      canvasRef,
+      userName,
+      isTutorialImage2End,
+      isSimStarted
+    ) as WebRTCResult;
 
   // =============== mediapipe 이벤트 ===============
   // 왼팔 및 오른팔 사각형의 위치를 매 프레임마다 업데이트
@@ -261,13 +278,16 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         </div>
       )}
 
-      {isTutorialImage1End && !isTutorialImage2End && countdown && countdown > 0 && (
-        <div id="tutorial-image-2">
-          <img src="/images/tutorialImage_002.png" alt="tutorial2" />
-        </div>
-      )}
+      {isTutorialImage1End &&
+        !isTutorialImage2End &&
+        countdown &&
+        countdown > 0 && (
+          <div id="tutorial-image-2">
+            <img src="/images/tutorialImage_002.png" alt="tutorial2" />
+          </div>
+        )}
 
-        {/* 작전 타임 && 제한 시간 */}
+      {/* 작전 타임 && 제한 시간 */}
       {isTutorialImage2End && countdown && countdown > 0 && (
         <div id="countdown">{countdown}</div>
       )}
@@ -301,7 +321,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
               <h1> 시간이 초과되었습니다! </h1>
               <img src="/images/resultState_timeout.png" alt="Timeout" />
               <button onClick={handleRetry}>다시하기</button>
-              <button disabled>다음스테이지</button>
+              <button onClick={handleNextStage}>다음스테이지</button>
             </div>
           )}
           {resultState === 2 && (
@@ -309,7 +329,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
               <h1> 바닥 함정에 떨어졌습니다! </h1>
               <img src="/images/resultState_spiketrap.png" alt="Trap" />
               <button onClick={handleRetry}>다시하기</button>
-              <button disabled>다음스테이지</button>
+              <button onClick={handleNextStage}>다음스테이지</button>
             </div>
           )}
           {resultState === 3 && (
@@ -317,7 +337,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
               <h1> 폭탄에 닿았습니다! </h1>
               <img src="/images/resultState_bomb.png" alt="Bomb" />
               <button onClick={handleRetry}>다시하기</button>
-              <button disabled>다음스테이지</button>
+              <button onClick={handleNextStage}>다음스테이지</button>
             </div>
           )}
           {/* 데드씬 추가 예정 */}
