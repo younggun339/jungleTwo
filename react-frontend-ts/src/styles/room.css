@@ -1,10 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Orbit&display=swap");
-
+@font-face {
+  font-family: "MyFont";
+  src: url("./CookieRun Regular.otf") format("opentype");
+  /* url('/fonts/CookieRun Bold.otf') format('otf'),
+       url('/fonts/CookieRun Regular.otf') format('otf'); */
+}
 body {
-  /* background-image: url("/images/background.webp"); */
-  /* src/styles/room.css에 있고, 이미지가 public/images/background.webp에 있다면, CSS 파일에서 이미지까지의 경로는 ../../../public/images/background.webp */
+  background-image: url("./back.png");
+  font-family: "MyFont";
 
-  font-family: "IBM Plex Sans KR", sans-serif;
+  /* font-family: "IBM Plex Sans KR", sans-serif; */
   font-weight: 400;
   font-style: normal;
   height: 100vh;
@@ -18,15 +22,16 @@ body {
 }
 
 .header {
+  font-family: "MyFont";
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #E6E6FA;
+  background-color: #e6e6fa;
 }
 
 /* Styles for profile section */
 .profile {
-  position: relative; 
+  position: relative;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -54,7 +59,6 @@ body {
   border-radius: 50%;
   margin-right: 5px;
 }
-
 
 /* .menu {
   position: absolute;
@@ -108,7 +112,7 @@ body {
 .searchInput {
   padding: 12px; /* Increase padding for a larger input */
   margin-right: 12px; /* Increase margin for spacing */
-  border: 2px solid #4B0082; /* Change border color and thickness */
+  border: 2px solid #4b0082; /* Change border color and thickness */
   border-radius: 5px; /* Add border radius for a rounded look */
   font-size: 18px; /* Increase font size for better readability */
   outline: none; /* Remove default outline */
@@ -125,7 +129,7 @@ body {
 .roomSearch {
   margin-right: 12px;
   padding: 10px 20px; /* Increase padding for a larger button */
-  background-color: #4B0082; /* Same blue as input border */
+  background-color: #4b0082; /* Same blue as input border */
   color: #fff;
   border: none;
   border-radius: 5px; /* Match input border radius */
@@ -135,7 +139,7 @@ body {
   transition: background-color 0.3s; /* Add transition for hover effect */
 
   /* Add box shadow for a subtle effect, similar to input but lighter */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .roomSearch:hover {
@@ -186,7 +190,7 @@ body {
     opacity: 1;
   }
   .title {
-    font-weight: bolder;
+    font-family: "MyFont";
     font-size: 5rem;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -221,7 +225,7 @@ body {
   }
 }
 button {
-  font-family: "IBM Plex Sans KR", sans-serif;
+  font-family: "MyFont";
   --text: #ede7f6;
   --light-pink: #673ab7;
   --pink: #7e57c2;
@@ -341,7 +345,6 @@ button:active::before {
       display: flex;
       justify-content: center;
       width: 80%;
-      font-weight: bolder;
       font-size: 5rem;
     }
     .refreshButton {

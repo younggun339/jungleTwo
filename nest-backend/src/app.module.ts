@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { SimulationController } from './simulation.controller';
 import { SimulationGateway } from './simulation.gateway';
 import { WebRTCGateway } from './webrtc/webrtc.gateway';
-
+// import { MouseEventGateway} from './mouseEvent/mouseEvent.gateway';
 @Module({
   imports: [WebRTCGateway],
   controllers: [AppController, SimulationController],

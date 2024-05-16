@@ -30,6 +30,7 @@ import {
 } from "../utils/updateSkeleton";
 import Video from "./Video";
 import "../styles/game.css";
+import { Body, Bodies, World, Engine } from "matter-js";
 
 interface GameProps {
   userName: string;
@@ -57,16 +58,16 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [currentStage, setCurrentStage] = useState<number>(1);
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
-  const [isGameStarted, setIsGameStarted] = useState(false);
-  const [isTutorialImage1End, setIsTutorialImage1End] = useState(false);
-  const [isTutorialImage2End, setIsTutorialImage2End] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(true);
+  const [isTutorialImage1End, setIsTutorialImage1End] = useState(true);
+  const [isTutorialImage2End, setIsTutorialImage2End] = useState(true);
   const [isSimStarted, setIsSimStarted] = useState(false);
   const [resultState, setResultState] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  //get coordinates
+  //--------------get coordinates---------------
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
+  const [mouseEndPos, setMouseEndPos] = useState({ x: 0, y: 0 });
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     const canvas = event.target as HTMLCanvasElement;
     const rect = canvas.getBoundingClientRect();
@@ -74,7 +75,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const mouseY = event.clientY - rect.top;
   
     setMousePos({ x: mouseX, y: mouseY });
-    console.log('Mouse clicked at (' + mouseX + ', ' + mouseY + ')');
+    console.log('Mouse down at (' + mouseX + ', ' + mouseY + ')');
   };
   
   const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
@@ -82,8 +83,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const rect = canvas.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
-  
-    setMousePos({ x: mouseX, y: mouseY });
+    
+    setMouseEndPos({ x: mouseX, y: mouseY });
     console.log('Mouse released at (' + mouseX + ', ' + mouseY + ')');
   };
   // 인게임 및 통신 관련 소켓
@@ -95,25 +96,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     nestjsSocketRef.current.on("connect", () => {
       nestjsSocketRef.current?.emit("user-signal", { gameRoomID, userName });
     });
-  }, []);
-
-  // mediapipie 관련 소켓
-  useEffect(() => {
-    if (flaskSocketRef.current) {
-      flaskSocketRef.current.disconnect();
-    }
-    flaskSocketRef.current = io("https://zzrot.store/", {
-      path: "/flaskSocket",
-    });
-    flaskSocketRef.current.emit("flask-connect", () => {
-      console.log("flask socket connected");
-    });
-    return () => {
-      // 컴포넌트 언마운트 시 소켓 연결 닫기
-      if (flaskSocketRef.current && flaskSocketRef.current.connected) {
-        flaskSocketRef.current.disconnect();
-      }
-    };
   }, []);
 
   const stageSetups = [
@@ -160,43 +142,45 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
   // =============== mediapipe 이벤트 ===============
   // 왼팔 및 오른팔 사각형의 위치를 매 프레임마다 업데이트
+  // interface Joint {
+  //   x: number;
+  //   y: number;
+  // }
+  
+  let startCx = mousePos.x;
+  let startCy = mousePos.y;
+  let endCx = mouseEndPos.x;
+  let endCy = mouseEndPos.y;
   interface BodyCoordsL {
-    joint1Start: { x: number; y: number };
-    joint1End: { x: number; y: number };
+    joint1Start: {x: typeof startCx, y :typeof startCy};
+    joint1End: {x: typeof endCx, y :typeof endCy};
   }
 
   interface BodyCoordsR {
-    joint1Start: { x: number; y: number };
-    joint1End: { x: number; y: number };
+    joint1Start: {x: typeof startCx, y :typeof startCy};
+    joint1End: {x: typeof endCx, y :typeof endCy};
   }
 
   useEffect(() => {
+    //-------------좌표넘겨주는 코드----------------
     const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
       const { joint1Start, joint1End } = data;
-      updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
-      // sendLeftHandJoint(joint1Start, joint1End);
+      if (joint1Start && joint1End) {
+        updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
+        sendLeftHandJoint(joint1Start, joint1End);
+      }
     };
 
     const handleRightsideBodyCoords = (data: BodyCoordsR) => {
       const { joint1Start, joint1End } = data;
-      updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
-      // sendRightHandJoint(joint1Start, joint1End);
+      if (joint1Start && joint1End) {
+        updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
+        sendLeftHandJoint(joint1Start, joint1End);
+      }
     };
-
-    if (isTutorialImage2End && !isSimStarted && indexRef.current === 0) {
-      flaskSocketRef.current?.on("body-coords-R", handleLeftsideBodyCoords);
-    } else if (isTutorialImage2End && !isSimStarted && indexRef.current === 1) {
-      flaskSocketRef.current?.on("body-coords-L", handleRightsideBodyCoords);
-    } else if (isSimStarted) {
-      flaskSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
-      flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
-    }
-
-    return () => {
-      flaskSocketRef.current?.off("body-coords-L", handleLeftsideBodyCoords);
-      flaskSocketRef.current?.off("body-coords-R", handleRightsideBodyCoords);
-    };
-  }, [isTutorialImage2End, isSimStarted, indexRef.current]);
+    
+    handleLeftsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
+  }, [isTutorialImage2End, isSimStarted, indexRef.current, mouseEndPos.y]);
 
   // =============== 게임 시작 이벤트 ===============
   const { readyGame } = stageStarts[currentStage - 1](

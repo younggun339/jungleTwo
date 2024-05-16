@@ -3,27 +3,19 @@ import { Body } from 'matter-js';
 /**
  * Reset the game objects to their initial positions.
  * @param {Object} refs - The ref object containing the game objects.
- * @param {Function} setIsGameStarted - The function to set the game state.
  * @param {Function} setIsSimStarted - The function to set the simulation state.
- * @param {Function} setIsTutorialImage1End - The function to set the tutorial state.
- * @param {Function} setIsTutorialImage2End - The function to set the tutorial state.
  * @param {Function} setShowModal - The function to set the modal state.
  * @param {Function} setResultState - The function to set the result state.
  * @param {Function} setCountdown - The function to set the countdown state.
- * @param {Function} setIsPlayerReady - The function to set the player state.
  */
 // ================================================ STAGE 1 ====================================================
 export function clearStage1Objects(
   refs,
-  setIsGameStarted,
   setIsSimStarted,
-  setIsTutorialImage1End,
-  setIsTutorialImage2End,
   setShowModal,
   setResultState,
   setCountdown,
   setTimeLimit,
-  setIsPlayerReady
 ) {
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
@@ -46,14 +38,10 @@ export function clearStage1Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
-  setIsPlayerReady(false);
-  setIsGameStarted(false);
-  setIsTutorialImage1End(false);
-  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(null);
+  setCountdown(15);
   setTimeLimit(null);
 }
 

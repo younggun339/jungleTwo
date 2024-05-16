@@ -35,8 +35,8 @@ export const useStage1Start = (
     timeLimit,
     1, // firstImageTime
     1, // secondImageTime
-    1, // chatTime
-    1, // simTime
+    15, // chatTime
+    20, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
