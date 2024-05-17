@@ -206,7 +206,7 @@ const CreateRoom = ({ userName }) => {
                 <button className="createButton">Create</button>
               </form>
             </div>
-            <div><MainImage/></div>
+            {/* <div><MainImage/></div> */}
 
           </div>
           <div className="roomListContain">

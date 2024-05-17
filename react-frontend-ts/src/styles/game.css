@@ -6,6 +6,7 @@ html, body {
   flex-direction: column; /* 요소를 세로로 쌓습니다. */
 }
 
+
 .App {
   position: relative;
   width: 100vw;

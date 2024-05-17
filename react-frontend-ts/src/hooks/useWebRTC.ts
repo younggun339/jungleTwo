@@ -76,7 +76,7 @@ const useWebRTC = (
 
           nestjsSocketRef.current.on("room-full", () => {
             alert("Room is full!");
-            window.location.href = "/";
+            window.location.href = "/create-room";
           });
 
           nestjsSocketRef.current.on("user", (data: string[]) => {

@@ -62,7 +62,7 @@ const useSimulation = ({
         15,
         {
           isStatic: true,
-          angle: leftArmLeftRef.current.angle
+          angle: rightArmRightRef.current.angle
          }
       );
 
