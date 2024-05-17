@@ -4,7 +4,7 @@
 }
 
 body {
-  background-image: url("./bkk3.webp");
+  background-image: url("./bg2.png");
   font-family: "MyFont", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -233,8 +233,7 @@ body {
 
 /* Responsive adjustments */
 @media screen and (max-width: 1024px) {
-  .roomList{
-    
+  .roomList {
   }
   .header,
   .search,
@@ -255,7 +254,7 @@ body {
     display: block;
   }
 
-  .searchInput ,
+  .searchInput,
   .roomSearch {
     width: auto; /* Adjust based on parent width */
   }
@@ -373,27 +372,27 @@ body {
 .roomListHeader,
 .headerText */
 .refreshButton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 1rem;
-    font-size: 2rem;
-    width: 12rem;
-    height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 2rem;
+  width: 12rem;
+  height: 5rem;
 }
 
 button {
   margin-top: 1rem;
   padding: 1em 1.5em;
   font-family: "MyFont";
-  color: #ede7f6;;
+  color: #ede7f6;
   text-transform: uppercase;
   padding: 1.25em 2em;
-  background: #673ab7;;
+  background: #673ab7;
   border: 2px solid #673ab7;
   border-radius: 0.75em;
   transform-style: preserve-3d;
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
 button::before {
