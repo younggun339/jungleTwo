@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import "../styles/room.css";
 import RoomModal from "./MakeModal";
 import ChangeName from "./ChangeName";
+import MainImage from "./ImageChange"
 
 const CreateRoom = ({ userName }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const images = ["/images/image1.gif", "/images/image.gif"];
+  const [currentImage, setCurrentImage] = useState(images[0]);
   const isLoggedIn = userName !== null;
 
   const handleCreateRoom = (event) => {
@@ -130,6 +132,13 @@ const CreateRoom = ({ userName }) => {
     setModalIsOpen(false);
   };
 
+  const image = document.getElementById('image');
+  
+
+  const nextImage = () => {
+    image.scr = images[1]
+  }
+
   return (
     <div>
       <div className="totalContain">
@@ -197,7 +206,8 @@ const CreateRoom = ({ userName }) => {
                 <button className="createButton">Create</button>
               </form>
             </div>
-            <div className="mainImg"><img src="/images/image.gif" alt="" /></div>
+            <div><MainImage/></div>
+
           </div>
           <div className="roomListContain">
             <div className="roomListHeader">

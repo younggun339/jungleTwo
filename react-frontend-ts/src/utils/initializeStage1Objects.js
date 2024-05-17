@@ -17,11 +17,11 @@ export const initializeStage1Objects = (
   isTutorialImage2End,
   setResultState
 ) => {
-  const { render, canvasSize, bombRef, leftArmLeftRef, rightArmRightRef } =
+  const { render, canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } =
     refs;
 
     // 쥐 생성
-    const mouse = Bodies.circle(200, canvasSize.y - 480, 20, {
+    mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
       restitution: 0, // 반발 계수
       friction: 0.8, // 마찰 계수
       render: {
@@ -91,16 +91,16 @@ export const initializeStage1Objects = (
 
     // 충돌 시 호출될 burnMouse 함수
     function burnMouse() {
-      Body.setStatic(mouse, true);
+      Body.setStatic(mouseRef.current, true);
     }
 
     //사라지는 벽
-    const collapsesGround = (engine, mouse) => {
+    const collapsesGround = (engine, mouseRef) => {
       if (
-        750 <= mouse.position.x &&
-        mouse.position.x <= 755 &&
-        117 === Math.floor(mouse.position.y) &&
-        mouse.velocity.x >= 0
+        750 <= mouseRef.current.position.x &&
+        mouseRef.current.position.x <= 755 &&
+        117 === Math.floor(mouseRef.current.position.y) &&
+        mouseRef.current.velocity.x >= 0
       ) {
         Composite.remove(engine.world, ground);
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
@@ -401,7 +401,7 @@ export const initializeStage1Objects = (
       canvasSize.x / 4,
       canvasSize.y / 2,
       0,
-      30,
+      15,
       {
         isStatic: true,
         angle: 0,
@@ -517,7 +517,7 @@ function loadImage(url, callback) {
 
     World.add(engine.world, [
       cheese,
-      mouse,
+      mouseRef.current,
       leftArmLeftRef.current,
       rightArmRightRef.current,
       ...floors,
@@ -542,8 +542,8 @@ function loadImage(url, callback) {
         const { bodyA, bodyB } = pair;
         // mouse과 catButton이 충돌했을 때
         if (
-          (bodyA === mouse && bodyB === catButton) ||
-          (bodyA === catButton && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === catButton) ||
+          (bodyA === catButton && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
           catButton.render.sprite.texture = "/assets/CatButtonPush.png";
@@ -558,8 +558,8 @@ function loadImage(url, callback) {
         }
         // mouse과 catButton2이 충돌했을 때
         if (
-          (bodyA === mouse && bodyB === catButton2) ||
-          (bodyA === catButton2 && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === catButton2) ||
+          (bodyA === catButton2 && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
           catButton2.render.sprite.texture = "/assets/CatButtonPush.png";
@@ -574,15 +574,15 @@ function loadImage(url, callback) {
         }
         // mouse과 fallFloor가 충돌했을 때
         if (
-          (bodyA === mouse && bodyB === fallFloor) ||
-          (bodyA === fallFloor && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === fallFloor) ||
+          (bodyA === fallFloor && bodyB === mouseRef.current)
         ) {
           setResultState(5);
         }
         // mouse과 cat이 충돌했을 때
         if (
-          (bodyA === mouse && bodyB === cat) ||
-          (bodyA === cat && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === cat) ||
+          (bodyA === cat && bodyB === mouseRef.current)
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
           if (!(cat.render.sprite.texture === "/assets/CatClose.png")) {
@@ -597,32 +597,32 @@ function loadImage(url, callback) {
         //--------------cats-------------
         //------------cheese--------------
         if (
-          (pair.bodyA === mouse && pair.bodyB === cheese) ||
-          (pair.bodyA === cheese && pair.bodyB === mouse)
+          (pair.bodyA === mouseRef.current && pair.bodyB === cheese) ||
+          (pair.bodyA === cheese && pair.bodyB === mouseRef.current)
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
-          mouse.isStatic = true;
+          mouseRef.current.isStatic = true;
           setResultState(0);
         }
         //------------cheese--------------
         //------------leftArm------------
         // 만약 mouse가 leftArm과 충돌했다면
         if (
-          (bodyA === mouse && bodyB === leftArmLeftRef.current) ||
-          (bodyA === leftArmLeftRef.current && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === leftArmLeftRef.current) ||
+          (bodyA === leftArmLeftRef.current && bodyB === mouseRef.current)
         ) {
           // 일정 속도를 유지하도록 설정
           if(!isColliding){
             onSlope = false;
             isColliding = true;
           }
-          console.log("쥐: ", mouse);
+          console.log("쥐: ", mouseRef.current);
         }
         //------------leftArm------------
         //------------rightArm------------
         if (
-          (bodyA === mouse && bodyB === rightArmRightRef.current) ||
-          (bodyA === rightArmRightRef.current && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === rightArmRightRef.current) ||
+          (bodyA === rightArmRightRef.current && bodyB === mouseRef.current)
         ) {
           // 일정 속도를 유지하도록 설정
           onSlopeRight = true;
@@ -630,8 +630,8 @@ function loadImage(url, callback) {
         //------------rightArm------------
         //------------panel------------
         if (
-          (bodyA === mouse && bodyB === panel) ||
-          (bodyA === panel && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === panel) ||
+          (bodyA === panel && bodyB === mouseRef.current)
         ) {
           // 일정 속도를 유지하도록 설정
           onPanel = true;
@@ -667,64 +667,64 @@ function loadImage(url, callback) {
 
         //--------------좌우반전---------------
         if (
-          (bodyA === mouse && bodyB === box1) ||
-          (bodyA === box1 && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === box1) ||
+          (bodyA === box1 && bodyB === mouseRef.current)
         ) {
           World.remove(engine.world, [box1]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          //console.log("사라지는 바닥의 좌표:", mouse.position);
+          //console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         if (
-          (bodyA === mouse && bodyB === box2) ||
-          (bodyA === box2 && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === box2) ||
+          (bodyA === box2 && bodyB === mouseRef.current)
         ) {
           World.remove(engine.world, [box2]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          //console.log("사라지는 바닥의 좌표:", mouse.position);
+          //console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         if (
-          (bodyA === mouse && bodyB === box3) ||
-          (bodyA === box3 && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === box3) ||
+          (bodyA === box3 && bodyB === mouseRef.current)
         ) {
           World.remove(engine.world, [box3]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          console.log("사라지는 바닥의 좌표:", mouse.position);
+          console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         if (
-          (bodyA === mouse && bodyB === box4) ||
-          (bodyA === box4 && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === box4) ||
+          (bodyA === box4 && bodyB === mouseRef.current)
         ) {
           World.remove(engine.world, [box4]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          // console.log("사라지는 바닥의 좌표:", mouse.position);
+          // console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         if (
-          (bodyA === mouse && bodyB === box5) ||
-          (bodyA === box5 && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === box5) ||
+          (bodyA === box5 && bodyB === mouseRef.current)
         ) {
           World.remove(engine.world, [box5]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          console.log("사라지는 바닥의 좌표:", mouse.position);
+          console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         //--------------좌우반전---------------
         //--------------점프대----------------
-        jumping(event, engine, mouse, jumpPad);
-        jumping(event, engine, mouse, jumpPad2);
-        superJumping(event, engine, mouse, superJumppad);
+        jumping(event, engine, mouseRef.current, jumpPad);
+        jumping(event, engine, mouseRef.current, jumpPad2);
+        superJumping(event, engine, mouseRef.current, superJumppad);
         //--------------점프대----------------
       });
       //불
-      // function handleBurnMouse(event) {
+      // function handleBurnmouseRef.current(event) {
       //   event.pairs.forEach((pair) => {
       //     const { bodyA, bodyB } = pair;
       //     // fire 배열의 각 요소에 대해 충돌을 감지하여 게임 오버 처리
       //     fire.forEach((fireBody) => {
       //       if (
-      //         (bodyA === fireBody && bodyB === mouse) ||
-      //         (bodyA === mouse && bodyB === fireBody)
+      //         (bodyA === fireBody && bodyB === mouseRef.current) ||
+      //         (bodyA === mouseRef.current && bodyB === fireBody)
       //       ) {
       //         setResultState(2);
-      //         burnMouse(); // 충돌 시 burnMouse 함수 호출
+      //         burnmouseRef.current(); // 충돌 시 burnmouseRef.current 함수 호출
       //       }
       //     });
       //   });
@@ -735,18 +735,18 @@ function loadImage(url, callback) {
         event.pairs.forEach((pair) => {
           const { bodyA, bodyB } = pair;
           if (
-            (bodyA === weight && bodyB === mouse) ||
-            (bodyA === mouse && bodyB === weight)
+            (bodyA === weight && bodyB === mouseRef.current) ||
+            (bodyA === mouseRef.current && bodyB === weight)
           ) {
-            // 충돌 시 crashMouse 함수 호출
-            crashMouse();
+            // 충돌 시 crashmouseRef.current 함수 호출
+            crashmouseRef.current();
             setResultState(2);
           }
         });
       }
       //마우스추에충돌시
       function crashMouse() {
-        Body.setStatic(mouse, true);
+        Body.setStatic(mouseRef.current, true);
       }
 
       //텔레포트
@@ -761,17 +761,17 @@ function loadImage(url, callback) {
           const { bodyA, bodyB } = pair;
           if (
             teleportLock === false && // 한 번의 충돌 이벤트에 대해서만 처리
-            ((bodyA === portal2 && bodyB === mouse) ||
-              (bodyA === mouse && bodyB === portal2))
+            ((bodyA === portal2 && bodyB === mouseRef.current) ||
+              (bodyA === mouseRef.current && bodyB === portal2))
           ) {
-            Body.setPosition(mouse, {
+            Body.setPosition(mouseRef.current, {
               x: portal1.position.x,
               y:
                 portal1.position.y -
                 portal1.circleRadius -
-                mouse.circleRadius,
+                mouseRef.current.circleRadius,
             });
-            //console.log(portal2.position.y - portal2.circleRadius - mouse.circleRadius);
+            //console.log(portal2.position.y - portal2.circleRadius - mouseRef.current.circleRadius);
             teleportLock = true; // 포탈 사용 후 잠금
             portal1.collisionFilter = {
               group: 0,
@@ -791,24 +791,24 @@ function loadImage(url, callback) {
           const { bodyA, bodyB } = pair;
           if (
             teleportLock === false && // 한 번의 충돌 이벤트에 대해서만 처리
-            ((bodyA === portal1 && bodyB === mouse) ||
-              (bodyA === mouse && bodyB === portal1))
+            ((bodyA === portal1 && bodyB === mouseRef.current) ||
+              (bodyA === mouseRef.current && bodyB === portal1))
           ) {
             console.log("here");
             console.log(
               portal1.position.x,
               portal1.position.y -
                 portal1.circleRadius -
-                mouse.circleRadius
+                mouseRef.current.circleRadius
             );
-            Body.setPosition(mouse, {
+            Body.setPosition(mouseRef.current, {
               x: portal2.position.x,
               y:
                 portal2.position.y -
                 portal2.circleRadius -
-                mouse.circleRadius,
+                mouseRef.current.circleRadius,
             });
-            //console.log(portal2.position.y - portal2.circleRadius - mouse.circleRadius);
+            //console.log(portal2.position.y - portal2.circleRadius - mouseRef.current.circleRadius);
             teleportLock = true; // 포탈 사용 후 잠금
             portal2.collisionFilter = {
               group: 0,
@@ -830,17 +830,17 @@ function loadImage(url, callback) {
           const { bodyA, bodyB } = pair;
           if (
             teleportLock === false && // 한 번의 충돌 이벤트에 대해서만 처리
-            ((bodyA === portal4 && bodyB === mouse) ||
-              (bodyA === mouse && bodyB === portal4))
+            ((bodyA === portal4 && bodyB === mouseRef.current) ||
+              (bodyA === mouseRef.current && bodyB === portal4))
           ) {
-            Body.setPosition(mouse, {
+            Body.setPosition(mouseRef.current, {
               x: portal3.position.x,
               y:
                 portal3.position.y -
                 portal3.circleRadius -
-                mouse.circleRadius,
+                mouseRef.current.circleRadius,
             });
-            //console.log(portal2.position.y - portal2.circleRadius - mouse.circleRadius);
+            //console.log(portal2.position.y - portal2.circleRadius - mouseRef.current.circleRadius);
             teleportLock = true; // 포탈 사용 후 잠금
             portal3.collisionFilter = {
               group: 0,
@@ -860,24 +860,24 @@ function loadImage(url, callback) {
           const { bodyA, bodyB } = pair;
           if (
             teleportLock === false && // 한 번의 충돌 이벤트에 대해서만 처리
-            ((bodyA === portal3 && bodyB === mouse) ||
-              (bodyA === mouse && bodyB === portal3))
+            ((bodyA === portal3 && bodyB === mouseRef.current) ||
+              (bodyA === mouseRef.current && bodyB === portal3))
           ) {
             console.log("here");
             console.log(
               portal3.position.x,
               portal3.position.y -
                 portal3.circleRadius -
-                mouse.circleRadius
+                mouseRef.current.circleRadius
             );
-            Body.setPosition(mouse, {
+            Body.setPosition(mouseRef.current, {
               x: portal4.position.x,
               y:
                 portal4.position.y -
                 portal4.circleRadius -
-                mouse.circleRadius,
+                mouseRef.current.circleRadius,
             });
-            //console.log(portal2.position.y - portal2.circleRadius - mouse.circleRadius);
+            //console.log(portal2.position.y - portal2.circleRadius - mouseRef.current.circleRadius);
             teleportLock = true; // 포탈 사용 후 잠금
             portal4.collisionFilter = {
               group: 0,
@@ -903,10 +903,10 @@ function loadImage(url, callback) {
         const bodyA = pair.bodyA;
         const bodyB = pair.bodyB;
         //------------------------------leftArm---------------
-        // 만약 mouse가 leftArm과 충돌 상태에서 벗어났다면
+        // 만약 mouseRef.current가 leftArm과 충돌 상태에서 벗어났다면
         // if (
-        //   (bodyA === mouse && bodyB === leftArmLeftRef.current) ||
-        //   (bodyA === leftArmLeftRef.current && bodyB === mouse)
+        //   (bodyA === mouseRef.current && bodyB === leftArmLeftRef.current) ||
+        //   (bodyA === leftArmLeftRef.current && bodyB === mouseRef.current)
         // ) {
         //   // 원래 상태로 돌아가도록 설정
         //   onSlope = false;
@@ -916,8 +916,8 @@ function loadImage(url, callback) {
 
         //------------------------------rightArm---------------
         if (
-          (bodyA === mouse && bodyB === rightArmRightRef.current) ||
-          (bodyA === rightArmRightRef.current && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === rightArmRightRef.current) ||
+          (bodyA === rightArmRightRef.current && bodyB === mouseRef.current)
         ) {
           // 원래 상태로 돌아가도록 설정
           onSlopeRight = false;
@@ -925,8 +925,8 @@ function loadImage(url, callback) {
         //------------------------------rightArm---------------
         //------------------------------panel---------------
         if (
-          (bodyA === mouse && bodyB === panel) ||
-          (bodyA === panel && bodyB === mouse)
+          (bodyA === mouseRef.current && bodyB === panel) ||
+          (bodyA === panel && bodyB === mouseRef.current)
         ) {
           // 원래 상태로 돌아가도록 설정
           onPanel = false;
@@ -940,7 +940,7 @@ function loadImage(url, callback) {
     //----------leftArm---------
     Events.on(engine, "beforeUpdate", () => {
       // ------------사라지는 바닥------------
-      collapsesGround(engine, mouse);
+      collapsesGround(engine, mouseRef);
       //------------사라지는 바닥------------
 
       //---------rightArm---------
@@ -949,18 +949,18 @@ function loadImage(url, callback) {
         const angle = rightArmRightRef.current.angle;
         //console.log("angle:", angle);
         if (angle === Math.PI) {
-          Body.setVelocity(mouse, mouse.velocity);
+          Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
         } else {
           let modifiedAngle = angle;
           // 공이 오른쪽에서 왼쪽으로 가는 경우
-          if (mouse.velocity.x < 0) {
-            if (mouse.angle > 0) {
+          if (mouseRef.current.velocity.x < 0) {
+            if (mouseRef.current.angle > 0) {
               modifiedAngle *= -3;
             } else {
               modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
             }
           } else {
-            if (mouse.angle > 0) {
+            if (mouseRef.current.angle > 0) {
               modifiedAngle *= -3;
             } else {
               modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
@@ -973,31 +973,31 @@ function loadImage(url, callback) {
           };
           // 경사면 방향으로 속도 설정
           const parallelComponent = Vector.mult(normalVector, originalSpeedX);
-          Body.setVelocity(mouse, parallelComponent);
+          Body.setVelocity(mouseRef.current, parallelComponent);
         }
       }
       //---------rightArm---------
 
       //----------leftArm---------
       if (onSlope) {
-        console.log("*****************",mouse);
+        console.log("*****************",mouseRef.current);
 
         // 경사면에서 공이 움직이는 로직
         const angle = leftArmLeftRef.current.angle;
-        //console.log("leftArm angle: ", angle, "mouse velocity.x:", mouse.velocity.x)
+        //console.log("leftArm angle: ", angle, "mouseRef.current velocity.x:", mouseRef.current.velocity.x)
         if (angle === Math.PI) {
-          Body.setVelocity(mouse, mouse.velocity);
+          Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
         } else {
           let modifiedAngle = angle;
           // 공이 오른쪽에서 왼쪽으로 가는 경우
-          if (mouse.velocity.x < 0) {
-            if (mouse.angle > 0) {
+          if (mouseRef.current.velocity.x < 0) {
+            if (mouseRef.current.angle > 0) {
               modifiedAngle *= 3;
             } else {
               modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
             }
           } else {
-            if (mouse.angle > 0) {
+            if (mouseRef.current.angle > 0) {
               modifiedAngle *= -3;
             } else {
               modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
@@ -1010,8 +1010,8 @@ function loadImage(url, callback) {
           };
           // 경사면 방향으로 속도 설정
           const parallelComponent = Vector.mult(normalVector, originalSpeedX);
-          Body.setVelocity(mouse, parallelComponent);
-          //mouse.collisionFilter({category: 0x0004, mask:0xFFFFFFFF})
+          Body.setVelocity(mouseRef.current, parallelComponent);
+          //mouseRef.current.collisionFilter({category: 0x0004, mask:0xFFFFFFFF})
         }
       }
       //----------leftArm---------
@@ -1020,18 +1020,18 @@ function loadImage(url, callback) {
         // 경사면에서 공이 움직이는 로직
         const angle = panel.angle;
         if (angle === Math.PI) {
-          Body.setVelocity(mouse, mouse.velocity);
+          Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
         } else {
           let modifiedAngle = angle;
           // 공이 오른쪽에서 왼쪽으로 가는 경우
-          if (mouse.velocity.x < 0) {
-            if (mouse.angle > 0) {
+          if (mouseRef.current.velocity.x < 0) {
+            if (mouseRef.current.angle > 0) {
               modifiedAngle *= -3;
             } else {
               modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
             }
           } else {
-            if (mouse.angle > 0) {
+            if (mouseRef.current.angle > 0) {
               modifiedAngle *= -3;
             } else {
               modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
@@ -1044,7 +1044,7 @@ function loadImage(url, callback) {
           };
           // 경사면 방향으로 속도 설정
           const parallelComponent = Vector.mult(normalVector, originalSpeedX);
-          Body.setVelocity(mouse, parallelComponent);
+          Body.setVelocity(mouseRef.current, parallelComponent);
         }
       }
       
@@ -1068,8 +1068,8 @@ function loadImage(url, callback) {
     //   Events.on(engine, "collisionStart", (event) => {
     //     event.pairs.forEach((pair) => {
     //       if (
-    //         (pair.bodyA === mouse && pair.bodyB === goal) ||
-    //         (pair.bodyB === mouse && pair.bodyA === goal)
+    //         (pair.bodyA === mouseRef.current && pair.bodyB === goal) ||
+    //         (pair.bodyB === mouseRef.current && pair.bodyA === goal)
     //       ) {
     //         // 게임 클리어
     //         setResultState(0);
@@ -1080,8 +1080,8 @@ function loadImage(url, callback) {
     //   Events.on(engine, "collisionStart", (event) => {
     //     event.pairs.forEach((pair) => {
     //       if (
-    //         (pair.bodyA === mouse && pair.bodyB === walls[1]) ||
-    //         (pair.bodyB === mouse && pair.bodyA === walls[1])
+    //         (pair.bodyA === mouseRef.current && pair.bodyB === walls[1]) ||
+    //         (pair.bodyB === mouseRef.current && pair.bodyA === walls[1])
     //       ) {
     //         // 바닥에 떨어짐
     //         setResultState(2);
@@ -1092,8 +1092,8 @@ function loadImage(url, callback) {
     //   Events.on(engine, "collisionStart", (event) => {
     //     event.pairs.forEach((pair) => {
     //       if (
-    //         (pair.bodyA === mouse && pair.bodyB === bombRef.current) ||
-    //         (pair.bodyB === mouse && pair.bodyA === bombRef.current)
+    //         (pair.bodyA === mouseRef.current && pair.bodyB === bombRef.current) ||
+    //         (pair.bodyB === mouseRef.current && pair.bodyA === bombRef.current)
     //       ) {
     //         // 폭탄에 닿음
     //         setResultState(3);
@@ -1102,7 +1102,6 @@ function loadImage(url, callback) {
     //   });
   }
 
-  return mouse;
 };
 
 export const initializeStageObjects = (

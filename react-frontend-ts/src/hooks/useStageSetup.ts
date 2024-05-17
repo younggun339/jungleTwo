@@ -29,15 +29,7 @@ const useStage1Setup = (
   const bombRef = useRef<Body | null>(null);
 
   useEffect(() => {
-    console.log("stage1 setup useEffect called");
     const engine = engineRef.current;
-    const runner = Runner.create();
-    engineRef.current!.world.gravity.y = 0;
-
-    if (!engine.world) {
-      console.error("World not initialized");
-      return;
-    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -46,16 +38,24 @@ const useStage1Setup = (
         width: canvasSize.x,
         height: canvasSize.y,
         wireframes: false,
-        background: "white",
+        background: "transparent",
       },
     });
+    
 
-    mouseRef.current = initializeStage1Objects(
+    if (!engine.world) {
+      console.error("World not initialized");
+      return;
+    }
+
+    initializeStage1Objects(
       engine,
       { render, canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       isTutorialImage2End,
       setResultState
     );
+
+    Render.run(render);
 
     return () => {
       Render.stop(render);
@@ -72,7 +72,6 @@ const useStage1Setup = (
     mouseRef,
     bombRef,
     engineRef,
-    runner
   });
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };

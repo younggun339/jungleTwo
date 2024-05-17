@@ -190,10 +190,10 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       }
     };
     
-    if (indexRef.current === 0) {
+    if (isTutorialImage2End && !isSimStarted && indexRef.current === 0) {
       handleLeftsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
     }
-    if (indexRef.current === 1) {
+    if (isTutorialImage2End && !isSimStarted && indexRef.current === 1) {
       handleRightsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
     }
   }, [isTutorialImage2End, indexRef.current, mouseEndPos.y]);
