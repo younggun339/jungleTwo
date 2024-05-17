@@ -201,15 +201,15 @@ const useWebRTC = (
   };
 
   const handleIncomingData = (data: any) => {
-    // const parsedData = JSON.parse(data);
+    const parsedData = JSON.parse(data);
 
-    // if (parsedData.type === "left-hand-joint") {
-    //   const { joint1Start, joint1End } = parsedData.data;
-    //   updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
-    // } else if (parsedData.type === "right-hand-joint" ) {
-    //   const { joint1Start, joint1End } = parsedData.data;
-    //   updateSkeleton(rightArmRightRef, joint1Start, joint1End);
-    // }
+    if (parsedData.type === "left-hand-joint") {
+      const { joint1Start, joint1End } = parsedData.data;
+      updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
+    } else if (parsedData.type === "right-hand-joint" ) {
+      const { joint1Start, joint1End } = parsedData.data;
+      updateSkeleton(rightArmRightRef, joint1Start, joint1End);
+    }
   };
 
   const sendLeftHandJoint = (joint1Start: any, joint1End: any) => {

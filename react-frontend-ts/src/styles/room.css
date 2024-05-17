@@ -14,7 +14,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  font-size: 30px;
+  font-size: 32px; /* Increased overall font size */
 }
 
 .totalContain {
@@ -25,13 +25,12 @@ body {
 }
 
 .header {
-  font-family: "MyFont", sans-serif;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #e6e6fa;
-  padding: 1rem; /* Increased padding */
-  font-size: 20px; /* Increased font size */
+  padding: 1.5rem; /* Increased padding */
+  font-size: 24px; /* Increased font size for header */
 }
 
 /* Profile section styles */
@@ -197,25 +196,41 @@ body {
   justify-content: space-between;
 }
 
-.roomName,
-.nickname {
-  flex: 1; /* Allows text to grow and fill available space */
+.roomName {
+  flex: 3; /* Increased width */
   padding: 0.5rem;
   border-radius: 1rem;
-  background-color: #7e57c2; /* Matching theme color */
-  margin-right: 10px; /* Space between elements */
+  background-color: #7e57c2;
+  margin-right: 10px;
 }
-
+.nickname {
+  flex: 2; /* Increased width less than roomName */
+  padding: 0.5rem;
+  border-radius: 1rem;
+  background-color: #7e57c2;
+  margin-right: 10px;
+}
 .go {
-  width: 100px; /* Fixed width for consistency */
-  height: 40px;
+  width: 80px; /* Decreased width */
+  height: 50px; /* Increased height for thickness */
+  font-size: 20px; /* Increased font size */
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #4b0082; /* Button color */
+  background-color: #4b0082;
   color: white;
   border-radius: 1rem;
   cursor: pointer;
+}
+
+.roomListHeader .headerText {
+  font-size: 24px; /* Increased font size */
+}
+.roomNameInputField {
+  font-size: 20px; /* Increased font size */
+  padding: 15px; /* Increased padding for larger click area */
+  margin: 10px 0; /* Added margin for spacing */
+  width: 100%; /* Full width */
 }
 
 /* Responsive adjustments */

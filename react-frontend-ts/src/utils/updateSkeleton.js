@@ -26,7 +26,7 @@ export function updateSkeleton(skeletonRef, jointStart, jointEnd) {
   
   Body.set(skeletonRef.current, 'collisionFilter', collisionFilter);
     Body.setAngle(skeletonRef.current, angle);
-    Body.setVertices(skeletonRef.current, Bodies.rectangle(centerX, centerY, width, 30, { angle: angle, }).vertices);
+    Body.setVertices(skeletonRef.current, Bodies.rectangle(centerX, centerY, width, 15, { angle: angle, }).vertices);
     Body.setPosition(skeletonRef.current, { x: centerX, y: centerY });
   }
 }

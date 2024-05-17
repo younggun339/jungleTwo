@@ -247,7 +247,7 @@ const useStageStart = (
           const readyPlayers = players.filter(
             (player: [string, string, boolean]) => player[2] === true
           );
-          if (readyPlayers.length === 1) {
+          if (readyPlayers.length === 2) {
             setIsGameStarted(true);
             setResultState(null);
           }

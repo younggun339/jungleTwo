@@ -111,6 +111,27 @@ const useSimulation = ({
           }
         });
       });
+
+      Events.on(engineRef.current, "collisionEnd", (event: IEventCollision<Matter.Engine>) => {
+        event.pairs.forEach((pair) => {
+          const { bodyA, bodyB } = pair;
+    
+          if (
+            (bodyA === mouseRef?.current && bodyB === leftArmTerrain) ||
+            (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
+          ) {
+            onSlope = false;
+            console.log("쥐: ", mouseRef?.current);
+          }
+    
+          if (
+            (bodyA === mouseRef?.current && bodyB === rightArmTerrain) ||
+            (bodyA === rightArmTerrain && bodyB === mouseRef?.current)
+          ) {
+            onSlopeRight = false;
+          }
+        });
+      });
     
       Events.on(engineRef.current, "beforeUpdate", () => {
         if (onSlopeRight && mouseRef.current) {
@@ -134,6 +155,27 @@ const useSimulation = ({
         }
     
         if (onSlope && mouseRef.current) {
+          console.log("*****************", mouseRef?.current);
+          const angle = leftArmTerrain.angle;
+          if (angle === Math.PI) {
+            Body.setVelocity(mouseRef!.current, mouseRef!.current.velocity);
+          } else {
+            let modifiedAngle = angle;
+            if (mouseRef!.current.velocity.x < 0) {
+              modifiedAngle *= mouseRef!.current.angle > 0 ? 3 : -3;
+            } else {
+              modifiedAngle *= mouseRef!.current.angle > 0 ? -3 : 3;
+            }
+            const normalVector = {
+              x: Math.sin(modifiedAngle),
+              y: Math.cos(angle) * 0,
+            };
+            const parallelComponent = Vector.mult(normalVector, originalSpeedX);
+            Body.setVelocity(mouseRef!.current, parallelComponent);
+          }
+        }
+
+        if (onSlopeRight && mouseRef.current) {
           console.log("*****************", mouseRef?.current);
           const angle = leftArmTerrain.angle;
           if (angle === Math.PI) {
