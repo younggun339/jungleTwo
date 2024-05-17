@@ -1,4 +1,3 @@
-// hooks/useAudio.ts
 import { useRef, useEffect, useCallback } from "react";
 
 type UseAudioProps = {
@@ -39,6 +38,13 @@ const useAudio = ({ initialSrc }: UseAudioProps) => {
     [play, pause]
   );
 
+  // 오디오 반복 재생 설정
+  const setLoop = useCallback((isLooping: boolean) => {
+    if (audioRef.current) {
+      audioRef.current.loop = isLooping;
+    }
+  }, []);
+
   // 컴포넌트 마운트 시 오디오 자동 재생 시도
   useEffect(() => {
     audioRef.current = new Audio(initialSrc);
@@ -76,15 +82,7 @@ const useAudio = ({ initialSrc }: UseAudioProps) => {
     };
   }, [play]);
 
-  return { play, pause, changeSource };
+  return { play, pause, changeSource, setLoop };
 };
 
 export default useAudio;
-
-// useEffect(() => {
-//   if (someCondition) {
-//     changeSource("path/to/special/sound.mp3");
-//   } else {
-//     changeSource("path/to/normal/sound.mp3");
-//   }
-// }, [someCondition, changeSource]);

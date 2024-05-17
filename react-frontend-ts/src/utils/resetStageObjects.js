@@ -24,6 +24,7 @@ export function resetStage1Objects(
   setCountdown,
   setIsPlayerReady
 ) {
+  console.log("resetStage1 called");
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
@@ -77,9 +78,6 @@ export function resetStage2Objects(
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
 
-  // 충돌 필터를 리셋
-  leftArmLeftRef.current.collisionFilter.mask = 0;
-  rightArmRightRef.current.collisionFilter.mask = 0;
   // 가로 길이를 0으로 리셋
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;
@@ -120,9 +118,6 @@ export function resetStage3Objects(
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
 
-  // 충돌 필터를 리셋
-  leftArmLeftRef.current.collisionFilter.mask = 0;
-  rightArmRightRef.current.collisionFilter.mask = 0;
   // 가로 길이를 0으로 리셋
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;
@@ -163,9 +158,6 @@ export function resetStage4Objects(
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
 
-  // 충돌 필터를 리셋
-  leftArmLeftRef.current.collisionFilter.mask = 0;
-  rightArmRightRef.current.collisionFilter.mask = 0;
   // 가로 길이를 0으로 리셋
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;
@@ -206,9 +198,6 @@ export function resetStage5Objects(
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
 
-  // 충돌 필터를 리셋
-  leftArmLeftRef.current.collisionFilter.mask = 0;
-  rightArmRightRef.current.collisionFilter.mask = 0;
   // 가로 길이를 0으로 리셋
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;

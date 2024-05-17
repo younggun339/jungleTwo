@@ -19,8 +19,14 @@ export function updateSkeleton(skeletonRef, jointStart, jointEnd) {
 
   // Set the position and angle of the rectangle that represents the finger
   if (skeletonRef.current) {
-    Body.setPosition(skeletonRef.current, { x: centerX, y: centerY });
+    const collisionFilter = {
+      category: 0x0004, // 충돌 그룹 설정
+      mask: 0xffff // 다른 모든 그룹과 충돌하도록 설정
+  };
+  
+  Body.set(skeletonRef.current, 'collisionFilter', collisionFilter);
     Body.setAngle(skeletonRef.current, angle);
-    Body.setVertices(skeletonRef.current, Bodies.rectangle(centerX, centerY, width, 15, { angle: angle }).vertices);
+    Body.setVertices(skeletonRef.current, Bodies.rectangle(centerX, centerY, width, 30, { angle: angle, }).vertices);
+    Body.setPosition(skeletonRef.current, { x: centerX, y: centerY });
   }
 }

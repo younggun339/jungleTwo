@@ -1,7 +1,7 @@
 // useSimulation.ts
 import { useEffect } from "react";
 import { MutableRefObject } from "react";
-import { Runner, Engine, Body, Events } from "matter-js";
+import { Runner, Engine, Body, Events, } from "matter-js";
 
 interface UseSimulationProps {
   isSimStarted: boolean;
@@ -10,6 +10,7 @@ interface UseSimulationProps {
   mouseRef: MutableRefObject<Body | null>;
   bombRef: MutableRefObject<Body | null>;
   engineRef: MutableRefObject<Engine | null>;
+  runner: Runner;
 }
 
 const useSimulation = ({
@@ -19,35 +20,38 @@ const useSimulation = ({
   mouseRef,
   bombRef,
   engineRef,
+  runner
 }: UseSimulationProps) => {
   useEffect(() => {
+    console.log("useSimulation called", isSimStarted);
     const applyContinuousForce = () => {
       if (mouseRef.current) {
-        // Body.applyForce(mouseRef.current, mouseRef.current.position, { x: 0.04, y: 0 });
+        Body.applyForce(mouseRef.current, mouseRef.current.position, { x: 0.0001, y: 0 });
         Body.setAngle(mouseRef.current, 0);
       }
     };
 
-    const runner = Runner.create();
     if (
       isSimStarted &&
       leftArmLeftRef.current &&
       rightArmRightRef.current &&
-      leftArmLeftRef.current.vertices.length > 1 &&
-      rightArmRightRef.current.vertices.length > 1 &&
       mouseRef.current &&
       bombRef.current &&
       engineRef.current
     ) {
-      Runner.run(runner, engineRef.current);
-      engineRef.current!.world.gravity.y = 0.15;
-      engineRef.current!.world.gravity.x = 0.04;
-      engineRef.current!.timing.timeScale = 2;
+       console.log("시뮬레이션 시작");
+       engineRef.current!.world.gravity.y = 0.15;
+       Runner.run(runner, engineRef.current);
+       Engine.run(engineRef.current);
+      // engineRef.current!.world.gravity.x = 0.04;
 
       // 쥐를 움직이기 위해 static 해제
       Body.setStatic(mouseRef.current, false);
       Body.setStatic(bombRef.current, false);
-      Events.on(engineRef.current, "beforeUpdate", applyContinuousForce);
+      // Events.on(engineRef.current, "beforeUpdate", applyContinuousForce);
+      // setInterval(() => {
+      //     console.log(mouseRef.current);
+      // }, 200);
     }
 
     return () => {

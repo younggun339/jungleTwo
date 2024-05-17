@@ -32,7 +32,7 @@ export const useStage1Start = (
     countdown,
     1, // firstImageTime
     1, // secondImageTime
-    15, // chatTime
+    5, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,
@@ -304,6 +304,7 @@ const useStageStart = (
 
   // 작전 타임 시작
   useEffect(() => {
+    // console.log ("다시 하기 누르면 여기서 시작", isTutorialImage2End, isSimStarted, countdown);
     if (isTutorialImage2End && !isSimStarted && countdown && countdown > 0) {
       const interval = setInterval(() => {
         setCountdown((prevCount: number | null) =>

@@ -1,11 +1,12 @@
 import { useEffect, useRef, MutableRefObject } from "react";
-import { Engine, Render, World, Body, Runner } from "matter-js";
+import { Engine, Render, World, Body, Runner, Bodies } from "matter-js";
 import useSimulation from "./useSimulation";
 import { initializeStage1Objects } from "../utils/initializeStage1Objects";
 import { initializeStage2Objects } from "../utils/initializeStage2Objects";
 import { initializeStage3Objects } from "../utils/initializeStage3Objects";
 import { initializeStage4Objects } from "../utils/initializeStage4Objects";
 import { initializeStage5Objects } from "../utils/initializeStage5Objects";
+import { initializeStageObjects } from "../utils/initializeStageObjects";
 
 interface CanvasSize {
   x: number;
@@ -28,7 +29,15 @@ const useStage1Setup = (
   const bombRef = useRef<Body | null>(null);
 
   useEffect(() => {
+    console.log("stage1 setup useEffect called");
     const engine = engineRef.current;
+    const runner = Runner.create();
+    engineRef.current!.world.gravity.y = 0;
+
+    if (!engine.world) {
+      console.error("World not initialized");
+      return;
+    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -37,24 +46,16 @@ const useStage1Setup = (
         width: canvasSize.x,
         height: canvasSize.y,
         wireframes: false,
-        background: "transparent",
+        background: "white",
       },
     });
-    
 
-    if (!engine.world) {
-      console.error("World not initialized");
-      return;
-    }
-
-    initializeStage1Objects(
+    mouseRef.current = initializeStage1Objects(
       engine,
       { render, canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       isTutorialImage2End,
       setResultState
     );
-
-    Render.run(render);
 
     return () => {
       Render.stop(render);
@@ -71,6 +72,7 @@ const useStage1Setup = (
     mouseRef,
     bombRef,
     engineRef,
+    runner
   });
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
@@ -92,15 +94,8 @@ const useStage2Setup = (
   const bombRef = useRef<Body | null>(null);
 
   useEffect(() => {
+    console.log("stage2 setup useEffect called");
     const engine = engineRef.current;
-    if (isSimStarted) {
-      engine.world.gravity.y = 0.15;
-      engine.world.gravity.x = 0.04;
-      engine.timing.timeScale = 3;
-    } else {
-      engine.world.gravity.y = 0;
-      engine.world.gravity.x = 0;
-    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -165,15 +160,8 @@ const useStage3Setup = (
   const bombRef = useRef<Body | null>(null);
 
   useEffect(() => {
+    console.log("stage3 setup useEffect called");
     const engine = engineRef.current;
-    if (isSimStarted) {
-      engine.world.gravity.y = 0.15;
-      engine.world.gravity.x = 0.04;
-      engine.timing.timeScale = 3;
-    } else {
-      engine.world.gravity.y = 0;
-      engine.world.gravity.x = 0;
-    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -239,15 +227,8 @@ const useStage4Setup = (
   const bombRef = useRef<Body | null>(null);
 
   useEffect(() => {
+    console.log("stage4 setup useEffect called");
     const engine = engineRef.current;
-    if (isSimStarted) {
-      engine.world.gravity.y = 0.15;
-      engine.world.gravity.x = 0.04;
-      engine.timing.timeScale = 3;
-    } else {
-      engine.world.gravity.y = 0;
-      engine.world.gravity.x = 0;
-    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -313,15 +294,8 @@ const useStage5Setup = (
   const bombRef = useRef<Body | null>(null);
 
   useEffect(() => {
+    console.log("stage5 setup useEffect called");
     const engine = engineRef.current;
-    if (isSimStarted) {
-      engine.world.gravity.y = 0.15;
-      engine.world.gravity.x = 0.04;
-      engine.timing.timeScale = 3;
-    } else {
-      engine.world.gravity.y = 0;
-      engine.world.gravity.x = 0;
-    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,

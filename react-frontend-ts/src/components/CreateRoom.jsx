@@ -25,13 +25,25 @@ const CreateRoom = ({ userName }) => {
 
       return result;
     };
+
+    if (userName === null) {
+      alert("로그인하지 않은 유저입니다.")
+      return
+    }
+
     const newRoomId = generateRandomString(8);
     const roomName = event.currentTarget.elements.roomName.value;
+
+    if (roomName === "") {
+      alert("방 제목을 입력하세요.")
+      return
+    }
     let passWord = null;
     if (showPassword) {
       passWord = event.currentTarget.elements.password.value;
       if (passWord === "") {
         document.getElementById("roomName").value = "";
+        alert("비밀번호를 입력하세요.")
         return;
       }
     }
@@ -168,27 +180,24 @@ const CreateRoom = ({ userName }) => {
                 비밀번호
               </p>
               <form onSubmit={handleCreateRoom}>
-                <p>
                   <input
                     type="text"
                     id="roomName"
-                    placeholder="방 이름"
+                    placeholder="방 제목"
                     className="inputField"
                   ></input>
-                </p>
                 {showPassword && (
-                  <p>
                     <input
                       type="password"
                       id="password"
                       placeholder="password"
                       className="inputField"
                     ></input>
-                  </p>
                 )}
                 <button className="createButton">Create</button>
               </form>
             </div>
+            <div className="mainImg"><img src="/images/image.gif" alt="" /></div>
           </div>
           <div className="roomListContain">
             <div className="roomListHeader">

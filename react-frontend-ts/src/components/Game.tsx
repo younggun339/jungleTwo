@@ -185,15 +185,15 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const handleRightsideBodyCoords = (data: BodyCoordsR) => {
       const { joint1Start, joint1End } = data;
       if (joint1Start && joint1End && joint1Start.x >= canvasSize.x / 2 && joint1End.x >= canvasSize.x / 2) {
-        updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
+        updateSkeleton(rightArmRightRef, joint1Start, joint1End);
         sendRightHandJoint(joint1Start, joint1End);
       }
     };
     
-    if (isTutorialImage2End && !isSimStarted && indexRef.current === 0) {
+    if (indexRef.current === 0) {
       handleLeftsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
     }
-    if (isTutorialImage2End && !isSimStarted && indexRef.current === 1) {
+    if (indexRef.current === 1) {
       handleRightsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
     }
   }, [isTutorialImage2End, indexRef.current, mouseEndPos.y]);
@@ -220,13 +220,13 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
   // ============== 게임 결과 모달 =====================
   const handleRetry = () => {
+    setIsMenuOpen(false);
     clearStageObjects[currentStage - 1](
       { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
-      setIsGameStarted,
       setIsSimStarted,
-      setIsTutorialImage1End,
-      setIsTutorialImage2End,
       setShowModal,
+      setResultState,
+      setCountdown,
     );
   };
 
