@@ -1,13 +1,16 @@
 import React from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import "../styles/home.css";
+import useAudio from "../hooks/useAudio";
 
 /**
  * Home displays the main login screen with options to log in via Kakao or Google.
  */
 const Home: React.FC = () => {
   const navigate: NavigateFunction = useNavigate(); // Initialize navigate using the useNavigate hook
-
+  const { play, changeSource } = useAudio({
+    initialSrc: "/music/wait1.mp3",
+  });
   const handleKakaoLogin = () => {
     navigate("/auth/kakao/login"); // Use navigate to change the route
     window.location.reload();

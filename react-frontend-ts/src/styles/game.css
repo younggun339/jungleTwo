@@ -28,6 +28,7 @@ html, body {
 }
 
 #video-container-1 {
+  display: none;
   position: absolute; /* 부모 기준 위치 */
   width: 50%; /* 전체 너비의 50% */
   height: 100%;
@@ -37,6 +38,7 @@ html, body {
 }
 
 #video-container-2 {
+  display: none;
   position: absolute; /* 부모 기준 위치 */
   right: 0; /* 오른쪽 정렬 */
   width: 50%; /* 전체 너비의 50% */

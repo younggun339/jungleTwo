@@ -402,7 +402,7 @@ export const initializeStage1Objects = (
       {
         isStatic: true,
         angle: 0,
-        collisionFilter: { mask: 0 },
+        collisionFilter: { mask: 0xffff },
         render: {
           fillStyle: "blue",
           strokeStyle: "black",
@@ -429,7 +429,7 @@ export const initializeStage1Objects = (
       {
         isStatic: true,
         angle: 0,
-        collisionFilter: { mask: 0 },
+        collisionFilter: { mask: 0xffff },
         render: {
           fillStyle: "blue",
           strokeStyle: "black",

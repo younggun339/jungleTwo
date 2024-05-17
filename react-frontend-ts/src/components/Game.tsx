@@ -176,7 +176,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     //-------------좌표넘겨주는 코드----------------
     const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
       const { joint1Start, joint1End } = data;
-      if (joint1Start && joint1End) {
+      if (joint1Start && joint1End && joint1Start.x <= canvasSize.x / 2 && joint1End.x <= canvasSize.x / 2) {
         updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
         sendLeftHandJoint(joint1Start, joint1End);
       }
@@ -184,7 +184,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
     const handleRightsideBodyCoords = (data: BodyCoordsR) => {
       const { joint1Start, joint1End } = data;
-      if (joint1Start && joint1End) {
+      if (joint1Start && joint1End && joint1Start.x >= canvasSize.x / 2 && joint1End.x >= canvasSize.x / 2) {
         updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
         sendRightHandJoint(joint1Start, joint1End);
       }
@@ -196,7 +196,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     if (isTutorialImage2End && !isSimStarted && indexRef.current === 1) {
       handleRightsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
     }
-  }, [isTutorialImage2End, isSimStarted, indexRef.current, mouseEndPos.y]);
+  }, [isTutorialImage2End, indexRef.current, mouseEndPos.y]);
 
   // =============== 게임 시작 이벤트 ===============
   const { readyGame } = stageStarts[currentStage - 1](

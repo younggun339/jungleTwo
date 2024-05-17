@@ -21,7 +21,6 @@ const useStage1Setup = (
   setResultState: (value: number) => void
 ) => {
   const engineRef = useRef<Engine>(Engine.create());
-  const runner = Runner.create();
 
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
@@ -30,11 +29,6 @@ const useStage1Setup = (
 
   useEffect(() => {
     const engine = engineRef.current;
-    if (isSimStarted) {
-      engine.world.gravity.y = 0.15;
-      engine.world.gravity.x = 0.04;
-      engine.timing.timeScale = 2;
-    }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -61,16 +55,14 @@ const useStage1Setup = (
     );
 
     Render.run(render);
-    Runner.run(runner, engine);
 
     return () => {
       Render.stop(render);
       World.clear(engine.world, false);
       Engine.clear(engine);
-      Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End, isSimStarted]);
+  }, [isTutorialImage2End]);
 
   useSimulation({
     isSimStarted,
@@ -93,7 +85,6 @@ const useStage2Setup = (
   setResultState: (value: number) => void
 ) => {
   const engineRef = useRef<Engine>(Engine.create());
-  const runner = Runner.create();
 
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
@@ -106,6 +97,9 @@ const useStage2Setup = (
       engine.world.gravity.y = 0.15;
       engine.world.gravity.x = 0.04;
       engine.timing.timeScale = 3;
+    } else {
+      engine.world.gravity.y = 0;
+      engine.world.gravity.x = 0;
     }
 
     const render = Render.create({
@@ -132,13 +126,11 @@ const useStage2Setup = (
     );
 
     Render.run(render);
-    Runner.run(runner, engine);
 
     return () => {
       Render.stop(render);
       World.clear(engine.world, false);
       Engine.clear(engine);
-      Runner.stop(runner);
       render.canvas.remove();
     };
   }, [isTutorialImage2End, isSimStarted]);
@@ -178,6 +170,9 @@ const useStage3Setup = (
       engine.world.gravity.y = 0.15;
       engine.world.gravity.x = 0.04;
       engine.timing.timeScale = 3;
+    } else {
+      engine.world.gravity.y = 0;
+      engine.world.gravity.x = 0;
     }
 
     const render = Render.create({
@@ -249,6 +244,9 @@ const useStage4Setup = (
       engine.world.gravity.y = 0.15;
       engine.world.gravity.x = 0.04;
       engine.timing.timeScale = 3;
+    } else {
+      engine.world.gravity.y = 0;
+      engine.world.gravity.x = 0;
     }
 
     const render = Render.create({
@@ -320,6 +318,9 @@ const useStage5Setup = (
       engine.world.gravity.y = 0.15;
       engine.world.gravity.x = 0.04;
       engine.timing.timeScale = 3;
+    } else {
+      engine.world.gravity.y = 0;
+      engine.world.gravity.x = 0;
     }
 
     const render = Render.create({

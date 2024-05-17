@@ -1,7 +1,7 @@
 // useSimulation.ts
 import { useEffect } from "react";
 import { MutableRefObject } from "react";
-import { Engine, Body, Events } from "matter-js";
+import { Runner, Engine, Body, Events } from "matter-js";
 
 interface UseSimulationProps {
   isSimStarted: boolean;
@@ -28,6 +28,7 @@ const useSimulation = ({
       }
     };
 
+    const runner = Runner.create();
     if (
       isSimStarted &&
       leftArmLeftRef.current &&
@@ -35,11 +36,13 @@ const useSimulation = ({
       leftArmLeftRef.current.vertices.length > 1 &&
       rightArmRightRef.current.vertices.length > 1 &&
       mouseRef.current &&
-      bombRef.current
+      bombRef.current &&
+      engineRef.current
     ) {
-      // 왼팔 및 오른팔 충돌 ON
-      leftArmLeftRef.current.collisionFilter.mask = 0xffff;
-      rightArmRightRef.current.collisionFilter.mask = 0xffff;
+      Runner.run(runner, engineRef.current);
+      engineRef.current!.world.gravity.y = 0.15;
+      engineRef.current!.world.gravity.x = 0.04;
+      engineRef.current!.timing.timeScale = 2;
 
       // 쥐를 움직이기 위해 static 해제
       Body.setStatic(mouseRef.current, false);
@@ -48,6 +51,7 @@ const useSimulation = ({
     }
 
     return () => {
+      Runner.stop(runner);
       Events.off(engineRef.current, "beforeUpdate", applyContinuousForce);
     };
   }, [isSimStarted]);
