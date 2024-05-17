@@ -79,14 +79,10 @@ export function clearStage2Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
-  setIsPlayerReady(false);
-  setIsGameStarted(false);
-  setIsTutorialImage1End(false);
-  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(null);
+  setCountdown(15);
   setTimeLimit(null);
 }
 
@@ -124,14 +120,10 @@ export function clearStage3Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
-  setIsPlayerReady(false);
-  setIsGameStarted(false);
-  setIsTutorialImage1End(false);
-  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(null);
+  setCountdown(15);
   setTimeLimit(null);
 }
 
@@ -169,14 +161,10 @@ export function clearStage4Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
-  setIsPlayerReady(false);
-  setIsGameStarted(false);
-  setIsTutorialImage1End(false);
-  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(null);
+  setCountdown(15);
   setTimeLimit(null);
 }
 
@@ -214,13 +202,9 @@ export function clearStage5Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
-  setIsPlayerReady(false);
-  setIsGameStarted(false);
-  setIsTutorialImage1End(false);
-  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(null);
+  setCountdown(15);
   setTimeLimit(null);
 }

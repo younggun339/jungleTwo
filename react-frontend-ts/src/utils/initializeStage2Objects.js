@@ -99,6 +99,14 @@ export const initializeStage2Objects = (
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
     };
 
+    // 쥐가 낙사 시 죽는 이벤트를 걸기 위한 바닥 생성
+    const fallFloor = Bodies.rectangle(canvasSize.x / 2, canvasSize.y + 10, canvasSize.x, 1, {
+      isStatic: true,
+      render: {
+        fillStyle: "red",
+      },
+    });
+
     const floors = [
       Bodies.rectangle(450, canvasSize.y - 350, 750, 25, {
         isStatic: true,
@@ -557,6 +565,13 @@ function loadImage(url, callback) {
             group: 0,
           }; // catButton의 충돌 필터 변경
           cat.render.fillStyle = "red"; // cat의 색상을 빨간색으로 변경
+        }
+        // mouse과 fallFloor가 충돌했을 때
+        if (
+          (bodyA === mouseRef.current && bodyB === fallFloor) ||
+          (bodyA === fallFloor && bodyB === mouseRef.current)
+        ) {
+          setResultState(5);
         }
         // mouse과 cat이 충돌했을 때
         if (

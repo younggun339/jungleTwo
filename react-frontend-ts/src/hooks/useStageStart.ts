@@ -12,7 +12,6 @@ export const useStage1Start = (
   isTutorialImage2End: boolean,
   isSimStarted: boolean,
   countdown: number | null,
-  timeLimit: number | null,
   resultState: number | null,
   setIsPlayerReady: (value: boolean) => void,
   setIsGameStarted: (value: boolean) => void,
@@ -20,7 +19,6 @@ export const useStage1Start = (
   setIsTutorialImage2End: (value: boolean) => void,
   setIsSimStarted: (value: boolean) => void,
   setCountdown: (value: number | null) => void,
-  setTimeLimit: (value: number | null) => void,
   setResultState: (value: number | null) => void
 ) => {
   return useStageStart(
@@ -32,7 +30,6 @@ export const useStage1Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    timeLimit,
     1, // firstImageTime
     1, // secondImageTime
     15, // chatTime
@@ -44,7 +41,6 @@ export const useStage1Start = (
     setIsTutorialImage2End,
     setIsSimStarted,
     setCountdown,
-    setTimeLimit,
     setResultState
   );
 };
@@ -59,7 +55,6 @@ export const useStage2Start = (
   isTutorialImage2End: boolean,
   isSimStarted: boolean,
   countdown: number | null,
-  timeLimit: number | null,
   resultState: number | null,
   setIsPlayerReady: (value: boolean) => void,
   setIsGameStarted: (value: boolean) => void,
@@ -67,7 +62,6 @@ export const useStage2Start = (
   setIsTutorialImage2End: (value: boolean) => void,
   setIsSimStarted: (value: boolean) => void,
   setCountdown: (value: number | null) => void,
-  setTimeLimit: (value: number | null) => void,
   setResultState: (value: number | null) => void
 ) => {
   return useStageStart(
@@ -79,7 +73,6 @@ export const useStage2Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    timeLimit,
     1, // firstImageTime
     1, // secondImageTime
     1, // chatTime
@@ -91,7 +84,6 @@ export const useStage2Start = (
     setIsTutorialImage2End,
     setIsSimStarted,
     setCountdown,
-    setTimeLimit,
     setResultState
   );
 };
@@ -106,7 +98,6 @@ export const useStage3Start = (
   isTutorialImage2End: boolean,
   isSimStarted: boolean,
   countdown: number | null,
-  timeLimit: number | null,
   resultState: number | null,
   setIsPlayerReady: (value: boolean) => void,
   setIsGameStarted: (value: boolean) => void,
@@ -114,7 +105,6 @@ export const useStage3Start = (
   setIsTutorialImage2End: (value: boolean) => void,
   setIsSimStarted: (value: boolean) => void,
   setCountdown: (value: number | null) => void,
-  setTimeLimit: (value: number | null) => void,
   setResultState: (value: number | null) => void
 ) => {
   return useStageStart(
@@ -126,7 +116,6 @@ export const useStage3Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    timeLimit,
     1, // firstImageTime
     1, // secondImageTime
     1, // chatTime
@@ -138,7 +127,6 @@ export const useStage3Start = (
     setIsTutorialImage2End,
     setIsSimStarted,
     setCountdown,
-    setTimeLimit,
     setResultState
   );
 };
@@ -153,7 +141,6 @@ export const useStage4Start = (
   isTutorialImage2End: boolean,
   isSimStarted: boolean,
   countdown: number | null,
-  timeLimit: number | null,
   resultState: number | null,
   setIsPlayerReady: (value: boolean) => void,
   setIsGameStarted: (value: boolean) => void,
@@ -161,7 +148,6 @@ export const useStage4Start = (
   setIsTutorialImage2End: (value: boolean) => void,
   setIsSimStarted: (value: boolean) => void,
   setCountdown: (value: number | null) => void,
-  setTimeLimit: (value: number | null) => void,
   setResultState: (value: number | null) => void
 ) => {
   return useStageStart(
@@ -173,7 +159,6 @@ export const useStage4Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    timeLimit,
     1, // firstImageTime
     1, // secondImageTime
     1, // chatTime
@@ -185,7 +170,6 @@ export const useStage4Start = (
     setIsTutorialImage2End,
     setIsSimStarted,
     setCountdown,
-    setTimeLimit,
     setResultState
   );
 };
@@ -200,7 +184,6 @@ export const useStage5Start = (
   isTutorialImage2End: boolean,
   isSimStarted: boolean,
   countdown: number | null,
-  timeLimit: number | null,
   resultState: number | null,
   setIsPlayerReady: (value: boolean) => void,
   setIsGameStarted: (value: boolean) => void,
@@ -208,7 +191,6 @@ export const useStage5Start = (
   setIsTutorialImage2End: (value: boolean) => void,
   setIsSimStarted: (value: boolean) => void,
   setCountdown: (value: number | null) => void,
-  setTimeLimit: (value: number | null) => void,
   setResultState: (value: number | null) => void
 ) => {
   return useStageStart(
@@ -220,7 +202,6 @@ export const useStage5Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    timeLimit,
     1, // firstImageTime
     1, // secondImageTime
     1, // chatTime
@@ -232,7 +213,6 @@ export const useStage5Start = (
     setIsTutorialImage2End,
     setIsSimStarted,
     setCountdown,
-    setTimeLimit,
     setResultState
   );
 };
@@ -246,7 +226,6 @@ const useStageStart = (
   isTutorialImage2End: boolean,
   isSimStarted: boolean,
   countdown: number | null,
-  timeLimit: number | null,
   firstImageTime: number,
   secondImageTime: number,
   chatTime: number,
@@ -258,7 +237,6 @@ const useStageStart = (
   setIsTutorialImage2End: (value: boolean) => void,
   setIsSimStarted: (value: boolean) => void,
   setCountdown: (value: number | null) => void,
-  setTimeLimit: (value: number | null) => void,
   setResultState: (value: number | null) => void
 ) => {
   useEffect(() => {
@@ -336,28 +314,8 @@ const useStageStart = (
     } else if (isTutorialImage2End && !isSimStarted && countdown === 0) {
       setIsSimStarted(true);
       setCountdown(null);
-      setTimeLimit(simTime);
     }
   }, [isTutorialImage2End, countdown, isSimStarted]);
-
-  // 시뮬레이션 제한 시간
-  useEffect(() => {
-    if (isSimStarted && timeLimit && timeLimit > 0) {
-      const interval = setInterval(() => {
-        if (resultState !== null) {
-          clearInterval(interval);
-          return;
-        }
-        setTimeLimit((prevCount: number | null) =>
-          prevCount !== null && prevCount > 0 ? prevCount - 1 : 0
-        );
-      }, 1000);
-      return () => clearInterval(interval);
-    } else if (isSimStarted && timeLimit === 0) {
-      setResultState(1);
-      setTimeLimit(null);
-    }
-  }, [isSimStarted, timeLimit]);
 
   return { readyGame };
 };

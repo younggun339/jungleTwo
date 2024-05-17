@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, MutableRefObject } from "react";
 import { Body } from "matter-js";
 import { Socket } from "socket.io-client";
 import Peer from "simple-peer";
-import { updateLsideSkeleton, updateRsideSkeleton } from "../utils/updateSkeleton";
+import { updateSkeleton } from "../utils/updateSkeleton";
 
 // 추가: Polyfill import
 import "process/browser";
@@ -205,10 +205,10 @@ const useWebRTC = (
 
     if (parsedData.type === "left-hand-joint") {
       const { joint1Start, joint1End } = parsedData.data;
-      updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
+      updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
     } else if (parsedData.type === "right-hand-joint" ) {
       const { joint1Start, joint1End } = parsedData.data;
-      updateRsideSkeleton(rightArmRightRef, joint1Start, joint1End, canvasSize);
+      updateSkeleton(rightArmRightRef, joint1Start, joint1End);
     }
   };
 

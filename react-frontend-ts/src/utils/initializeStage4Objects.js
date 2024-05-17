@@ -139,6 +139,13 @@ export const initializeStage4Objects = (
         mask: 0xffff, // 모든 category와 충돌
       },
     });
+    // 쥐가 낙사 시 죽는 이벤트를 걸기 위한 바닥 생성
+    const fallFloor = Bodies.rectangle(canvasSize.x / 2, canvasSize.y + 10, canvasSize.x, 1, {
+      isStatic: true,
+      render: {
+        fillStyle: "red",
+      },
+    });
     // bombGround
     const bombGround = Bodies.rectangle(1090, canvasSize.y - 500, 100, 25, {
       isStatic: true,
@@ -574,6 +581,13 @@ export const initializeStage4Objects = (
           cat.render.sprite.texture = "/assets/CatClose.png";
           cat.render.sprite.xScale = 0.17;
           cat.render.sprite.yScale = 0.17;
+        }
+        // mouse과 fallFloor가 충돌했을 때
+        if (
+          (bodyA === mouseRef.current && bodyB === fallFloor) ||
+          (bodyA === fallFloor && bodyB === mouseRef.current)
+        ) {
+          setResultState(5);
         }
         // mouse과 cat이 충돌했을 때
         if (

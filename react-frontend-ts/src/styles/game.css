@@ -74,17 +74,6 @@ canvas {
   z-index: 4;
 }
 
-#time-limit {
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 15px;
-  font-weight: bold;
-  color: blue; /* 적당한 색상으로 조정 */
-  z-index: 4;
-}
-
 #tutorial-image-1, #tutorial-image-2 {
   position: absolute;
   top: 50%;
@@ -158,4 +147,42 @@ canvas {
   height: 100%;
   background-color: transparent; /* 투명 배경 */
   z-index: 10; /* 필요에 따라 z-index를 조절 */
+}
+
+.menu-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 5;
+}
+
+.menu-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-popup button {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
 }

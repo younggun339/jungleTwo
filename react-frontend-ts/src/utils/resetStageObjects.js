@@ -22,7 +22,6 @@ export function resetStage1Objects(
   setShowModal,
   setResultState,
   setCountdown,
-  setTimeLimit,
   setIsPlayerReady
 ) {
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
@@ -54,7 +53,6 @@ export function resetStage1Objects(
   setResultState(null);
   setShowModal(false);
   setCountdown(null);
-  setTimeLimit(null);
 }
 
 // ================================================ STAGE 2 ====================================================
@@ -67,7 +65,6 @@ export function resetStage2Objects(
   setShowModal,
   setResultState,
   setCountdown,
-  setTimeLimit,
   setIsPlayerReady
 ) {
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
@@ -99,7 +96,6 @@ export function resetStage2Objects(
   setResultState(null);
   setShowModal(false);
   setCountdown(null);
-  setTimeLimit(null);
 }
 
 // ================================================ STAGE 3 ====================================================
@@ -112,7 +108,6 @@ export function resetStage3Objects(
   setShowModal,
   setResultState,
   setCountdown,
-  setTimeLimit,
   setIsPlayerReady
 ) {
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
@@ -144,7 +139,6 @@ export function resetStage3Objects(
   setResultState(null);
   setShowModal(false);
   setCountdown(null);
-  setTimeLimit(null);
 }
 
 // ================================================ STAGE 4 ====================================================
@@ -157,7 +151,6 @@ export function resetStage4Objects(
   setShowModal,
   setResultState,
   setCountdown,
-  setTimeLimit,
   setIsPlayerReady
 ) {
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
@@ -189,7 +182,6 @@ export function resetStage4Objects(
   setResultState(null);
   setShowModal(false);
   setCountdown(null);
-  setTimeLimit(null);
 }
 
 // ================================================ STAGE 5 ====================================================
@@ -202,7 +194,6 @@ export function resetStage5Objects(
   setShowModal,
   setResultState,
   setCountdown,
-  setTimeLimit,
   setIsPlayerReady
 ) {
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
@@ -234,5 +225,4 @@ export function resetStage5Objects(
   setResultState(null);
   setShowModal(false);
   setCountdown(null);
-  setTimeLimit(null);
 }

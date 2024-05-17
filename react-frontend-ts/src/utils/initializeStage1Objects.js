@@ -90,6 +90,14 @@ export const initializeStage1Objects = (
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
     };
 
+    // 쥐가 낙사 시 죽는 이벤트를 걸기 위한 바닥 생성
+    const fallFloor = Bodies.rectangle(canvasSize.x / 2, canvasSize.y + 10, canvasSize.x, 1, {
+      isStatic: true,
+      render: {
+        fillStyle: "red",
+      },
+    });
+
     const floors = [
       Bodies.rectangle(250, canvasSize.y - 300, 350, 25, {
         isStatic: true,
@@ -517,6 +525,7 @@ function loadImage(url, callback) {
       bombGround,
       weight,
       floor,
+      fallFloor
     ]);
 
     // 충돌 감지
@@ -560,6 +569,13 @@ function loadImage(url, callback) {
           cat.render.sprite.xScale = 0.17;
           cat.render.sprite.yScale = 0.17; // cat의 색상을 빨간색으로 변경
         }
+        // mouse과 fallFloor가 충돌했을 때
+        if (
+          (bodyA === mouseRef.current && bodyB === fallFloor) ||
+          (bodyA === fallFloor && bodyB === mouseRef.current)
+        ) {
+          setResultState(5);
+        }
         // mouse과 cat이 충돌했을 때
         if (
           (bodyA === mouseRef.current && bodyB === cat) ||
@@ -567,7 +583,7 @@ function loadImage(url, callback) {
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
           if (!(cat.render.sprite.texture === "/assets/CatClose.png")) {
-            alert("게임오버");
+            setResultState(4);
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {
             cat.collisionFilter = {

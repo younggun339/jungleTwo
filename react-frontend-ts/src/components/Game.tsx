@@ -23,14 +23,17 @@ import {
   resetStage4Objects,
   resetStage5Objects,
 } from "../utils/resetStageObjects";
-import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
 import {
-  updateLsideSkeleton,
-  updateRsideSkeleton,
-} from "../utils/updateSkeleton";
+  clearStage1Objects,
+  clearStage2Objects,
+  clearStage3Objects,
+  clearStage4Objects,
+  clearStage5Objects,
+} from "../utils/clearStageObjects";
+import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
+import { updateSkeleton } from "../utils/updateSkeleton";
 import Video from "./Video";
 import "../styles/game.css";
-import { Body, Bodies, World, Engine } from "matter-js";
 
 interface GameProps {
   userName: string;
@@ -53,17 +56,20 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const sceneRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const [isMouseUP, setIsMouseUP] = useState(true);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
   const [countdown, setCountdown] = useState<number | null>(null);
-  const [timeLimit, setTimeLimit] = useState<number | null>(null);
   const [currentStage, setCurrentStage] = useState<number>(1);
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
-  const [isGameStarted, setIsGameStarted] = useState(true);
-  const [isTutorialImage1End, setIsTutorialImage1End] = useState(true);
-  const [isTutorialImage2End, setIsTutorialImage2End] = useState(true);
+  const [isGameStarted, setIsGameStarted] = useState(false);
+  const [isTutorialImage1End, setIsTutorialImage1End] = useState(false);
+  const [isTutorialImage2End, setIsTutorialImage2End] = useState(false);
   const [isSimStarted, setIsSimStarted] = useState(false);
   const [resultState, setResultState] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   //--------------get coordinates---------------
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -73,20 +79,23 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const rect = canvas.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
+    setIsMouseDown(true);
+    setIsMouseUP(false);
   
     setMousePos({ x: mouseX, y: mouseY });
-    console.log('Mouse down at (' + mouseX + ', ' + mouseY + ')');
   };
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    if (isMouseDown && !isMouseUP) {
+      const canvas = event.target as HTMLCanvasElement;
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+      
+      setMouseEndPos({ x: mouseX, y: mouseY });
+    }
+  }
   
-  const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    const canvas = event.target as HTMLCanvasElement;
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-    
-    setMouseEndPos({ x: mouseX, y: mouseY });
-    console.log('Mouse released at (' + mouseX + ', ' + mouseY + ')');
-  };
   // 인게임 및 통신 관련 소켓
   useEffect(() => {
     nestjsSocketRef.current = io("https://zzrot.store/", {
@@ -122,9 +131,17 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     resetStage5Objects,
   ];
 
-  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = stageSetups[
-    currentStage - 1
-  ](canvasSize, sceneRef, isSimStarted, isTutorialImage2End, setResultState);
+  const clearStageObjects = [
+    clearStage1Objects,
+    clearStage2Objects,
+    clearStage3Objects,
+    clearStage4Objects,
+    clearStage5Objects,
+  ];
+
+  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = stageSetups[currentStage - 1](
+    canvasSize, sceneRef, isSimStarted, isTutorialImage2End, setResultState
+    );
 
   const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } =
     useWebRTC(
@@ -138,19 +155,13 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       userName,
       isTutorialImage2End,
       isSimStarted
-    ) as WebRTCResult;
+  ) as WebRTCResult;
 
-  // =============== mediapipe 이벤트 ===============
-  // 왼팔 및 오른팔 사각형의 위치를 매 프레임마다 업데이트
-  // interface Joint {
-  //   x: number;
-  //   y: number;
-  // }
-  
   let startCx = mousePos.x;
   let startCy = mousePos.y;
   let endCx = mouseEndPos.x;
   let endCy = mouseEndPos.y;
+
   interface BodyCoordsL {
     joint1Start: {x: typeof startCx, y :typeof startCy};
     joint1End: {x: typeof endCx, y :typeof endCy};
@@ -166,7 +177,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
       const { joint1Start, joint1End } = data;
       if (joint1Start && joint1End) {
-        updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
+        updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
         sendLeftHandJoint(joint1Start, joint1End);
       }
     };
@@ -174,12 +185,17 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const handleRightsideBodyCoords = (data: BodyCoordsR) => {
       const { joint1Start, joint1End } = data;
       if (joint1Start && joint1End) {
-        updateLsideSkeleton(leftArmLeftRef, joint1Start, joint1End, canvasSize);
-        sendLeftHandJoint(joint1Start, joint1End);
+        updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
+        sendRightHandJoint(joint1Start, joint1End);
       }
     };
     
-    handleLeftsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
+    if (isTutorialImage2End && !isSimStarted && indexRef.current === 0) {
+      handleLeftsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
+    }
+    if (isTutorialImage2End && !isSimStarted && indexRef.current === 1) {
+      handleRightsideBodyCoords({joint1Start: mousePos, joint1End: mouseEndPos});
+    }
   }, [isTutorialImage2End, isSimStarted, indexRef.current, mouseEndPos.y]);
 
   // =============== 게임 시작 이벤트 ===============
@@ -192,7 +208,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    timeLimit,
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -200,23 +215,18 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     setIsTutorialImage2End,
     setIsSimStarted,
     setCountdown,
-    setTimeLimit,
     setResultState
   );
 
   // ============== 게임 결과 모달 =====================
   const handleRetry = () => {
-    resetStageObjects[currentStage - 1](
+    clearStageObjects[currentStage - 1](
       { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       setIsGameStarted,
       setIsSimStarted,
       setIsTutorialImage1End,
       setIsTutorialImage2End,
       setShowModal,
-      setResultState,
-      setCountdown,
-      setTimeLimit,
-      setIsPlayerReady
     );
   };
 
@@ -231,11 +241,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       setShowModal,
       setResultState,
       setCountdown,
-      setTimeLimit,
       setIsPlayerReady
     );
     setCurrentStage((prevStage) => Math.min(prevStage + 1, 5)); // 최대 5스테이지
     setShowModal(false);
+
+    if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.emit("reset-ready", { roomName: gameRoomID });
+    }
   };
 
   useEffect(() => {
@@ -269,8 +282,10 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         <canvas
           ref={canvasRef}
           className="canvas-transparent"
+          // handleMouseDown 및 setIsMouseDown 함수 추가 
           onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onMouseUp={() => { setIsMouseDown(false); setIsMouseUP(true); }}
         />
 
         {peers.slice(indexRef.current).map((peer, index) => (
@@ -302,14 +317,22 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       {isTutorialImage2End && countdown && countdown > 0 && (
         <div id="countdown">{countdown}</div>
       )}
-      {isSimStarted && !resultState && timeLimit && timeLimit > 0 && (
-        <div id="time-limit">{timeLimit}</div>
-      )}
 
       {!isPlayerReady && (
         <button onClick={readyGame} id="ready-button">
           준비 완료
         </button>
+      )}
+
+      <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
+        메뉴
+      </button>
+
+      {isMenuOpen && (
+        <div className="menu-popup">
+          <button onClick={handleRetry}>다시하기</button>
+          <button onClick={() => setIsMenuOpen(false)}>닫기</button>
+        </div>
       )}
 
       <footer className="footer">
@@ -354,6 +377,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           {resultState === 4 && (
             <div>
               <h1> 고양이에게 잡혔습니다! </h1>
+              <img src="/images/resultState_bomb.png" alt="Bomb" />
+              <button onClick={handleRetry}>다시하기</button>
+              <button onClick={handleNextStage}>다음스테이지</button>
+            </div>
+          )}
+          {resultState === 5 && (
+            <div>
+              <h1> 바닥에 떨어졌습니다! </h1>
               <img src="/images/resultState_bomb.png" alt="Bomb" />
               <button onClick={handleRetry}>다시하기</button>
               <button onClick={handleNextStage}>다음스테이지</button>
