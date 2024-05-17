@@ -1,54 +1,52 @@
 @font-face {
   font-family: "MyFont";
-  src: url("./dos.ttf") format("opentype");
+  src: url("./dos.tf") format("opentype");
+  /* url('/fonts/CookieRun Bold.otf') format('otf'),
+       url('/fonts/CookieRun Regular.otf') format('otf'); */
 }
-
 body {
   background-image: url("./bkk3.webp");
-  font-family: "MyFont", sans-serif;
+  font-family: "MyFont";
+
+  /* font-family: "IBM Plex Sans KR", sans-serif; */
   font-weight: 400;
   font-style: normal;
   height: 100vh;
   background-size: cover;
   z-index: 0;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
 }
-
 .totalContain {
+  /* border: solid; */
   height: 95vh;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
 }
 
 .header {
-  font-family: "MyFont", sans-serif;
+  font-family: "MyFont";
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #e6e6fa;
-  padding: 0.5rem;
 }
 
-/* Profile section styles */
+/* Styles for profile section */
 .profile {
   position: relative;
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin-left: 0.75rem;
-  background-color: white;
-  padding: 0.75rem;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: width 0.3s ease;
+  margin-left: 12px;
+  background-color: white; /* 흰색 배경 */
+  padding: 12px; /* 내부 여백 추가 */
+  border-radius: 5px; /* 둥근 모서리 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  overflow: hidden; /* 메뉴가 넘치는 것을 방지 */
+  transition: width 0.3s ease; /* 너비 변경 애니메이션 */
 }
 
 .profile:hover .menu {
-  display: block;
+  display: block; /* 마우스 오버 시 메뉴 표시 */
   transform: translateX(0);
 }
 
@@ -60,7 +58,7 @@ body {
 }
 
 .menu ul {
-  display: flex;
+  display: flex; /* 메뉴 항목 가로 배치 */
   align-items: center;
   justify-content: center;
   list-style: none;
@@ -69,80 +67,80 @@ body {
 }
 
 .menu ul li {
-  margin-left: 35px;
+  margin-left: 35px; /* 메뉴 항목 간 간격 */
   cursor: pointer;
 }
 
-/* Login button styles */
+/* Styles for login button */
 .loginButton {
   margin-left: 12px;
-  padding: 10px 20px;
-  background-color: #4b0082;
+  padding: 10px 20px; /* Increase padding for a larger button */
+  background-color: #4b0082; /* Same blue as input border */
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 5px; /* Match input border radius */
   cursor: pointer;
-  font-size: 16px;
-  outline: none;
+  font-size: 16px; /* Match input font size */
+  outline: none; /* Remove default outline */
+  transition: background-color 0.3s; /* Add transition for hover effect */
+
+  /* Add box shadow for a subtle effect, similar to input but lighter */
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
 }
 
-/* Logo styles */
+/* Styles for logo */
 .logo {
   width: 100px;
   height: auto;
 }
 
-/* Search form styles */
+/* Styles for search form */
 .search {
   display: flex;
   align-items: center;
 }
 
 .searchInput {
-  padding: 12px;
-  margin-right: 12px;
-  border: 2px solid #4b0082;
-  border-radius: 5px;
-  font-size: 18px;
-  outline: none;
-  transition: border-color 0.3s;
+  padding: 12px; /* Increase padding for a larger input */
+  margin-right: 12px; /* Increase margin for spacing */
+  border: 2px solid #4b0082; /* Change border color and thickness */
+  border-radius: 5px; /* Add border radius for a rounded look */
+  font-size: 18px; /* Increase font size for better readability */
+  outline: none; /* Remove default outline */
+  transition: border-color 0.3s; /* Add transition for a smooth effect */
+
+  /* Add box shadow for a subtle effect */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Ensures input is responsive */
 }
 
 .searchInput:focus {
-  border-color: #a831fd;
+  border-color: #a831fd; /* Change border color on focus */
 }
 
 .roomSearch {
   margin-right: 12px;
-  padding: 10px 20px;
-  background-color: #4b0082;
+  padding: 10px 20px; /* Increase padding for a larger button */
+  background-color: #4b0082; /* Same blue as input border */
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 5px; /* Match input border radius */
   cursor: pointer;
-  font-size: 16px;
-  outline: none;
-  transition: background-color 0.3s;
+  font-size: 16px; /* Match input font size */
+  outline: none; /* Remove default outline */
+  transition: background-color 0.3s; /* Add transition for hover effect */
+
+  /* Add box shadow for a subtle effect, similar to input but lighter */
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .roomSearch:hover {
-  background-color: #a831fd;
+  background-color: #a831fd; /* Darker blue on hover */
 }
 
-/* Responsive adjustments */
-@media screen and (max-width: 1024px) {
-  .header,
-  .search,
-  .profile,
-  .menu ul li,
-  .roomList .room .roomText {
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  .header {
     flex-direction: column;
-    align-items: center;
     padding: 10px 0;
   }
 
@@ -154,96 +152,112 @@ body {
     position: static;
     display: block;
   }
-
-  .searchInput,
-  .roomSearch {
-    width: auto; /* Adjust based on parent width */
-  }
-
-  .createRoomContain,
-  .roomListContain {
-    width: 100%; /* Full width on smaller screens */
-    margin-right: 0;
-    margin-bottom: 1rem;
-  }
-
-  .contain {
-    flex-direction: column;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .header {
-    flex-direction: column;
-  }
-
-  .profile {
-    margin-bottom: 10px;
-  }
-
-  .menu {
-    display: block;
-  }
-
-  .searchInput {
-    margin-bottom: 10px;
-  }
 }
 
 .contain {
-  width: 100%;
+  width: 85%;
+  height: 70rem;
   margin: auto;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .createRoomContain {
-  width: 100%;
-  max-width: 360px; /* Fixed max-width for better control */
   margin-top: 2rem;
+  width: 30%;
+  height: 50rem;
+  margin-right: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: rgba(237, 231, 246, 0.8);
   border-radius: 1rem;
-  padding: 1rem;
+  .mainImg {
+    margin-top: 15rem;
+  }
+  .createButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 5rem;
+    font-size: 2rem;
+    opacity: 1;
+  }
+  .title {
+    font-family: "MyFont";
+    font-size: 5rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    opacity: 1;
+  }
+  .createRoom {
+    width: 80%;
+    height: 35rem;
+    border: solid;
+    background-color: #9575cd;
+    font-size: 2rem;
+    border-color: #b39ddb;
+    border-radius: 1rem;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    p {
+      font-weight: bold;
+      color: rgb(45, 44, 44);
+    }
+  }
+  .inputField {
+    font-size: 2rem;
+    width: 90%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 1px;
+    border: solid 0.3rem #b39ddb;
+    border-radius: 1rem;
+    opacity: 1;
+  }
 }
-
-.createButton,
-.title,
-.createRoom,
-.inputField,
-button,
-.roomListContain,
-.room,
-.roomText,
-.roomName,
-.nickname,
-.go,
-.roomListHeader,
-.headerText,
-.refreshButton {
-  width: 100%;
-  text-align: center;
-}
-
 button {
-  margin-top: 1rem;
-  padding: 1em 1.5em;
+  font-family: "MyFont";
+  --text: #ede7f6;
+  --light-pink: #673ab7;
+  --pink: #7e57c2;
+  --dark-pink: #512dab;
+  --pink-border: #2e1793;
+  --pink-shadow: #b39ddb;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  padding: 1.25em 2em;
+  background: var(--light-pink);
+  border: 2px solid var(--pink-border);
   border-radius: 0.75em;
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+    background 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
 button::before {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  transform: translate3d(0, 0.25em, -0.25em);
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--dark-pink);
+  border-radius: inherit;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* 그림자 범위, 색상, 투명도 조절 */
+  transform: translate3d(0, 0.25em, -0.25em); /* 이동 거리 감소 */
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out; /* 트랜지션 시간 및 타이밍 함수 변경 */
 }
-
 button:hover {
+  cursor: pointer;
   background: var(--pink);
   transform: translate(0, 0.25em);
 }
-
 button:hover::before {
   box-shadow: 0 0 0 2px var(--pink-border), 0 0.5em 0 0 var(--pink-shadow);
   transform: translate3d(0, 0.5em, -1em);
@@ -260,78 +274,82 @@ button:active::before {
 }
 
 .roomListContain {
-  width: calc(100% - 360px); /* Adjust width to take remaining space */
   margin-top: 2rem;
+  width: 66.67%;
   background-color: rgba(237, 231, 246, 0.8);
   border-radius: 1rem;
-  padding: 1rem;
-}
-
-.roomList {
-  display: flex;
-  flex-direction: column;
-  max-height: 60rem;
-  overflow-y: auto;
-}
-
-.room {
-  margin-top: 1rem;
-  margin-right: 1rem;
-  background-color: #9575cd;
-  border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.roomText {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.roomName,
-.nickname,
-.go {
-  padding: 0.5rem;
-  border-radius: 1rem;
-}
-
-.roomListHeader {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-}
-
-.headerText,
-.refreshButton {
-  font-size: 1.5rem;
-  padding: 0.5rem;
-}
-
-@media screen and (max-width: 480px) {
-  .contain,
-  .createRoomContain,
-  .roomListContain {
-    width: 100%;
+  .roomList {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    max-height: 60rem;
+    overflow-y: auto;
   }
+  .room {
+    width: 90rem;
+    height: 10rem;
+    border: solid #b39ddb;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    background-color: #9575cd;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  .createRoomContain {
-    max-width: 100%;
+    .roomText {
+      width: 80%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .roomName {
+        width: 40%;
+        background-color: #7e57c2;
+        border-radius: 1rem;
+        font-weight: bold;
+        color: rgb(240, 240, 240);
+        font-size: 2.5rem;
+        padding: auto;
+      }
+      .nickname {
+        width: 30%;
+        color: white;
+        font-weight: bold;
+        background-color: #7e57c2;
+        border-radius: 1rem;
+        font-size: 2rem;
+      }
+      .go {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        margin-right: 10px;
+        width: 9rem;
+        height: 4rem;
+      }
+    }
   }
-
-  .roomListContain {
-    width: 100%;
-  }
-
-  .searchInput,
-  .roomSearch,
-  .loginButton {
-    font-size: 1rem;
-    padding: 8px 16px;
-  }
-
-  button {
-    font-size: 0.875rem;
+  .roomListHeader {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    .headerText {
+      display: flex;
+      justify-content: center;
+      width: 80%;
+      font-size: 5rem;
+    }
+    .refreshButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 1rem;
+      font-size: 2rem;
+      width: 12rem;
+      height: 5rem;
+    }
   }
 }
