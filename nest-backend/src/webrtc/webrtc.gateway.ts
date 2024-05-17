@@ -173,4 +173,9 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 }
+@SubscribeMessage('mouse-move')
+handleMouseMove(client: Socket, payload: { id: string; x: number; y: number }) {
+  const roomName = this.user_room[client.id];
+  this.server.to(roomName).emit('mouse-move', payload);
+}
 }

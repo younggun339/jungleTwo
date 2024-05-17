@@ -209,26 +209,40 @@ body {
   margin-right: 10px;
 }
 .go {
-  width: 80px; /* Decreased width */
-  height: 50px; /* Increased height for thickness */
   font-size: 20px; /* Increased font size */
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #4b0082;
   color: white;
   border-radius: 1rem;
   cursor: pointer;
+  width: 20%;
+  height: 8rem;
+  font-size: 2rem;
+  opacity: 1;
+}
+.roomListHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  font-size: 1.5rem;
 }
 
 .roomListHeader .headerText {
-  font-size: 24px; /* Increased font size */
+  font-size: 64px; /* Increased font size */
 }
-.roomNameInputField {
-  font-size: 20px; /* Increased font size */
-  padding: 15px; /* Increased padding for larger click area */
-  margin: 10px 0; /* Added margin for spacing */
-  width: 100%; /* Full width */
+#roomName.inputField {
+  font-size: 16px; /* 기본 폰트 크기 */
+  padding: 10px; /* 기본 패딩 */
+  margin: 5px 0; /* 기본 마진 */
+  width: 80%; /* 전체 너비 */
+  font-family: "MyFont";
+}
+input[type="checkbox"] {
+  width: 18px; /* 체크박스의 너비를 25px로 설정 */
+  height: 18px; /* 체크박스의 높이를 25px로 설정 */
+  cursor: pointer; /* 마우스를 올렸을 때 손가락 모양으로 변경 */
 }
 
 /* Responsive adjustments */
@@ -305,6 +319,21 @@ body {
     width: 10%; /* Full width on smaller screens */
     margin-right: 0; /* Remove margin on smaller screens */
     margin-bottom: 10px; /* Space between elements */
+  }
+
+  .roomListHeader {
+    flex-direction: column; /* 모바일 뷰에서는 항목들을 세로로 쌓음 */
+    padding: 0.5rem;
+  }
+
+  .roomListHeader .headerText {
+    font-size: 50px; /* 모바일에서는 폰트 크기를 조금 줄임 */
+    margin-bottom: 10px; /* 텍스트와 버튼 사이에 마진 추가 */
+  }
+
+  .roomListHeader .refreshButton {
+    width: 100%; /* 모바일에서 버튼을 전체 폭으로 확장 */
+    font-size: 14px; /* 모바일에서의 버튼 폰트 크기를 조정 */
   }
 }
 
@@ -448,6 +477,7 @@ button:active::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 90%;
 }
 
 .roomName,
@@ -458,16 +488,21 @@ button:active::before {
 }
 
 .roomListHeader {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
   display: flex;
-  align-items: center;
+  justify-content: space-between; /* 왼쪽과 오른쪽 정렬을 위해 */
+  align-items: center; /* 세로 중앙 정렬 */
+  padding: 1rem;
+  font-size: 1.5rem; /* 기본 폰트 크기 */
 }
 
-.headerText,
-.refreshButton {
-  font-size: 1.5rem;
-  padding: 0.5rem;
+.roomListHeader .headerText {
+  flex-grow: 1; /* 가용 공간을 모두 차지하도록 설정 */
+  text-align: center; /* 텍스트를 중앙 정렬 */
+  font-size: 64px; /* 텍스트 크기 증가 */
+}
+.roomListHeader .refreshButton {
+  margin-left: auto; /* 왼쪽 요소와의 거리 최대로 */
+  padding: 0.5rem 1rem; /* 패딩 설정 */
 }
 
 @media screen and (max-width: 480px) {
@@ -494,5 +529,27 @@ button:active::before {
 
   button {
     font-size: 0.875rem;
+  }
+
+  .roomListHeader .headerText {
+    font-size: 18px; /* 더 작은 화면에서 폰트 크기를 더 줄임 */
+  }
+}
+
+/* 중간 크기의 화면에서의 스타일 */
+@media (min-width: 600px) {
+  #roomName.inputField {
+    font-size: 18px; /* 증가된 폰트 크기 */
+    padding: 12px; /* 증가된 패딩 */
+    margin: 8px 0; /* 증가된 마진 */
+  }
+}
+
+/* 큰 화면에서의 스타일 */
+@media (min-width: 992px) {
+  #roomName.inputField {
+    font-size: 20px; /* 더욱 증가된 폰트 크기 */
+    padding: 15px; /* 더욱 증가된 패딩 */
+    margin: 10px 0; /* 더욱 증가된 마진 */
   }
 }

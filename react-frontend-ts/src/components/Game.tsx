@@ -95,6 +95,19 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       setMouseEndPos({ x: mouseX, y: mouseY });
     }
   }
+  //--------------get coordinates----------------
+
+  //--------------draw mouse--------------
+  function updatePeerMouse(id, x, y) {
+    const canvas = document.getElementById('canvas');
+    const ctx = canvasRef.getContext('2d');
+    
+    ctx.clearRect(0, 0, canvasRef.width, canvas.height); // 기존 마우스 위치 지우기
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+}
   
   // 인게임 및 통신 관련 소켓
   useEffect(() => {
