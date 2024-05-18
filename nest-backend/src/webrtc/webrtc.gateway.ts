@@ -13,7 +13,7 @@ interface User {
 }
 
 @WebSocketGateway({ cors: true })
-export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class WebRTCGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
 
@@ -25,24 +25,24 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log('Client connected:', client.id);
   }
 
-  handleDisconnect(client: Socket) {
-    const roomName = this.user_room[client.id];
-    delete this.user_room[client.id];
+//   handleDisconnect(client: Socket) {
+//     const roomName = this.user_room[client.id];
+//     delete this.user_room[client.id];
 
-    console.log(this.room_user)
+//     console.log(this.room_user)
 
-    for (let i = 0; i < this.room_user[roomName].length; i++) {
-        if (this.room_user[roomName][i][0] === client.id) {
-            this.room_user[roomName].splice(i, 1);
-            break;
-        }
-    }
+//     for (let i = 0; i < this.room_user[roomName].length; i++) {
+//         if (this.room_user[roomName][i][0] === client.id) {
+//             this.room_user[roomName].splice(i, 1);
+//             break;
+//         }
+//     }
 
     
-    for (let i = 0; i < this.room_user[roomName].length; i++) {
-        const users = this.room_user[roomName][i];
-        this.server.to(users[0]).emit('user', this.room_user[roomName]);
-    }
+//     for (let i = 0; i < this.room_user[roomName].length; i++) {
+//         const users = this.room_user[roomName][i];
+//         this.server.to(users[0]).emit('user', this.room_user[roomName]);
+//     }
 
 //     Object.keys(this.room_user).forEach(roomName => {
 //       const users = this.room_user[roomName]; 
@@ -72,7 +72,7 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
 //           emitDeleteEvent(); // 초기 이벤트 전송
 //         }
 //     });
-}
+// }
 
   @SubscribeMessage('join-room')
   handleJoinRoom(client: Socket, roomName: string) {
@@ -98,23 +98,39 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleSendingSignal(
     client: Socket,
     payload: { userToSignal: string; signal: any; callerID: string },
+    callback: (err?: Error) => void,
   ) {
     this.server.to(payload.userToSignal).emit('user-joined', {
       signal: payload.signal,
       callerID: payload.callerID,
+    }, (err: any) => {
+      if (err) {
+        console.error('Failed to emit "user-joined" event:', err);
+        callback(err);
+      } else {
+        callback();
+      }
     });
   }
-
   @SubscribeMessage('returning-signal')
   handleReturningSignal(
     client: Socket,
     payload: { callerID: string; signal: any },
+    callback: (err?: Error) => void,
   ) {
     this.server.to(payload.callerID).emit('receiving-returned-signal', {
       signal: payload.signal,
       id: client.id,
+    }, (err: any) => {
+      if (err) {
+        console.error('Failed to emit "receiving-returned-signal" event:', err);
+        callback(err);
+      } else {
+        callback();
+      }
     });
   }
+  
   @SubscribeMessage('user-signal')
   handleUserSignal(client: Socket, data: { gameRoomID: string; userName: string }) {
     const { gameRoomID, userName } = data;

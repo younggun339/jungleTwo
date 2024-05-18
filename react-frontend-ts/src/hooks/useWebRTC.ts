@@ -5,18 +5,16 @@ import { Socket } from "socket.io-client";
 import Peer from "simple-peer";
 import { updateSkeleton } from "../utils/updateSkeleton";
 
-// 추가: Polyfill import
 import "process/browser";
-import startCapturing from "../components/startCapturing";
 
 const pcConfig = {
-  iceServers: [
-    {
-      urls: ["turn:43.203.29.69:3478?transport=tcp"],
-      username: "team2",
-      credential: "team2",
-    },
-  ],
+  // iceServers: [
+  //   {
+  //     urls: ["turn:43.203.29.69:3478?transport=tcp"],
+  //     username: "team2",
+  //     credential: "team2",
+  //   },
+  // ],
 };
 
 const retryFetch = async (url: any, options: any, retries = 50) => {
@@ -43,7 +41,7 @@ const useWebRTC = (
   canvasRef: MutableRefObject<HTMLCanvasElement | null>,
   userName: string,
   isTutorialImage2End: boolean,
-  isSimStarted: boolean,
+  isSimStarted: boolean
 ): WebRTCResult => {
   const peersRef = useRef<PeerObject[]>([]);
   const [peers, setPeers] = useState<PeerObject[]>([]);
@@ -74,7 +72,9 @@ const useWebRTC = (
           // });
 
           nestjsSocketRef.current.emit("join-room", roomName);
-
+          console.log(
+            `Attempting to join room: ${roomName} with ID: ${nestjsSocketRef.current.id}`
+          );
           nestjsSocketRef.current.on("room-full", () => {
             alert("Room is full!");
             window.location.href = "/create-room";
@@ -112,7 +112,11 @@ const useWebRTC = (
           nestjsSocketRef.current.on(
             "user-joined",
             (payload: { signal: any; callerID: string }) => {
+              console.log(`User joined: ${payload.callerID}`);
               const peer = addPeer(payload.signal, payload.callerID, stream);
+              console.log(
+                `Creating peer for newly joined user: ${payload.callerID}`
+              );
               const peerObj: PeerObject = { peer, peerID: payload.callerID };
               peer.on("data", handleIncomingData);
               peer.on("error", (err) => console.error("Peer error:", err));
@@ -152,21 +156,29 @@ const useWebRTC = (
       trickle: false,
       stream,
       config: pcConfig,
-      channelConfig: {
-        ordered: false, // UDP-like behavior
-        maxRetransmits: 0,
-      },
     });
 
-    console.log("stream created: ", stream);
+    const sendSignal = (signal: any, retryCount = 0) => {
+      nestjsSocketRef.current?.emit(
+        "sending-signal",
+        {
+          userToSignal,
+          callerID,
+          signal,
+        },
+        (err: any) => {
+          if (err) {
+            console.error(`Failed to send signal to ${userToSignal}:`, err);
+            if (retryCount >= 10) {
+              console.warn("Failed to send signal, retrying...", err);
+              setTimeout(() => sendSignal(signal, retryCount + 1), 1000);
+            }
+          }
+        }
+      );
+    };
 
-    peer.on("signal", (signal) => {
-      nestjsSocketRef.current?.emit("sending-signal", {
-        userToSignal,
-        callerID,
-        signal,
-      });
-    });
+    peer.on("signal", sendSignal);
 
     return peer;
   };
@@ -181,15 +193,22 @@ const useWebRTC = (
       trickle: false,
       stream,
       config: pcConfig,
-      channelConfig: {
-        ordered: false, // UDP-like behavior
-        maxRetransmits: 0,
-      },
     });
 
-    peer.on("signal", (signal) => {
-      nestjsSocketRef.current?.emit("returning-signal", { signal, callerID });
-    });
+    const sendReturnSignal = (signal: any, retryCount = 0) => {
+      nestjsSocketRef.current?.emit(
+        "returning-signal",
+        { signal, callerID },
+        (err: any) => {
+          if (err && retryCount < 10) {
+            console.warn("Failed to send return signal, retrying...", err);
+            setTimeout(() => sendReturnSignal(signal, retryCount + 1), 1000);
+          }
+        }
+      );
+    };
+
+    peer.on("signal", sendReturnSignal);
 
     peer.signal(incomingSignal);
     return peer;
@@ -201,7 +220,7 @@ const useWebRTC = (
     if (parsedData.type === "left-hand-joint") {
       const { joint1Start, joint1End } = parsedData.data;
       updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
-    } else if (parsedData.type === "right-hand-joint" ) {
+    } else if (parsedData.type === "right-hand-joint") {
       const { joint1Start, joint1End } = parsedData.data;
       updateSkeleton(rightArmRightRef, joint1Start, joint1End);
     }
@@ -209,13 +228,23 @@ const useWebRTC = (
 
   const sendLeftHandJoint = (joint1Start: any, joint1End: any) => {
     peersRef.current.forEach((peerObj) => {
-      peerObj.peer.send(JSON.stringify({ type: "left-hand-joint", data: { joint1Start, joint1End } }));
+      peerObj.peer.send(
+        JSON.stringify({
+          type: "left-hand-joint",
+          data: { joint1Start, joint1End },
+        })
+      );
     });
   };
 
   const sendRightHandJoint = (joint1Start: any, joint1End: any) => {
     peersRef.current.forEach((peerObj) => {
-      peerObj.peer.send(JSON.stringify({ type: "right-hand-joint", data: { joint1Start, joint1End } }));
+      peerObj.peer.send(
+        JSON.stringify({
+          type: "right-hand-joint",
+          data: { joint1Start, joint1End },
+        })
+      );
     });
   };
 
