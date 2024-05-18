@@ -13,7 +13,8 @@ export const initializeStage5Objects = (
   engine,
   refs,
   isTutorialImage2End,
-  setResultState
+  setResultState,
+  playSound
 ) => {
   const { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } =
     refs;
@@ -568,13 +569,13 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
         }
         //------------rightArm------------
         //------------panel------------
-        if (
-          (bodyA === mouseRef.current && bodyB === panel) ||
-          (bodyA === panel && bodyB === mouseRef.current)
-        ) {
-          // 일정 속도를 유지하도록 설정
-          onPanel = true;
-        }
+        // if (
+        //   (bodyA === mouseRef.current && bodyB === panel) ||
+        //   (bodyA === panel && bodyB === mouseRef.current)
+        // ) {
+        //   // 일정 속도를 유지하도록 설정
+        //   onPanel = true;
+        // }
         //------------panel------------
 
         //--------bomb--------------
@@ -616,30 +617,30 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
-        if (
-          (bodyA === mouseRef.current && bodyB === box3) ||
-          (bodyA === box3 && bodyB === mouseRef.current)
-        ) {
-          World.remove(engine.world, [box3]); //box제거
-          engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
-        }
-        if (
-          (bodyA === mouseRef.current && bodyB === box4) ||
-          (bodyA === box4 && bodyB === mouseRef.current)
-        ) {
-          World.remove(engine.world, [box4]); //box제거
-          engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          // console.log("사라지는 바닥의 좌표:", mouse.position);
-        }
-        if (
-          (bodyA === mouseRef.current && bodyB === box5) ||
-          (bodyA === box5 && bodyB === mouseRef.current)
-        ) {
-          World.remove(engine.world, [box5]); //box제거
-          engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
-        }
+        // if (
+        //   (bodyA === mouseRef.current && bodyB === box3) ||
+        //   (bodyA === box3 && bodyB === mouseRef.current)
+        // ) {
+        //   World.remove(engine.world, [box3]); //box제거
+        //   engine.gravity.x = engine.gravity.x * -1; //좌우반전
+        //   console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
+        // }
+        // if (
+        //   (bodyA === mouseRef.current && bodyB === box4) ||
+        //   (bodyA === box4 && bodyB === mouseRef.current)
+        // ) {
+        //   World.remove(engine.world, [box4]); //box제거
+        //   engine.gravity.x = engine.gravity.x * -1; //좌우반전
+        //   // console.log("사라지는 바닥의 좌표:", mouse.position);
+        // }
+        // if (
+        //   (bodyA === mouseRef.current && bodyB === box5) ||
+        //   (bodyA === box5 && bodyB === mouseRef.current)
+        // ) {
+        //   World.remove(engine.world, [box5]); //box제거
+        //   engine.gravity.x = engine.gravity.x * -1; //좌우반전
+        //   console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
+        // }
         //--------------좌우반전---------------
         //--------------점프대----------------
         jumping(event, engine, mouseRef.current, jumpPad);
@@ -857,13 +858,13 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
         }
         //------------------------------rightArm---------------
         //------------------------------panel---------------
-        if (
-          (bodyA === mouseRef.current && bodyB === panel) ||
-          (bodyA === panel && bodyB === mouseRef.current)
-        ) {
-          // 원래 상태로 돌아가도록 설정
-          onPanel = false;
-        }
+        // if (
+        //   (bodyA === mouseRef.current && bodyB === panel) ||
+        //   (bodyA === panel && bodyB === mouseRef.current)
+        // ) {
+        //   // 원래 상태로 돌아가도록 설정
+        //   onPanel = false;
+        // }
         //------------------------------panel---------------
       });
     });

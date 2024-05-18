@@ -531,7 +531,7 @@ export const initializeStage1Objects = (
           (bodyA === catButton && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
-          playSound("/sound/CatMeow.wav");
+          // playSound("/sound/CatMeow.wav"); 문닫히는 소리로 변경 
           catButton.render.sprite.texture = "/assets/CatButtonPush.png";
           catButton.render.sprite.xScale = 0.05;
           catButton.render.sprite.yScale = 0.05;
@@ -548,6 +548,7 @@ export const initializeStage1Objects = (
           (bodyA === catButton2 && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
+          // playSound("/sound/CatMeow.wav");
           catButton2.render.sprite.texture = "/assets/CatButtonPush.png";
           catButton2.render.sprite.xScale = 0.05;
           catButton2.render.sprite.yScale = 0.05;

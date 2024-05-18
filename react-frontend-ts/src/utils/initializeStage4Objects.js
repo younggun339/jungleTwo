@@ -13,7 +13,8 @@ export const initializeStage4Objects = (
   engine,
   refs,
   isTutorialImage2End,
-  setResultState
+  setResultState,
+  playSound
 ) => {
   const { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } =
     refs;

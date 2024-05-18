@@ -123,6 +123,7 @@ const useStage2Setup = (
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
+  const playSound = useSoundEffects();
 
   useEffect(() => {
     console.log("stage2 setup useEffect called");
@@ -148,7 +149,8 @@ const useStage2Setup = (
       engine,
       { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       isTutorialImage2End,
-      setResultState
+      setResultState,
+      playSound
     );
 
     Render.run(render);
@@ -188,6 +190,7 @@ const useStage3Setup = (
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
+  const playSound = useSoundEffects();
 
   useEffect(() => {
     console.log("stage3 setup useEffect called");
@@ -213,7 +216,8 @@ const useStage3Setup = (
       engine,
       { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       isTutorialImage2End,
-      setResultState
+      setResultState,
+      playSound
     );
 
     Render.run(render);
@@ -255,6 +259,7 @@ const useStage4Setup = (
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
+  const playSound = useSoundEffects();
 
   useEffect(() => {
     console.log("stage4 setup useEffect called");
@@ -280,7 +285,8 @@ const useStage4Setup = (
       engine,
       { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       isTutorialImage2End,
-      setResultState
+      setResultState,
+      playSound
     );
 
     Render.run(render);
@@ -322,6 +328,7 @@ const useStage5Setup = (
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
+  const playSound = useSoundEffects();
 
   useEffect(() => {
     console.log("stage5 setup useEffect called");
@@ -347,7 +354,8 @@ const useStage5Setup = (
       engine,
       { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       isTutorialImage2End,
-      setResultState
+      setResultState,
+      playSound
     );
 
     Render.run(render);

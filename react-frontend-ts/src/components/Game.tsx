@@ -68,9 +68,13 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [isTutorialImage2End, setIsTutorialImage2End] = useState(false);
   const [isSimStarted, setIsSimStarted] = useState(false);
   const [resultState, setResultState] = useState<number | null>(null);
+
   const [showModal, setShowModal] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showRetryRequest, setShowRetryRequest] = useState(false);
+  const [showWaitingPopup, setShowWaitingPopup] = useState(false);
+  const [placeholder, setPlaceholder] = useState("");
+  const textareaRef = useRef(null); // textarea 요소에 대한 참조 생성
 
   //--------------get coordinates---------------
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -243,13 +247,15 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   // ============== 게임 결과 모달 =====================
   const handleRetry = () => {
     setIsMenuOpen(false);
-    setShowRetryRequest(true);
+    setShowWaitingPopup(true);
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
     }
   };
+
   const handleAcceptRetry = () => {
     setShowRetryRequest(false);
+    setShowWaitingPopup(false);
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("retry-response", {
         roomName: gameRoomID,
@@ -257,8 +263,10 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       });
     }
   };
+
   const handleRejectRetry = () => {
     setShowRetryRequest(false);
+    setShowWaitingPopup(false);
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("retry-response", {
         roomName: gameRoomID,
@@ -276,6 +284,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
       nestjsSocketRef.current.on("retry-response", (accepted: boolean) => {
         setShowRetryRequest(false);
+        setShowWaitingPopup(false);
         if (accepted) {
           clearStageObjects[currentStage - 1](
             { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
@@ -316,10 +325,26 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     }
   }, [resultState]);
 
+  useEffect(() => {
+    // 현재 url 링크 창
+    setPlaceholder("https://zzrot.store" + window.location.pathname);
+  }, []);
+
+  const handleCopyClick = () => {
+    if (textareaRef.current) {
+      textareaRef.current.select(); // textarea 전체 선택
+      document.execCommand("copy"); // 클립보드로 복사
+      // 필요하다면 복사 완료 알림 등 추가 로직 작성
+    }
+  };
+
   return (
-    <div className="App">
-      <div id="matter-container" ref={sceneRef}>
-        {/* {peers.slice(0, indexRef.current).map((peer, index) => (
+    <>
+      <div className="animated-background"></div>
+
+      <div className="App">
+        <div id="matter-container" ref={sceneRef}>
+          {/* {peers.slice(0, indexRef.current).map((peer, index) => (
           <Video
             key={`${peer.peerID}-${index}`}
             peer={peer.peer}
@@ -347,145 +372,163 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             myIndexRef={0}
           />
         ))} */}
-        <canvas
-          ref={canvasRef}
-          className="canvas-transparent"
-          // handleMouseDown 및 setIsMouseDown 함수 추가
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={() => {
-            setIsMouseDown(false);
-            setIsMouseUP(true);
-          }}
-        />
-      </div>
-
-      {isGameStarted && !isTutorialImage1End && countdown && countdown > 0 && (
-        <div id="tutorial-image-1">
-          <img src="/images/tutorialImage_001.png" alt="tutorial1" />
+          <canvas
+            ref={canvasRef}
+            className="canvas-transparent"
+            // handleMouseDown 및 setIsMouseDown 함수 추가
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={() => {
+              setIsMouseDown(false);
+              setIsMouseUP(true);
+            }}
+          />
         </div>
-      )}
 
-      {isTutorialImage1End &&
-        !isTutorialImage2End &&
-        countdown &&
-        countdown > 0 && (
-          <div id="tutorial-image-2">
-            <img src="/images/tutorialImage_002.png" alt="tutorial2" />
+        {isGameStarted &&
+          !isTutorialImage1End &&
+          countdown &&
+          countdown > 0 && (
+            <div id="tutorial-image-1">
+              <img src="/images/tutorialImage_001.png" alt="tutorial1" />
+            </div>
+          )}
+
+        {isTutorialImage1End &&
+          !isTutorialImage2End &&
+          countdown &&
+          countdown > 0 && (
+            <div id="tutorial-image-2">
+              <img src="/images/tutorialImage_002.png" alt="tutorial2" />
+            </div>
+          )}
+
+        {/* 작전 타임 */}
+        {isTutorialImage2End && countdown && countdown > 0 && (
+          <div id="countdown-container">
+            <div id="countdown-bar">
+              <div id="countdown-stripes"></div>
+            </div>
+            <div id="loading-text">작전 타임...</div>
           </div>
         )}
 
-      {/* 작전 타임 */}
-      {isTutorialImage2End && countdown && countdown > 0 && (
-        <div id="countdown-container">
-          <div id="countdown-bar">
-            <div id="countdown-stripes"></div>
-          </div>
-          <div id="loading-text">작전 타임...</div>
-        </div>
-      )}
+        {!isPlayerReady &&
+          document.getElementById("player" + indexRef)?.textContent !=
+            "WAITING" && (
+            <button onClick={readyGame} id="ready-button">
+              READY
+            </button>
+          )}
 
-      {!isPlayerReady &&
-        document.getElementById("player" + indexRef)?.textContent !=
-          "WAITING" && (
-          <button onClick={readyGame} id="ready-button">
-            READY
+        <div className="header">
+          <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
+            메뉴
           </button>
+          <img src="/images/Rattus.webp" className="logo"></img>
+          <textarea
+            ref={textareaRef} // ref 연결
+            className="searchInput"
+            id="search"
+            value={placeholder}
+            readOnly
+          />
+          <button className="roomSearch" onClick={handleCopyClick}>
+            친구초대
+          </button>
+        </div>
+
+        {isMenuOpen && (
+          <div className="menu-popup">
+            <button onClick={handleRetry}>RE-TRY</button>
+            <button onClick={() => setIsMenuOpen(false)}>닫기</button>
+          </div>
         )}
 
-      <div className="header">
-        { isSimStarted &&
-        <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
-          메뉴
-        </button> }
-        <img src="/images/Rattus.webp" className="logo"></img>
-        <input placeholder="방검색" className="searchInput" id="search"></input>
-        <button className="roomSearch">친구초대</button>
+        <footer className="footer">
+          <span id="player0">WAITING</span>
+          <span id="ready0">X</span>
+          <span id="player1">WAITING</span>
+          <span id="ready1">X</span>
+        </footer>
+
+        {showRetryRequest && (
+          <div className="retry-popup">
+            <h1>상대방이 다시 시도하려고 합니다. 수락하시겠습니까?</h1>
+            <button onClick={handleAcceptRetry}>수락</button>
+            <button onClick={handleRejectRetry}>거절</button>
+          </div>
+        )}
+
+        {showWaitingPopup && (
+          <div className="waiting-popup">
+            <h1>
+              <span></span>
+            </h1>
+          </div>
+        )}
+
+        {showModal && (
+          <div className="modal">
+            {resultState === 0 && (
+              <div>
+                <h1>YOU WON!</h1>
+                {/* <h1> 치즈를 찾았습니다! </h1> */}
+                {/* <img src="/images/resultState_clear.png" alt="Victory" /> */}
+                {/* <button onClick={handleRetry}>다시하기</button> */}
+                <button onClick={handleNextStage}>NEXT STAGE</button>
+              </div>
+            )}
+            {resultState === 1 && (
+              <div>
+                <h1>GAME OVER!</h1>
+                {/* <h1> 시간이 초과되었습니다! </h1> */}
+                {/* <img src="/images/resultState_timeout.png" alt="Timeout" /> */}
+                <button onClick={handleRetry}>RE-TRY</button>
+                {/* <button onClick={handleNextStage}>다음스테이지</button> */}
+              </div>
+            )}
+            {resultState === 2 && (
+              <div>
+                <h1>GAME OVER!</h1>
+                {/* <h1> 노릇하게 구워졌습니다 </h1> */}
+                {/* <img src="/images/resultState_bomb.png" alt="Bomb" /> */}
+                <button onClick={handleRetry}>RE-TRY</button>
+                {/* <button onClick={handleNextStage}>다음스테이지</button> */}
+              </div>
+            )}
+            {resultState === 3 && (
+              <div>
+                <h1>GAME OVER!</h1>
+                {/* <h1> 폭탄에 닿았습니다! </h1> */}
+                {/* <img src="/images/resultState_bomb.png" alt="Bomb" /> */}
+                <button onClick={handleRetry}>RE-TRY</button>
+                {/* <button onClick={handleNextStage}>다음스테이지</button> */}
+              </div>
+            )}
+            {resultState === 4 && (
+              <div>
+                <h1>GAME OVER!</h1>
+                {/* <h1> 고양이에게 잡혔습니다! </h1> */}
+                {/* <img src="/images/resultState_bomb.png" alt="Bomb" /> */}
+                <button onClick={handleRetry}>RE-TRY</button>
+                {/* <button onClick={handleNextStage}>다음스테이지</button> */}
+              </div>
+            )}
+            {resultState === 5 && (
+              <div>
+                <h1>GAME OVER!</h1>
+                {/* <h1> 바닥에 떨어졌습니다! </h1> */}
+                {/* <img src="/images/resultState_bomb.png" alt="Bomb" /> */}
+                <button onClick={handleRetry}>RE-TRY</button>
+                {/* <button onClick={handleNextStage}>다음스테이지</button> */}
+              </div>
+            )}
+            {/* 데드씬 추가 예정 */}
+          </div>
+        )}
       </div>
-
-      {isMenuOpen && (
-        <div className="menu-popup">
-          <button onClick={handleRetry}>RE-TRY</button>
-          <button onClick={() => setIsMenuOpen(false)}>닫기</button>
-        </div>
-      )}
-
-      <footer className="footer">
-        <span id="player0">WAITING</span>
-        <span id="ready0">X</span>
-        <span>|</span>
-        <span id="player1">WAITING</span>
-        <span id="ready1">X</span>
-      </footer>
-
-      {showRetryRequest && (
-        <div className="retry-popup">
-          <h1>상대방이 다시 시도하려고 합니다. 수락하시겠습니까?</h1>
-          <button onClick={handleAcceptRetry}>수락</button>
-          <button onClick={handleRejectRetry}>거절</button>
-        </div>
-      )}
-
-      {showModal && (
-        <div className="modal">
-          {resultState === 0 && (
-            <div>
-              <h1>YOU WON!</h1>
-              {/* <h1> 치즈를 찾았습니다! </h1> */}
-              {/* <img src="/images/resultState_clear.png" alt="Victory" /> */}
-              {/* <button onClick={handleRetry}>다시하기</button> */}
-              <button onClick={handleNextStage}>NEXT STAGE</button>
-            </div>
-          )}
-          {resultState === 1 && (
-            <div>
-              <h1>GAME OVER!</h1>
-              {/* <h1> 시간이 초과되었습니다! </h1> */}
-              {/* <img src="/images/resultState_timeout.png" alt="Timeout" /> */}
-              <button onClick={handleRetry}>RE-TRY</button>
-              {/* <button onClick={handleNextStage}>다음스테이지</button> */}
-            </div>
-          )}
-          {resultState === 2 && (
-            <div>
-              <h1>GAME OVER!</h1>
-              {/* <h1> 노릇하게 구워졌습니다 </h1> */}
-              {/* <img src="/images/resultState_bomb.png" alt="Bomb" /> */}
-              <button onClick={handleRetry}>RE-TRY</button>
-              {/* <button onClick={handleNextStage}>다음스테이지</button> */}
-            </div>
-          )}
-          {resultState === 3 && (
-            <div>
-              <h1>GAME OVER!</h1>
-              {/* <h1> 폭탄에 닿았습니다! </h1> */}
-              {/* <img src="/images/resultState_bomb.png" alt="Bomb" /> */}
-              <button onClick={handleRetry}>RE-TRY</button>
-              {/* <button onClick={handleNextStage}>다음스테이지</button> */}
-            </div>
-          )}
-          {resultState === 4 && (
-            <div>
-              <h1>GAME OVER!</h1>
-              {/* <h1> 고양이에게 잡혔습니다! </h1> */}
-              {/* <img src="/images/resultState_bomb.png" alt="Bomb" /> */}
-              <button onClick={handleRetry}>RE-TRY</button>
-              {/* <button onClick={handleNextStage}>다음스테이지</button> */}
-            </div>
-          )}
-          {resultState === 5 && (
-            <div>
-              <h1>GAME OVER!</h1>
-              {/* <h1> 바닥에 떨어졌습니다! </h1> */}
-              {/* <img src="/images/resultState_bomb.png" alt="Bomb" /> */}
-              <button onClick={handleRetry}>RE-TRY</button>
-              {/* <button onClick={handleNextStage}>다음스테이지</button> */}
-            </div>
-          )}
-          {/* 데드씬 추가 예정 */}
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 
