@@ -3,6 +3,26 @@
   src: url("./dos.ttf") format("opentype");
 }
 
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0.5; /* Start and end with semi-transparent */
+  }
+  50% {
+    opacity: 1; /* Fully opaque at the middle */
+  }
+}
+.animated-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background with transparency */
+  animation: fadeInOut 10s infinite;
+  z-index: 1; /* Sit on top of the base background */
+}
+
 body {
   background-image: url("./bg3.png");
   font-family: "MyFont", sans-serif;
@@ -15,6 +35,7 @@ body {
   padding: 0;
   overflow-x: hidden;
   font-size: 32px; /* Increased overall font size */
+  /* 애니메이션 적용 */
 }
 
 .mainImg {

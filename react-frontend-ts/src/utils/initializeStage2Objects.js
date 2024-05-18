@@ -100,7 +100,7 @@ export const initializeStage2Objects = (
     };
 
     // 쥐가 낙사 시 죽는 이벤트를 걸기 위한 바닥 생성
-    const fallFloor = Bodies.rectangle(canvasSize.x / 2, canvasSize.y + 10, canvasSize.x, 1, {
+    const fallFloor = Bodies.rectangle(canvasSize.x / 2, canvasSize.y + 50, canvasSize.x, 1, {
       isStatic: true,
       render: {
         fillStyle: "red",

@@ -26,26 +26,28 @@ body {
   z-index: 2; /* Matter.js 캔버스를 상위에 */
   display: flex; /* 자식 요소를 가로로 배치 */
   justify-content: space-between; /* 공간을 고르게 분배 */
+
 }
 
+
 #video-container-1 {
-  display: none;
   position: absolute; /* 부모 기준 위치 */
   width: 50%; /* 전체 너비의 50% */
   height: 100%;
   z-index: 0;
   opacity: 0.3;
+  background-color: "white";
   transform: scaleX(-1);
 }
 
 #video-container-2 {
-  display: none;
   position: absolute; /* 부모 기준 위치 */
   right: 0; /* 오른쪽 정렬 */
   width: 50%; /* 전체 너비의 50% */
   height: 100%;
   z-index: 0;
   opacity: 0.3;
+  background-color: "white";
   transform: scaleX(-1);
 }
 
@@ -56,7 +58,9 @@ canvas {
 
 #ready-button {
   position: absolute;
-  bottom: 8%;
+  left: 50%;
+  bottom: 3%;
+  transform: translate(-50%, -50%);
   z-index: 3; /* 버튼을 렌더러 위로 올리기 */
   background-color: #fff;
   padding: 50px 70px;
@@ -84,7 +88,7 @@ canvas {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 5;
+  z-index: 10;
 }
 
 #loading-overlay {
@@ -197,7 +201,7 @@ canvas {
 
 #countdown-container {
   position: absolute;
-  top: 10%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
@@ -247,7 +251,7 @@ canvas {
   font-fmily: "myFont";
   font-size: 16px;
   font-weight: bold;
-  color: #ff6347; /* 적당한 색상으로 조정 */
+  color: #dddddd; /* 적당한 색상으로 조정 */
 }
 
 @keyframes moveStripes {

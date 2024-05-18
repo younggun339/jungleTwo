@@ -70,6 +70,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [resultState, setResultState] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showRetryRequest, setShowRetryRequest] = useState(false);
 
   //--------------get coordinates---------------
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -222,14 +223,44 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   // ============== 게임 결과 모달 =====================
   const handleRetry = () => {
     setIsMenuOpen(false);
-    clearStageObjects[currentStage - 1](
-      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
-      setIsSimStarted,
-      setShowModal,
-      setResultState,
-      setCountdown,
-    );
+    if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.emit('retry-request', { roomName: gameRoomID });
+    }
   };
+  const handleAcceptRetry = () => {
+    setShowRetryRequest(false);
+    if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.emit('retry-response', { roomName: gameRoomID, accepted: true });
+    }
+  };
+  const handleRejectRetry = () => {
+    setShowRetryRequest(false);
+    if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.emit('retry-response', { roomName: gameRoomID, accepted: false });
+    }
+  };
+
+    // 클라이언트 측에서 reset-retry 요청 핸들링
+    useEffect(() => {
+      if (nestjsSocketRef.current) {
+        nestjsSocketRef.current.on('retry-request', () => {
+          setShowRetryRequest(true);
+        });
+  
+        nestjsSocketRef.current.on('retry-response', (accepted: boolean) => {
+          setShowRetryRequest(false);
+          if (accepted) {
+            clearStageObjects[currentStage - 1](
+              { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+              setIsSimStarted,
+              setShowModal,
+              setResultState,
+              setCountdown,
+            );
+          }
+        });
+      }
+    }, []);
 
   // 다음 스테이지 버튼 클릭 시 처리 로직
   const handleNextStage = () => {
@@ -261,7 +292,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   return (
     <div className="App">
       <div id="matter-container" ref={sceneRef}>
-        {peers.slice(0, indexRef.current).map((peer, index) => (
+        {/* {peers.slice(0, indexRef.current).map((peer, index) => (
           <Video
             key={`${peer.peerID}-${index}`}
             peer={peer.peer}
@@ -280,6 +311,15 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           playsInline
           style={{ order: indexRef.current }}
         />
+
+        {peers.slice(indexRef.current).map((peer, index) => (
+          <Video
+            key={`${peer.peerID}-${index}`}
+            peer={peer.peer}
+            peers={peers}
+            myIndexRef={0}
+          />
+        ))} */}
         <canvas
           ref={canvasRef}
           className="canvas-transparent"
@@ -289,14 +329,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           onMouseUp={() => { setIsMouseDown(false); setIsMouseUP(true); }}
         />
 
-        {peers.slice(indexRef.current).map((peer, index) => (
-          <Video
-            key={`${peer.peerID}-${index}`}
-            peer={peer.peer}
-            peers={peers}
-            myIndexRef={0}
-          />
-        ))}
+        
       </div>
 
       {isGameStarted && !isTutorialImage1End && countdown && countdown > 0 && (
@@ -324,7 +357,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         </div>
       )}
 
-      {!isPlayerReady && (
+      {!isPlayerReady && document.getElementById("player" + indexRef)?.textContent != "기다리는 중..." && (
         <button onClick={readyGame} id="ready-button">
           준비 완료
         </button>
@@ -358,6 +391,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         <span id="player1">기다리는 중... </span>
       </footer>
 
+      {showRetryRequest && (
+        <div className="retry-popup">
+          <h1>상대방이 다시 시도하려고 합니다. 수락하시겠습니까?</h1>
+          <button onClick={handleAcceptRetry}>수락</button>
+          <button onClick={handleRejectRetry}>거절</button>
+        </div>
+      )}
+
       {showModal && (
         <div className="modal">
           {resultState === 0 && (
@@ -378,8 +419,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           )}
           {resultState === 2 && (
             <div>
-              <h1> 아뜨뜨뜨뜨! </h1>
-              <img src="/images/resultState_spiketrap.png" alt="Trap" />
+              <h1> 노릇하게 구워졌습니다 </h1>
+              <img src="/images/resultState_bomb.png" alt="Bomb" />
               <button onClick={handleRetry}>다시하기</button>
               <button onClick={handleNextStage}>다음스테이지</button>
             </div>
@@ -403,14 +444,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           {resultState === 5 && (
             <div>
               <h1> 바닥에 떨어졌습니다! </h1>
-              <img src="/images/resultState_bomb.png" alt="Bomb" />
-              <button onClick={handleRetry}>다시하기</button>
-              <button onClick={handleNextStage}>다음스테이지</button>
-            </div>
-          )}
-          {resultState === 6 && (
-            <div>
-              <h1> 노릇하게 구워졌습니다 </h1>
               <img src="/images/resultState_bomb.png" alt="Bomb" />
               <button onClick={handleRetry}>다시하기</button>
               <button onClick={handleNextStage}>다음스테이지</button>

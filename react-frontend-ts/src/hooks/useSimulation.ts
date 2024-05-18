@@ -44,14 +44,21 @@ const useSimulation = ({
     ) {
        console.log("시뮬레이션 시작");
 
-       leftArmTerrain = Bodies.rectangle(
+      leftArmTerrain = Bodies.rectangle(
         leftArmLeftRef.current.position.x,
         leftArmLeftRef.current.position.y,
         leftArmLeftRef.current.bounds.max.x - leftArmLeftRef.current.bounds.min.x,
-        15,
+        5,
         {
           isStatic: true,
-          angle: leftArmLeftRef.current.angle
+          angle: leftArmLeftRef.current.angle,
+          render: {
+            sprite: {
+              texture: "/sprite/Ground4.png",
+              yScale: 15/62.5,
+              xScale: (leftArmLeftRef.current.bounds.max.x - leftArmLeftRef.current.bounds.min.x)/247.06
+            },
+          },
          }
       );
 
@@ -59,22 +66,30 @@ const useSimulation = ({
         rightArmRightRef.current.position.x,
         rightArmRightRef.current.position.y,
         rightArmRightRef.current.bounds.max.x - rightArmRightRef.current.bounds.min.x,
-        15,
+        5,
         {
           isStatic: true,
-          angle: rightArmRightRef.current.angle
+          angle: leftArmLeftRef.current.angle,
+          render: {
+            sprite: {
+              texture: "/sprite/Ground4.png",
+              yScale: 15/62.5,
+              xScale: (rightArmRightRef.current.bounds.max.x - rightArmRightRef.current.bounds.min.x)/247.06
+            },
+          },
          }
       );
 
       World.add(engineRef.current.world, [leftArmTerrain, rightArmTerrain]);
 
-      Composite.remove(engineRef.current.world, leftArmLeftRef.current, true);
-      Composite.remove(engineRef.current.world, rightArmRightRef.current, true);
+      // leftArmLeftRef과 rightArmRightRef의 width를 0으로 설정
+      Body.setVertices(leftArmLeftRef.current, [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }]);
+      Body.setVertices(rightArmRightRef.current, [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }]);
       
-       engineRef.current!.world.gravity.y = 0.15;
-       engineRef.current!.world.gravity.x = 0.04;
-       Runner.run(runner, engineRef.current);
-       Engine.run(engineRef.current);
+      engineRef.current!.world.gravity.y = 0.15;
+      engineRef.current!.world.gravity.x = 0.04;
+      Runner.run(runner, engineRef.current);
+      Engine.run(engineRef.current);
       // engineRef.current!.world.gravity.x = 0.04;
 
       // 쥐를 움직이기 위해 static 해제
@@ -100,7 +115,6 @@ const useSimulation = ({
             (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
           ) {
             onSlope = true;
-            console.log("쥐: ", mouseRef?.current);
           }
     
           if (
@@ -155,7 +169,6 @@ const useSimulation = ({
         }
     
         if (onSlope && mouseRef.current) {
-          console.log("*****************", mouseRef?.current);
           const angle = leftArmTerrain.angle;
           if (angle === Math.PI) {
             Body.setVelocity(mouseRef!.current, mouseRef!.current.velocity);
@@ -176,7 +189,6 @@ const useSimulation = ({
         }
 
         if (onSlopeRight && mouseRef.current) {
-          console.log("*****************", mouseRef?.current);
           const angle = leftArmTerrain.angle;
           if (angle === Math.PI) {
             Body.setVelocity(mouseRef!.current, mouseRef!.current.velocity);
@@ -199,8 +211,12 @@ const useSimulation = ({
     }
 
     return () => {
+      if (engineRef.current) {
+        Composite.remove(engineRef.current.world, leftArmTerrain, true);
+        Composite.remove(engineRef.current.world, rightArmTerrain, true);
+        Events.off(engineRef.current, "beforeUpdate", applyContinuousForce);
+      }
       Runner.stop(runner);
-      Events.off(engineRef.current, "beforeUpdate", applyContinuousForce);
     };
   }, [isSimStarted]);
 };

@@ -39,7 +39,7 @@ export function clearStage1Objects(
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(5);
+  setCountdown(10);
 }
 
 // ================================================ STAGE 2 ====================================================

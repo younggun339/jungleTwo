@@ -161,21 +161,40 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.room_user[roomName].forEach((user) => {
       this.server.to(user[0]).emit('response-ready', players);
     });
-  }
+  } 
 
   @SubscribeMessage('reset-ready')
   handleResetReady(client: Socket, payload: { roomName: string }) {
     const roomName = payload.roomName;
 
-  if (this.room_user[roomName]) {
-    for (let i = 0; i < this.room_user[roomName].length; i++) {
-      this.room_user[roomName][i][2] = false;
+    if (this.room_user[roomName]) {
+      for (let i = 0; i < this.room_user[roomName].length; i++) {
+        this.room_user[roomName][i][2] = false;
+      }
     }
   }
-}
-@SubscribeMessage('mouse-move')
-handleMouseMove(client: Socket, payload: { id: string; x: number; y: number }) {
-  const roomName = this.user_room[client.id];
-  this.server.to(roomName).emit('mouse-move', payload);
-}
+
+  @SubscribeMessage('retry-request')
+  handleRetryRequest(client: Socket, payload: { roomName: string }) {
+    const roomName = payload.roomName;
+
+    if (this.room_user[roomName]) {
+      this.room_user[roomName].forEach((user) => {
+        if (user[0] !== client.id) {
+          this.server.to(user[0]).emit('retry-request');
+        }
+      });
+    }
+  }
+
+  @SubscribeMessage('retry-response')
+  handleRetryResponse(client: Socket, payload: { roomName: string, accepted: boolean }) {
+    const roomName = payload.roomName;
+
+    if (this.room_user[roomName]) {
+      this.room_user[roomName].forEach((user) => {
+        this.server.to(user[0]).emit('retry-response', payload.accepted);
+      });
+    }
+  }
 }

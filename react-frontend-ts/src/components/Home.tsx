@@ -25,26 +25,29 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <div className="wrapper">
-        <div className="form-signin">
-          <img src="/images/Rattus.png" className="homeLogo"/>
-          <div className="hello">환영합니다!</div>
-          <img
-            src="/images/kakao_login_large_narrow.png"
-            alt="Kakao login"
-            style={{ width: "200px", height: "auto", marginRight: "10px" }}
-            onClick={handleKakaoLogin}
-          />
-          <img
-            src="/images/web_light_sq_SU@2x.png"
-            alt="Google login"
-            style={{ width: "200px", height: "auto", marginRight: "10px" }}
-            onClick={handleGoogleLogin}
-          />
+    <>
+      <div className="animated-background"></div>
+      <div className="main-content" style={{ textAlign: "center" }}>
+        <div className="wrapper">
+          <div className="form-signin">
+            <img src="/images/Rattus.webp" className="homeLogo" />
+            <div className="hello">환영합니다!</div>
+            <img
+              src="/images/kakao_login_large_narrow.png"
+              alt="Kakao login"
+              style={{ width: "200px", height: "auto", marginRight: "10px" }}
+              onClick={handleKakaoLogin}
+            />
+            <img
+              src="/images/web_light_sq_SU@2x.png"
+              alt="Google login"
+              style={{ width: "200px", height: "auto", marginRight: "10px" }}
+              onClick={handleGoogleLogin}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

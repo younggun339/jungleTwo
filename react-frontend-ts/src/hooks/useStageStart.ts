@@ -247,7 +247,6 @@ const useStageStart = (
           );
           const element0 = document.getElementById("ready0");
           const element1 = document.getElementById("ready1");
-          console.log(players)
 
           if (players[0][2] === true) {
             element0!.textContent = "O";
@@ -261,7 +260,7 @@ const useStageStart = (
               element1!.textContent = "X";
             }
           }
-          if (readyPlayers.length === 1) {
+          if (readyPlayers.length === 2) {
             setIsGameStarted(true);
             setResultState(null);
           }
@@ -318,17 +317,14 @@ const useStageStart = (
 
   // 작전 타임 시작
   useEffect(() => {
-    // console.log ("다시 하기 누르면 여기서 시작", isTutorialImage2End, isSimStarted, countdown);
     if (isTutorialImage2End && !isSimStarted && countdown && countdown > 0) {
       const interval = setInterval(() => {
-        console.log("countdown: ", countdown);
         setCountdown((prevCount: number | null) =>
           prevCount !== null && prevCount > 0 ? prevCount - 1 : 0
         );
       }, 1000);
       return () => clearInterval(interval);
     } else if (isTutorialImage2End && !isSimStarted && countdown === 0) {
-      console.log("dsfhjs: ", isSimStarted);
       setIsSimStarted(true);
       setCountdown(null);
     }
@@ -336,10 +332,13 @@ const useStageStart = (
 
   // =============== 카운트다운 바 처리 ===============
   useEffect(() => {
+    if (countdown === chatTime) {
+      document.getElementById("countdown-bar")!.style.width = "100%";
+    }
     if (countdown && countdown > 0) {
       const countdownBar = document.getElementById("countdown-bar");
       if (countdownBar) {
-        const percentage = (countdown / chatTime) * 100;
+        const percentage = ((countdown - 1) / chatTime) * 100;
         countdownBar.style.width = `${percentage}%`;
       }
     }

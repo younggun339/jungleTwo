@@ -1,14 +1,50 @@
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0.1; /* 시작과 끝은 매우 투명 */
+  }
+  10%,
+  90% {
+    opacity: 0.4; /* 약간 더 밝아짐 */
+  }
+  20%,
+  80% {
+    opacity: 0.7; /* 더 밝아짐 */
+  }
+  50% {
+    opacity: 1; /* 중간에는 완전히 불투명 */
+  }
+}
+
 body {
   background-color: white;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  position: relative; /* Ensure body can contain absolute elements correctly */
 }
+
 .wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.animated-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background with transparency */
+  animation: fadeInOut 10s infinite linear; /* Adjusted duration for smoother transition */
+  z-index: 1; /* Sit on top of the base background */
+}
+
+.main-content {
+  position: relative; /* z-index가 적용되도록 position 설정 */
+  z-index: 2; /* animated-background 위에 위치 */
 }
 
 .form-signin {
@@ -19,7 +55,8 @@ body {
   --dark-pink: #f9c4d2;
   --pink-shadow: #ffe3e2;
   text-align: center;
-  width: 550px;
+  width: 50%; /* Increased width */
+  max-width: 650px; /* Max width to prevent too large sizes on big screens */
   font-weight: 600;
   color: var(--text);
   text-transform: uppercase;
@@ -29,54 +66,62 @@ body {
   border-radius: 1em;
   transform-style: preserve-3d;
   transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
+  margin: auto; /* Center in the available space */
 }
 
 .hello {
-  font-size: 2rem;
-  margin: 1rem;
+  font-size: 3rem;
+  margin: 0.8em;
   padding-bottom: 1rem;
 }
 
 .homeLogo {
-  width: 200px;
+  width: 100%; /* Adjust based on your preference */
+  max-width: 700px; /* Max width to maintain aspect ratio and appearance */
+  height: auto;
+  margin: auto; /* Center the logo if needed */
 }
 
-/* .form-signin::before {
-  position: absolute;
-  content: '';
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--dark-pink);
-  border-radius: inherit;
-  box-shadow: 0 0 0 2px var(--pink-border), 0 0.625em 0 0 var(--pink-shadow);
-  transform: translate3d(0, 0.75em, -1em);
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
-} */
-
-@media (max-width: 1600px) {
+@media (max-width: 1200px) {
   .form-signin {
-    width: 40%;
+    width: 60%; /* Larger on smaller screens to maintain readability */
   }
 }
 
-/* Room.js용 */
+@media (max-width: 800px) {
+  .form-signin {
+    width: 80%; /* Larger on small devices */
+    font-size: 14px; /* Adjust font size to fit smaller screens */
+  }
+  .hello {
+    font-size: 1.5rem; /* Slightly smaller font size for small devices */
+  }
+}
+
+@media (max-width: 500px) {
+  .form-signin {
+    width: 95%; /* Use most of the screen on very small devices */
+    padding: 1em; /* Reduce padding */
+  }
+  .hello {
+    font-size: 1.2rem; /* Further reduce for very small screens */
+  }
+}
+
 .box {
   width: 300px;
   height: 400px;
   background-color: white;
-  margin: 0 10px; /* 여백 조절 */
+  margin: 0 10px;
   margin-top: 10px;
 }
+
 .round {
   margin-top: 5px;
   margin-left: 48%;
   display: flex;
-  align-items: center; /* 수직 가운데 정렬 */
-  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center;
+  justify-content: center;
   width: 50px;
   height: 50px;
   background-color: white;
@@ -84,12 +129,13 @@ body {
   font-size: 25px;
   font-weight: bold;
 }
+
 .timer {
   margin-top: 10px;
   margin-left: 46%;
   display: flex;
-  align-items: center; /* 수직 가운데 정렬 */
-  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center;
+  justify-content: center;
   width: 100px;
   height: 50px;
   background-color: white;
@@ -98,15 +144,16 @@ body {
   font-weight: bold;
   color: red;
 }
+
 .click-box {
   position: absolute;
-  top: 50%; /* 화면 세로 중앙 */
-  left: 50%; /* 화면 가로 중앙 */
-  transform: translate(-50%, -50%); /* 가운데 정렬 */
-  z-index: 2; /* container보다 위로 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
   display: flex;
-  align-items: center; /* 수직 가운데 정렬 */
-  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center;
+  justify-content: center;
   width: 500px;
   height: 300px;
   background-color: white;
@@ -115,8 +162,9 @@ body {
   font-size: 20px;
   font-weight: bold;
 }
+
 .click-box:hover {
-  background-color: #f0f0f0; /* 호버 시 배경색 변경 */
-  border-color: #999; /* 호버 시 테두리 색 변경 */
+  background-color: #f0f0f0;
+  border-color: #999;
   cursor: pointer;
 }
