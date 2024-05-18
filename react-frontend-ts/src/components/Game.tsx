@@ -243,6 +243,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   // ============== 게임 결과 모달 =====================
   const handleRetry = () => {
     setIsMenuOpen(false);
+    setShowRetryRequest(true);
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
     }
@@ -413,8 +414,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         <span id="player0">WAITING</span>
         <span id="ready0">X</span>
         <span>|</span>
-        <span id="ready1">X</span>
         <span id="player1">WAITING</span>
+        <span id="ready1">X</span>
       </footer>
 
       {showRetryRequest && (

@@ -7,6 +7,7 @@ import { initializeStage3Objects } from "../utils/initializeStage3Objects";
 import { initializeStage4Objects } from "../utils/initializeStage4Objects";
 import { initializeStage5Objects } from "../utils/initializeStage5Objects";
 import { initializeStageObjects } from "../utils/initializeStageObjects";
+import useSoundEffects from "./useSoundEffects";
 interface CanvasSize {
   x: number;
   y: number;
@@ -32,6 +33,7 @@ const useStage1Setup = (
     useState<HTMLImageElement | null>(null); // Empty dependency array ensures this effect runs only once
   // const container = document.getElementById('matter-container');
   // if(!container) return;
+  const playSound = useSoundEffects();
   useEffect(() => {
     const engine = engineRef.current;
 
@@ -62,7 +64,8 @@ const useStage1Setup = (
         rightArmRightRef,
       },
       isTutorialImage2End,
-      setResultState
+      setResultState,
+      playSound
     );
     // // Event to draw the background before each render
     // Events.on(render, "beforeRender", () => {

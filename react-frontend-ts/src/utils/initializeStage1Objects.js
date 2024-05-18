@@ -15,7 +15,8 @@ export const initializeStage1Objects = (
   engine,
   refs,
   isTutorialImage2End,
-  setResultState
+  setResultState,
+  playSound
 ) => {
   const {
     render,
@@ -39,7 +40,6 @@ export const initializeStage1Objects = (
       mask: 0xffff, // 다른 모든 그룹과 충돌하도록 설정
     },
   });
-
   const walls = [
     Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, {
       isStatic: true,
@@ -531,7 +531,7 @@ export const initializeStage1Objects = (
           (bodyA === catButton && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
-          // playSound("/sound/CatMeow.wav");
+          playSound("/sound/CatMeow.wav");
           catButton.render.sprite.texture = "/assets/CatButtonPush.png";
           catButton.render.sprite.xScale = 0.05;
           catButton.render.sprite.yScale = 0.05;
@@ -570,6 +570,7 @@ export const initializeStage1Objects = (
           (bodyA === mouseRef.current && bodyB === fire) ||
           (bodyA === fire && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Burn.wav");
           setResultState(2);
         }
         // mouse과 cat이 충돌했을 때
@@ -579,6 +580,7 @@ export const initializeStage1Objects = (
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
           if (!(cat.render.sprite.texture === "/assets/CatClose.png")) {
+            playSound("/sound/CatMeow.wav");
             setResultState(4);
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {
@@ -595,6 +597,7 @@ export const initializeStage1Objects = (
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
           mouseRef.current.isStatic = true;
+          playSound("/sound/GameClear.wav");
           setResultState(0);
         }
         //------------cheese--------------
@@ -615,6 +618,7 @@ export const initializeStage1Objects = (
         ) {
           //console.log("Collision detected between Bomb and BombGround");
           // 충돌 시 crashMouse 함수 호출
+          playSound("/sound/Bomb.wav");
           explosion();
         }
 

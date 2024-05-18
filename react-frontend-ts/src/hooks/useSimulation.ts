@@ -212,6 +212,8 @@ const useSimulation = ({
 
     return () => {
       if (engineRef.current) {
+        engineRef.current!.world.gravity.y = 0;
+        engineRef.current!.world.gravity.x = 0;
         Composite.remove(engineRef.current.world, leftArmTerrain, true);
         Composite.remove(engineRef.current.world, rightArmTerrain, true);
         Events.off(engineRef.current, "beforeUpdate", applyContinuousForce);
