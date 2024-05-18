@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/room.css";
 import RoomModal from "./MakeModal";
 import ChangeName from "./ChangeName";
-import MainImage from "./ImageChange"
+import MainImage from "./ImageChange";
 
 const CreateRoom = ({ userName }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -29,23 +29,23 @@ const CreateRoom = ({ userName }) => {
     };
 
     if (userName === null) {
-      alert("로그인하지 않은 유저입니다.")
-      return
+      alert("로그인하지 않은 유저입니다.");
+      return;
     }
 
     const newRoomId = generateRandomString(8);
     const roomName = event.currentTarget.elements.roomName.value;
 
     if (roomName === "") {
-      alert("방 제목을 입력하세요.")
-      return
+      alert("방 제목을 입력하세요.");
+      return;
     }
     let passWord = null;
     if (showPassword) {
       passWord = event.currentTarget.elements.password.value;
       if (passWord === "") {
         document.getElementById("roomName").value = "";
-        alert("비밀번호를 입력하세요.")
+        alert("비밀번호를 입력하세요.");
         return;
       }
     }
@@ -107,7 +107,7 @@ const CreateRoom = ({ userName }) => {
     window.location.assign("https://zzrot.store/");
   };
 
-  const searchRoom = () => {
+  const searchRoom = (event) => {
     const search = document.getElementById("search").value;
     event.preventDefault();
     fetch("https://zzrot.store/room/search", {
@@ -131,13 +131,6 @@ const CreateRoom = ({ userName }) => {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-
-  const image = document.getElementById('image');
-  
-
-  const nextImage = () => {
-    image.scr = images[1]
-  }
 
   return (
     <div>
@@ -167,10 +160,10 @@ const CreateRoom = ({ userName }) => {
               Login
             </button>
           )}
-          <img src="/images/Rattus.png" className="logo"></img>
+          <img src="/images/Rattus.webp" className="logo"></img>
           <form className="search" onSubmit={searchRoom}>
             <input
-              placeholder="방검색"
+              placeholder="방 검색"
               className="searchInput"
               id="search"
             ></input>
@@ -189,25 +182,26 @@ const CreateRoom = ({ userName }) => {
                 비밀번호
               </p>
               <form onSubmit={handleCreateRoom}>
+                <input
+                  type="text"
+                  id="roomName"
+                  placeholder="방 제목"
+                  className="inputField"
+                ></input>
+                {showPassword && (
                   <input
-                    type="text"
-                    id="roomName"
-                    placeholder="방 제목"
+                    type="password"
+                    id="password"
+                    placeholder="비밀번호"
                     className="inputField"
                   ></input>
-                {showPassword && (
-                    <input
-                      type="password"
-                      id="password"
-                      placeholder="password"
-                      className="inputField"
-                    ></input>
                 )}
                 <button className="createButton">Create</button>
               </form>
             </div>
-            {/* <div><MainImage/></div> */}
-
+            <div>
+              <MainImage />
+            </div>
           </div>
           <div className="roomListContain">
             <div className="roomListHeader">
@@ -219,7 +213,7 @@ const CreateRoom = ({ userName }) => {
 
             <div className="roomList">
               {rooms.map((room) => (
-                <div key={room.id}>
+                <div key={room.id} className="roomListDiv">
                   <RoomModal room={room} />
                 </div>
               ))}

@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   display: flex;
   min-height: 100vh; /* 뷰포트가 가시 영역 전체를 채우도록 합니다. */
   margin: 0;
@@ -6,15 +7,14 @@ html, body {
   flex-direction: column; /* 요소를 세로로 쌓습니다. */
 }
 
-
-.App {
+/* .App {
   position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 #matter-container {
   position: absolute;
@@ -78,7 +78,8 @@ canvas {
   z-index: 4;
 }
 
-#tutorial-image-1, #tutorial-image-2 {
+#tutorial-image-1,
+#tutorial-image-2 {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -102,21 +103,23 @@ canvas {
   z-index: 5; /* 맨 위에 표시 */
 }
 
-#player0{
+#player0 {
   position: absolute;
   border: 2px solid #000;
   padding: 10px;
   top: 5%;
   left: 20%;
   z-index: 5; /* 맨 위에 표시 */
+  font-family: "myFont";
 }
-#player1{
-  position: absolute; 
+#player1 {
+  position: absolute;
   border: 2px solid #000;
   padding: 10px;
   top: 5%;
   right: 20%;
   z-index: 5; /* 맨 위에 표시 */
+  font-family: "myFont";
 }
 
 .footer {
@@ -154,16 +157,17 @@ canvas {
 }
 
 .menu-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  margin-left: 12px;
   padding: 10px 20px;
-  background-color: #fff;
-  border: 2px solid #000;
+  background-color: #4b0082;
+  color: #fff;
+  border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  z-index: 5;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
 }
 
 .menu-popup {
@@ -189,4 +193,68 @@ canvas {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+}
+
+#countdown-container {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 30px;
+  background-color: #eee;
+  border-radius: 15px;
+  overflow: hidden;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+}
+
+#countdown-bar {
+  height: 100%;
+  width: 100%;
+  background-color: red;
+  position: relative;
+  overflow: hidden;
+  transition: width 1s linear;
+}
+
+#countdown-stripes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 40px 40px;
+  animation: moveStripes 1s linear infinite;
+}
+
+#loading-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-fmily: "myFont";
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff6347; /* 적당한 색상으로 조정 */
+}
+
+@keyframes moveStripes {
+  from {
+    left: -40px;
+  }
+  to {
+    left: 0;
+  }
 }

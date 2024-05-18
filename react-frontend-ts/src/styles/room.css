@@ -4,7 +4,7 @@
 }
 
 body {
-  background-image: url("./bg2.png");
+  background-image: url("./bg3.png");
   font-family: "MyFont", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -15,6 +15,14 @@ body {
   padding: 0;
   overflow-x: hidden;
   font-size: 32px; /* Increased overall font size */
+}
+
+.mainImg {
+  display: none;
+  border-radius: 20px;
+  border: 10px pink solid;
+  margin-top: 1rem;
+  width: 80%;
 }
 
 .totalContain {
@@ -28,9 +36,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #e6e6fa;
+  background-color: rgba(72, 53, 34, 0.8);
   padding: 1.2rem; /* Increased padding */
   font-size: 24px; /* Increased font size for header */
+  height: 10rem;
+  background-image: url("./header2.webp");
 }
 
 /* Profile section styles */
@@ -89,7 +99,7 @@ body {
 
 /* Logo styles */
 .logo {
-  width: 100px;
+  width: 45rem;
   height: auto;
 }
 
@@ -112,25 +122,21 @@ body {
 }
 
 .searchInput:focus {
-  border-color: #a831fd;
+  border-color: #362210;
 }
 
 .roomSearch {
-  margin-right: 12px;
-  padding: 10px 20px;
-  background-color: #4b0082;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  outline: none;
-  transition: background-color 0.3s;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 2rem;
+  width: 12rem;
+  height: 5rem;
 }
 
 .roomSearch:hover {
-  background-color: #a831fd;
+  background-color: #764a27;
 }
 
 .contain {
@@ -153,7 +159,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgba(237, 231, 246, 0.8);
+  background-color: rgba(72, 53, 34, 0.8);
   border-radius: 1rem;
   padding: 1rem;
   box-sizing: border-box;
@@ -162,26 +168,44 @@ body {
 .roomListContain {
   flex: 3; /* Takes up more space than createRoomContain */
   margin-top: 2rem;
-  background-color: rgba(237, 231, 246, 0.8);
+  background-color: rgba(72, 53, 34, 0.8);
   border-radius: 1rem;
   padding: 1rem;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
+.roomList {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 내부 요소들을 중앙 정렬 */
+  max-width: 100%; /* 최대 너비 설정 */
+  max-height: 60rem;
+  overflow-y: auto;
+}
+.roomListDiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .room {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* 내부 내용을 중앙으로 정렬 */
   align-items: center;
-  width: 90%;
+  width: 95%;
+  height: 10rem;
   margin-top: 1rem;
-  margin-right: 1rem;
-  background-color: #9575cd;
+  margin-bottom: 4rem;
+  background-image: url("./blockback_2.png");
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .room img {
+  margin-top: 5rem;
   width: 100px; /* Adjust based on your preference */
   height: 100px; /* Maintain aspect ratio */
   /* margin-right: 1rem; */
@@ -198,17 +222,25 @@ body {
   flex: 3; /* Increased width */
   padding: 0.5rem;
   border-radius: 1rem;
-  background-color: #7e57c2;
+  background-color: #362210;
+  margin-top: 5rem;
+  margin-left: 10px;
   margin-right: 10px;
+  color: white;
+  text-align: center;
 }
 .nickname {
   flex: 2; /* Increased width less than roomName */
   padding: 0.5rem;
   border-radius: 1rem;
-  background-color: #7e57c2;
+  background-color: #362210;
+  margin-top: 5rem;
   margin-right: 10px;
+  color: white;
+  text-align: center;
 }
 .go {
+  margin-top: 5rem;
   font-size: 20px; /* Increased font size */
   display: flex;
   align-items: center;
@@ -216,8 +248,8 @@ body {
   color: white;
   border-radius: 1rem;
   cursor: pointer;
-  width: 20%;
-  height: 8rem;
+  width: 12rem;
+  height: 6rem;
   font-size: 2rem;
   opacity: 1;
 }
@@ -227,16 +259,22 @@ body {
   align-items: center;
   padding: 1rem;
   font-size: 1.5rem;
+  color: white;
 }
 
 .roomListHeader .headerText {
   font-size: 64px; /* Increased font size */
 }
 #roomName.inputField {
-  font-size: 16px; /* 기본 폰트 크기 */
+  font-size: 15px; /* 기본 폰트 크기 */
   padding: 10px; /* 기본 패딩 */
   margin: 5px 0; /* 기본 마진 */
-  width: 80%; /* 전체 너비 */
+  font-family: "MyFont";
+}
+#password.inputField {
+  font-size: 20px; /* 기본 폰트 크기 */
+  padding: 10px; /* 기본 패딩 */
+  margin: 5px 0; /* 기본 마진 */
   font-family: "MyFont";
 }
 input[type="checkbox"] {
@@ -247,8 +285,7 @@ input[type="checkbox"] {
 
 /* Responsive adjustments */
 @media screen and (max-width: 1024px) {
-  .roomList {
-  }
+  .roomList,
   .header,
   .search,
   .profile,
@@ -356,7 +393,6 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgba(237, 231, 246, 0.8);
   border-radius: 1rem;
   padding: 1rem;
 }
@@ -374,6 +410,7 @@ input[type="checkbox"] {
 .title {
   font-family: "MyFont";
   font-size: 4rem;
+  color: white;
   margin-top: 10px;
   margin-bottom: 10px;
   opacity: 1;
@@ -381,15 +418,22 @@ input[type="checkbox"] {
 .createRoom {
   width: 80%;
   height: 50%;
-  border: solid;
-  background-color: #9575cd;
+  /* border: solid; */
+  /* background-color: #9575cd; */
+  background-image: url("./Wall.png");
   font-size: 2rem;
-  border-color: #b39ddb;
+  /* border-color: #b39ddb; */
   border-radius: 1rem;
   opacity: 1;
   display: flex;
   align-items: center;
   flex-direction: column;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.createRoom p {
+  color: black;
 }
 /* .inputField,
 .roomListContain,
@@ -417,8 +461,8 @@ button {
   color: #ede7f6;
   text-transform: uppercase;
   padding: 1.25em 2em;
-  background: #673ab7;
-  border: 2px solid #673ab7;
+  background: #362210;
+  border: 2px solid #362210;
   border-radius: 0.75em;
   transform-style: preserve-3d;
   transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
@@ -430,7 +474,7 @@ button::before {
 }
 
 button:hover {
-  background: #a831fd;
+  background: #764a27;
   transform: translate(0, 0.25em);
 }
 
@@ -440,7 +484,7 @@ button:hover::before {
 }
 
 button:active {
-  background: #a831fd;
+  background: #764a27;
   transform: translate(0em, 0.75em);
 }
 
@@ -452,7 +496,6 @@ button:active::before {
 .roomListContain {
   width: calc(100% - 360px); /* Adjust width to take remaining space */
   margin-top: 2rem;
-  background-color: rgba(237, 231, 246, 0.8);
   border-radius: 1rem;
   padding: 1rem;
 }
@@ -542,12 +585,24 @@ button:active::before {
     font-size: 18px; /* 증가된 폰트 크기 */
     padding: 12px; /* 증가된 패딩 */
     margin: 8px 0; /* 증가된 마진 */
+    width: 80%;
+  }
+  #password.inputField {
+    font-size: 18px; /* 증가된 폰트 크기 */
+    padding: 12px; /* 증가된 패딩 */
+    margin: 8px 0; /* 증가된 마진 */
+    width: 80%;
   }
 }
 
 /* 큰 화면에서의 스타일 */
 @media (min-width: 992px) {
   #roomName.inputField {
+    font-size: 20px; /* 더욱 증가된 폰트 크기 */
+    padding: 15px; /* 더욱 증가된 패딩 */
+    margin: 10px 0; /* 더욱 증가된 마진 */
+  }
+  #password.inputField {
     font-size: 20px; /* 더욱 증가된 폰트 크기 */
     padding: 15px; /* 더욱 증가된 패딩 */
     margin: 10px 0; /* 더욱 증가된 마진 */

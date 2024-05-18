@@ -96,18 +96,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     }
   }
   //--------------get coordinates----------------
-
-  //--------------draw mouse--------------
-  function updatePeerMouse(id, x, y) {
-    const canvas = document.getElementById('canvas');
-    const ctx = canvasRef.getContext('2d');
-    
-    ctx.clearRect(0, 0, canvasRef.width, canvas.height); // 기존 마우스 위치 지우기
-    ctx.beginPath();
-    ctx.arc(x, y, 5, 0, 2 * Math.PI);
-    ctx.fillStyle = 'red';
-    ctx.fill();
-}
   
   // 인게임 및 통신 관련 소켓
   useEffect(() => {
@@ -324,11 +312,16 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           <div id="tutorial-image-2">
             <img src="/images/tutorialImage_002.png" alt="tutorial2" />
           </div>
-        )}
+      )}
 
-      {/* 작전 타임 && 제한 시간 */}
+      {/* 작전 타임 */}
       {isTutorialImage2End && countdown && countdown > 0 && (
-        <div id="countdown">{countdown}</div>
+        <div id="countdown-container">
+          <div id="countdown-bar">
+            <div id="countdown-stripes"></div>
+          </div>
+          <div id="loading-text">작전 타임...</div>
+        </div>
       )}
 
       {!isPlayerReady && (
@@ -337,9 +330,18 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         </button>
       )}
 
+      <div className="header">
       <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
         메뉴
       </button>
+          <img src="/images/Rattus.webp" className="logo"></img>
+            <input
+              placeholder="방검색"
+              className="searchInput"
+              id="search"
+            ></input>
+          <button className="roomSearch">친구초대</button>
+      </div>
 
       {isMenuOpen && (
         <div className="menu-popup">
@@ -349,8 +351,11 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       )}
 
       <footer className="footer">
-        <div id="player0">기다리는 중...</div>
-        <div id="player1">기다리는 중...</div>
+        <span id="player0">기다리는 중... </span>
+        <span id="ready0">X</span>        
+        <span>|</span>        
+        <span id="ready1">X</span>
+        <span id="player1">기다리는 중... </span>
       </footer>
 
       {showModal && (
@@ -398,6 +403,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           {resultState === 5 && (
             <div>
               <h1> 바닥에 떨어졌습니다! </h1>
+              <img src="/images/resultState_bomb.png" alt="Bomb" />
+              <button onClick={handleRetry}>다시하기</button>
+              <button onClick={handleNextStage}>다음스테이지</button>
+            </div>
+          )}
+          {resultState === 6 && (
+            <div>
+              <h1> 노릇하게 구워졌습니다 </h1>
               <img src="/images/resultState_bomb.png" alt="Bomb" />
               <button onClick={handleRetry}>다시하기</button>
               <button onClick={handleNextStage}>다음스테이지</button>

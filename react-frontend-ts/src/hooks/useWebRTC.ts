@@ -137,12 +137,6 @@ const useWebRTC = (
             peersRef.current = peers;
             setPeers(peers);
           });
-
-          nestjsSocketRef.current!.on("game-started", () => {
-            // setIsGameStarted(true);
-            // setIsGoalReached(false);
-            // setCountdown(3);
-          });
         }
       });
   }, [roomName]);
@@ -223,26 +217,6 @@ const useWebRTC = (
       peerObj.peer.send(JSON.stringify({ type: "right-hand-joint", data: { joint1Start, joint1End } }));
     });
   };
-
-  // useEffect(() => {
-  //   let stopCapturing: (() => void) | undefined;
-  
-  //   if (isTutorialImage2End && !isSimStarted) {
-  //     stopCapturing = startCapturing(
-  //       userVideo,
-  //       canvasRef,
-  //       flaskSocketRef,
-  //       indexRef,
-  //       isSimStarted,
-  //     );
-  //   }
-  
-  //   return () => {
-  //     if (stopCapturing) {
-  //       stopCapturing();
-  //     }
-  //   };
-  // }, [isTutorialImage2End, isSimStarted]);
 
   return { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint };
 };

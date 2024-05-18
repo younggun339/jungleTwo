@@ -241,13 +241,27 @@ const useStageStart = (
 ) => {
   useEffect(() => {
     if (nestjsSocketRef.current) {
-      nestjsSocketRef.current.on(
-        "response-ready",
-        (players: [string, string, boolean][]) => {
-          const readyPlayers = players.filter(
+      nestjsSocketRef.current.on("response-ready",(players: [string, string, boolean][]) => {
+        const readyPlayers = players.filter(
             (player: [string, string, boolean]) => player[2] === true
           );
-          if (readyPlayers.length === 2) {
+          const element0 = document.getElementById("ready0");
+          const element1 = document.getElementById("ready1");
+          console.log(players)
+
+          if (players[0][2] === true) {
+            element0!.textContent = "O";
+          } else {
+            element0!.textContent = "X";
+          }
+          if (players.length === 2) {
+            if (players[1][2] === true) {
+              element1!.textContent = "O";
+            } else {
+              element1!.textContent = "X";
+            }
+          }
+          if (readyPlayers.length === 1) {
             setIsGameStarted(true);
             setResultState(null);
           }
@@ -307,16 +321,29 @@ const useStageStart = (
     // console.log ("다시 하기 누르면 여기서 시작", isTutorialImage2End, isSimStarted, countdown);
     if (isTutorialImage2End && !isSimStarted && countdown && countdown > 0) {
       const interval = setInterval(() => {
+        console.log("countdown: ", countdown);
         setCountdown((prevCount: number | null) =>
           prevCount !== null && prevCount > 0 ? prevCount - 1 : 0
         );
       }, 1000);
       return () => clearInterval(interval);
     } else if (isTutorialImage2End && !isSimStarted && countdown === 0) {
+      console.log("dsfhjs: ", isSimStarted);
       setIsSimStarted(true);
       setCountdown(null);
     }
   }, [isTutorialImage2End, countdown, isSimStarted]);
+
+  // =============== 카운트다운 바 처리 ===============
+  useEffect(() => {
+    if (countdown && countdown > 0) {
+      const countdownBar = document.getElementById("countdown-bar");
+      if (countdownBar) {
+        const percentage = (countdown / chatTime) * 100;
+        countdownBar.style.width = `${percentage}%`;
+      }
+    }
+  }, [isTutorialImage2End, countdown]);
 
   return { readyGame };
 };

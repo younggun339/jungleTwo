@@ -28,7 +28,7 @@ body {
   border: 5px solid #a831fd;
   border-radius: 1em;
   transform-style: preserve-3d;
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
 }
 
 .hello {
