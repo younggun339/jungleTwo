@@ -80,7 +80,7 @@ body {
   background-repeat: no-repeat; /* 이미지 반복 없음 */
 }
 
-/* #video-container-1 {
+#video-container-1 {
   position: absolute;
   width: 50%;
   height: 100%;
@@ -99,7 +99,7 @@ body {
   opacity: 0.3;
   background-color: "white";
   transform: scaleX(-1);
-} */
+}
 
 canvas {
   width: 100%;
