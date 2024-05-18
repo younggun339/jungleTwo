@@ -20,7 +20,7 @@ export function updateSkeleton(skeletonRef, jointStart, jointEnd) {
   // Set the position and angle of the rectangle that represents the finger
   if (skeletonRef.current) {
     Body.setAngle(skeletonRef.current, angle);
-    Body.setVertices(skeletonRef.current, Bodies.rectangle(centerX, centerY, width, 5, { angle: angle, }).vertices);
+    Body.setVertices(skeletonRef.current, Bodies.rectangle(centerX, centerY, width, 15, { angle: angle, }).vertices);
     Body.setPosition(skeletonRef.current, { x: centerX, y: centerY });
   }
 }
