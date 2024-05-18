@@ -105,17 +105,13 @@ body {
 
 /* Login button styles */
 .loginButton {
-  margin-left: 12px;
-  padding: 10px 20px;
-  background-color: #4b0082;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  outline: none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 2rem;
+  width: 12rem;
+  height: 5rem;
 }
 
 /* Logo styles */
@@ -226,7 +222,7 @@ body {
 }
 
 .room img {
-  margin-top: 5rem;
+  margin-top: 4rem;
   width: 100px; /* Adjust based on your preference */
   height: 100px; /* Maintain aspect ratio */
   /* margin-right: 1rem; */
@@ -244,21 +240,23 @@ body {
   padding: 0.5rem;
   border-radius: 1rem;
   background-color: #362210;
-  margin-top: 5rem;
+  margin-top: 4rem;
   margin-left: 10px;
   margin-right: 10px;
   color: white;
   text-align: center;
+  font-size: 4rem;
 }
 .nickname {
   flex: 2; /* Increased width less than roomName */
   padding: 0.5rem;
   border-radius: 1rem;
   background-color: #362210;
-  margin-top: 5rem;
+  margin-top: 4rem;
   margin-right: 10px;
   color: white;
   text-align: center;
+  font-size: 4rem;
 }
 .go {
   margin-top: 5rem;
@@ -438,7 +436,7 @@ input[type="checkbox"] {
 }
 .createRoom {
   width: 80%;
-  height: 50%;
+  height: 60%;
   /* border: solid; */
   /* background-color: #9575cd; */
   background-image: url("./Wall.png");
@@ -452,9 +450,21 @@ input[type="checkbox"] {
   background-size: cover;
   background-repeat: no-repeat;
 }
+.createRoom form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  input {
+    align-self: center;
+  }
+  button {
+    align-self: center;
+  }
+}
 
 .createRoom p {
-  color: black;
+  margin-top: 5rem;
+  color: white;
 }
 /* .inputField,
 .roomListContain,

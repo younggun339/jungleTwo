@@ -17,23 +17,28 @@ export const initializeStage1Objects = (
   isTutorialImage2End,
   setResultState
 ) => {
-  const { render, canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } =
-    refs;
+  const {
+    render,
+    canvasSize,
+    mouseRef,
+    bombRef,
+    leftArmLeftRef,
+    rightArmRightRef,
+  } = refs;
 
-    // 쥐 생성
-    mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
-      restitution: 0, // 반발 계수
-      friction: 0.8, // 마찰 계수
-      render: {
-        fillStyle: "transparent",
-        strokeStyle: "transparent"
-      },
-      collisionFilter: {
-        category: 0x0004, // 충돌 그룹 설정
-        mask: 0xffff // 다른 모든 그룹과 충돌하도록 설정
+  // 쥐 생성
+  mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
+    restitution: 0, // 반발 계수
+    friction: 0.8, // 마찰 계수
+    render: {
+      fillStyle: "transparent",
+      strokeStyle: "transparent",
     },
-      
-    });
+    collisionFilter: {
+      category: 0x0004, // 충돌 그룹 설정
+      mask: 0xffff, // 다른 모든 그룹과 충돌하도록 설정
+    },
+  });
 
   const walls = [
     Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, {
@@ -60,7 +65,7 @@ export const initializeStage1Objects = (
     let onPanel = false;
     let onSlope = false;
     let onSlopeRight = false;
-    let isColliding= false;
+    let isColliding = false;
     //점프
     const jumping = (event, engine, ball, jumpPad) => {
       event.pairs.forEach((pair) => {
@@ -107,12 +112,18 @@ export const initializeStage1Objects = (
     };
 
     // 쥐가 낙사 시 죽는 이벤트를 걸기 위한 바닥 생성
-    const fallFloor = Bodies.rectangle(canvasSize.x / 2, canvasSize.y + 50, canvasSize.x, 1, {
-      isStatic: true,
-      render: {
-        fillStyle: "red",
-      },
-    });
+    const fallFloor = Bodies.rectangle(
+      canvasSize.x / 2,
+      canvasSize.y + 50,
+      canvasSize.x,
+      1,
+      {
+        isStatic: true,
+        render: {
+          fillStyle: "red",
+        },
+      }
+    );
 
     const floors = [
       Bodies.rectangle(250, canvasSize.y - 300, 350, 25, {
@@ -187,8 +198,8 @@ export const initializeStage1Objects = (
       render: {
         sprite: {
           texture: "/assets/Bomb_0.png",
-          xScale:2,
-          yScale:2
+          xScale: 2,
+          yScale: 2,
         },
       },
     });
@@ -309,8 +320,8 @@ export const initializeStage1Objects = (
       render: {
         sprite: {
           texture: "/assets/Weight_0.png",
-          xScale:2.5,
-          yScale:2.5,
+          xScale: 2.5,
+          yScale: 2.5,
         },
       },
       collisionFilter: {
@@ -343,45 +354,45 @@ export const initializeStage1Objects = (
 
     //------------------------------region 쥐---------------------------------
 
-      const mouseImages = [
-        "/assets/MouseWalk_0.png",
-        "/assets/MouseWalk_1.png",
-        "/assets/MouseWalk_2.png",
-        "/assets/MouseWalk_3.png",
-      ];
-      let currentImageIndex = 0;
+    const mouseImages = [
+      "/assets/MouseWalk_0.png",
+      "/assets/MouseWalk_1.png",
+      "/assets/MouseWalk_2.png",
+      "/assets/MouseWalk_3.png",
+    ];
+    let currentImageIndex = 0;
 
-      // 매초마다 이미지를 변경하는 로직
-      setInterval(() => {
-        currentImageIndex = (currentImageIndex + 1) % mouseImages.length;
-      }, 100);
-      const scaleMultiplier = 2;
-      // 커스텀 렌더링 함수
-      function handleMouseRender(event) {
-        const context = render.context;
-        const bodies = Matter.Composite.allBodies(engine.world);
+    // 매초마다 이미지를 변경하는 로직
+    setInterval(() => {
+      currentImageIndex = (currentImageIndex + 1) % mouseImages.length;
+    }, 100);
+    const scaleMultiplier = 2;
+    // 커스텀 렌더링 함수
+    function handleMouseRender(event) {
+      const context = render.context;
+      const bodies = Matter.Composite.allBodies(engine.world);
 
-        for (let body of bodies) {
-          if (body.circleRadius) {
-            const { x, y } = body.position;
-            const img = new Image();
-            img.src = mouseImages[currentImageIndex];
-            const yOffset = img.height / 2; // 이미지의 높이의 절반
+      for (let body of bodies) {
+        if (body.circleRadius) {
+          const { x, y } = body.position;
+          const img = new Image();
+          img.src = mouseImages[currentImageIndex];
+          const yOffset = img.height / 2; // 이미지의 높이의 절반
 
-            const scale = (body.circleRadius * 2 * scaleMultiplier) / img.width; // 스케일을 조절합니다.
-            context.save();
-            context.translate(x, y- yOffset);
-            context.drawImage(
-                img,
-                -body.circleRadius * scaleMultiplier,
-                -body.circleRadius * scaleMultiplier,
-                body.circleRadius * 2 * scaleMultiplier,
-                body.circleRadius * 2 * scaleMultiplier
-            );
-            context.restore();
-          }
+          const scale = (body.circleRadius * 2 * scaleMultiplier) / img.width; // 스케일을 조절합니다.
+          context.save();
+          context.translate(x, y - yOffset);
+          context.drawImage(
+            img,
+            -body.circleRadius * scaleMultiplier,
+            -body.circleRadius * scaleMultiplier,
+            body.circleRadius * 2 * scaleMultiplier,
+            body.circleRadius * 2 * scaleMultiplier
+          );
+          context.restore();
         }
       }
+    }
     // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
     Events.on(render, "afterRender", handleMouseRender);
     //----------------------------end region 쥐-------------------------------
@@ -442,36 +453,36 @@ export const initializeStage1Objects = (
     );
     //---------------피어가만든기물-----------------
 
-// 이미지를 순환시키기 위한 로직
-let lastUpdateTime = 0;
-let currentFrame = 0;
-Events.on(engine, "beforeUpdate", function (event) {
-  const currentTime = event.timestamp;
-  let frameDuration = 100; // 매 초마다 이미지 변경
+    // 이미지를 순환시키기 위한 로직
+    let lastUpdateTime = 0;
+    let currentFrame = 0;
+    Events.on(engine, "beforeUpdate", function (event) {
+      const currentTime = event.timestamp;
+      let frameDuration = 100; // 매 초마다 이미지 변경
 
-  if (currentTime - lastUpdateTime > frameDuration) {
-    lastUpdateTime = currentTime;
-    currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
+      if (currentTime - lastUpdateTime > frameDuration) {
+        lastUpdateTime = currentTime;
+        currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
 
-    // 각 이미지를 로드한 후에만 이미지 변경
-    loadImage(`/assets/Fire_${currentFrame}.png`, function() {
-        fire.render.sprite.texture = `/assets/Fire_${currentFrame}.png`;
+        // 각 이미지를 로드한 후에만 이미지 변경
+        loadImage(`/assets/Fire_${currentFrame}.png`, function () {
+          fire.render.sprite.texture = `/assets/Fire_${currentFrame}.png`;
+        });
+        loadImage(`/assets/Bomb_${currentFrame}.png`, function () {
+          bombRef.current.render.sprite.texture = `/assets/Bomb_${currentFrame}.png`;
+        });
+        // 이하 동일
+      }
     });
-    loadImage(`/assets/Bomb_${currentFrame}.png`, function() {
-      bombRef.current.render.sprite.texture = `/assets/Bomb_${currentFrame}.png`;
-  });
-    // 이하 동일
-  }
-});
 
-// 이미지 로드 함수 정의
-function loadImage(url, callback) {
-  const img = new Image();
-  img.onload = function() {
-      callback();
-  };
-  img.src = url;
-}
+    // 이미지 로드 함수 정의
+    function loadImage(url, callback) {
+      const img = new Image();
+      img.onload = function () {
+        callback();
+      };
+      img.src = url;
+    }
     // cheese
     const cheese = Bodies.rectangle(1400, 163, 50, 50, {
       isStatic: true,
@@ -486,7 +497,10 @@ function loadImage(url, callback) {
 
     cat.render.zIndex = 5;
 
+    // const playSound = useSoundEffects();
+
     World.add(engine.world, [
+      ...walls, // 지우지마라
       cheese,
       mouseRef.current,
       leftArmLeftRef.current,
@@ -498,7 +512,7 @@ function loadImage(url, callback) {
       bombGround,
       weight,
       floor,
-      fallFloor
+      fallFloor,
     ]);
 
     // 충돌 감지
@@ -517,6 +531,7 @@ function loadImage(url, callback) {
           (bodyA === catButton && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
+          // playSound("/sound/CatMeow.wav");
           catButton.render.sprite.texture = "/assets/CatButtonPush.png";
           catButton.render.sprite.xScale = 0.05;
           catButton.render.sprite.yScale = 0.05;
@@ -980,7 +995,6 @@ function loadImage(url, callback) {
           Body.setVelocity(mouseRef.current, parallelComponent);
         }
       }
-      
     });
 
     //-------bomb------
@@ -1034,7 +1048,6 @@ function loadImage(url, callback) {
     //     });
     //   });
   }
-
 };
 
 export const initializeStageObjects = (
@@ -1042,6 +1055,4 @@ export const initializeStageObjects = (
   refs,
   isTutorialImage2End,
   setResultState
-) => {
-
-}
+) => {};

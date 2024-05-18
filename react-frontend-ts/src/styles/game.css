@@ -26,9 +26,11 @@ body {
   z-index: 2; /* Matter.js 캔버스를 상위에 */
   display: flex; /* 자식 요소를 가로로 배치 */
   justify-content: space-between; /* 공간을 고르게 분배 */
-
+  background-image: url("./whiteback.png"); /* 이미지 경로 수정 */
+  background-size: cover; /* 이미지가 컨테이너를 꽉 채우도록 */
+  background-position: center; /* 이미지를 컨테이너 중앙에 위치 */
+  background-repeat: no-repeat; /* 이미지 반복 없음 */
 }
-
 
 #video-container-1 {
   position: absolute; /* 부모 기준 위치 */
@@ -62,13 +64,24 @@ canvas {
   bottom: 3%;
   transform: translate(-50%, -50%);
   z-index: 3; /* 버튼을 렌더러 위로 올리기 */
-  background-color: #fff;
-  padding: 50px 70px;
-  border: 2px solid #000;
-  border-radius: 5px;
+  background-color: #f8b9ca;
+  padding: 15px 30px;
+  border-radius: 10px;
+  border-color: #f8b9ca;
   cursor: pointer;
-  font-size: 30px;
+  font-size: 50px;
   color: #000;
+}
+
+#ready-button:hover {
+  background-color: #ffa1ba;
+}
+
+#ready0{
+  font-size: 50px;
+}
+#ready1{
+  font-size: 50px;
 }
 
 #countdown {
@@ -109,21 +122,27 @@ canvas {
 
 #player0 {
   position: absolute;
-  border: 2px solid #000;
   padding: 10px;
   top: 5%;
   left: 20%;
   z-index: 5; /* 맨 위에 표시 */
   font-family: "myFont";
+  font-size: 50px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: aliceblue;
 }
 #player1 {
   position: absolute;
-  border: 2px solid #000;
   padding: 10px;
   top: 5%;
   right: 20%;
   z-index: 5; /* 맨 위에 표시 */
   font-family: "myFont";
+  font-size: 50px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: aliceblue;
 }
 
 .footer {
@@ -132,22 +151,33 @@ canvas {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #333;
-  color: white;
+  background-color: "transparent";
+  color: black;
   padding: 20px 0;
   text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
+#player0,
+#player1,
+#ready0,
+#ready1 {
+  margin-left: 10px; /* player와 ready 사이의 간격 조정 */
+}
+
 
 .modal {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   background-color: white;
   border: 2px solid black;
   border-radius: 10px;
   padding: 20px;
   z-index: 10;
+  animation: zoomInBounce 0.5s ease forwards;
 }
 
 .canvas-transparent {
@@ -178,7 +208,6 @@ canvas {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   background-color: white;
   border: 2px solid black;
   border-radius: 10px;
@@ -187,6 +216,7 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: zoomInBounce 0.5s ease forwards;
 }
 
 .menu-popup button {
@@ -197,6 +227,49 @@ canvas {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+}
+
+.retry-popup {
+  position: fixed; /* 화면 중앙에 고정 위치 */
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  max-width: 500px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 10; /* 팝업이 다른 요소들 위에 나타나도록 설정 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: zoomInBounce 0.5s ease forwards;
+}
+
+.retry-popup h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-family: "myFont"; /* 기존의 글꼴 사용 */
+}
+
+.retry-popup button {
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.retry-popup button:hover {
+  background-color: #ddd; /* 호버 시 배경색 변경 */
+}
+
+.retry-popup button:active {
+  background-color: #ccc; /* 클릭 시 배경색 변경 */
 }
 
 #countdown-container {
@@ -252,6 +325,21 @@ canvas {
   font-size: 16px;
   font-weight: bold;
   color: #dddddd; /* 적당한 색상으로 조정 */
+}
+
+@keyframes zoomInBounce {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 @keyframes moveStripes {

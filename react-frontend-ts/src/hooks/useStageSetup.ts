@@ -1,5 +1,5 @@
-import { useEffect, useRef, MutableRefObject } from "react";
-import { Engine, Render, World, Body, Runner, Bodies } from "matter-js";
+import { useEffect, useRef, MutableRefObject, useState } from "react";
+import { Engine, Render, World, Body, Runner, Bodies, Events } from "matter-js";
 import useSimulation from "./useSimulation";
 import { initializeStage1Objects } from "../utils/initializeStage1Objects";
 import { initializeStage2Objects } from "../utils/initializeStage2Objects";
@@ -7,7 +7,6 @@ import { initializeStage3Objects } from "../utils/initializeStage3Objects";
 import { initializeStage4Objects } from "../utils/initializeStage4Objects";
 import { initializeStage5Objects } from "../utils/initializeStage5Objects";
 import { initializeStageObjects } from "../utils/initializeStageObjects";
-
 interface CanvasSize {
   x: number;
   y: number;
@@ -28,16 +27,13 @@ const useStage1Setup = (
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
 
+  const renderRef = useRef<Render | null>(null);
+  const [backgroundImage, setBackgroundImage] =
+    useState<HTMLImageElement | null>(null); // Empty dependency array ensures this effect runs only once
   // const container = document.getElementById('matter-container');
   // if(!container) return;
   useEffect(() => {
     const engine = engineRef.current;
-
-    // // Ensure the container is correctly referenced
-    // if (!sceneRef.current) {
-    //   console.error("No scene container found");
-    //   return;
-    // }
 
     const render = Render.create({
       element: document.getElementById("matter-container") as HTMLElement,
@@ -49,62 +45,11 @@ const useStage1Setup = (
         background: "transparent", // Set canvas background to transparent
       },
     });
-
+    renderRef.current = render;
     if (!engine.world) {
       console.error("World not initialized");
       return;
     }
-    // // Function to draw the animated background
-    // // Function to draw the animated background
-    // function drawBackground(
-    //   ctx: CanvasRenderingContext2D,
-    //   width: number,
-    //   height: number,
-    //   tick: number
-    // ) {
-    //   const opacity = 0.5 + 0.5 * Math.sin(tick / 60);
-    //   ctx.fillStyle = `rgba(150, 150, 255, ${opacity})`;
-    //   ctx.fillRect(0, 0, width, height);
-    // }
-
-    // // Start the animation
-    // function startBackgroundAnimation() {
-    //   const ctx = render.canvas.getContext("2d");
-    //   if (!ctx) {
-    //     console.error("Failed to get 2D context");
-    //     return;
-    //   }
-
-    //   const width = render.canvas.width;
-    //   const height = render.canvas.height;
-
-    //   // Initial draw to prevent flickering
-    //   drawBackground(ctx, width, height, performance.now());
-
-    //   // Variable to hold the animation frame request
-    //   let frameId: number;
-
-    //   // The animate function
-    //   function animate() {
-    //     frameId = requestAnimationFrame(animate);
-
-    //     // Ensure ctx is not null before drawing
-    //     if (ctx !== null) {
-    //       // Clear the canvas
-    //       ctx.clearRect(0, 0, width, height);
-
-    //       // Draw the background first
-    //       drawBackground(ctx, width, height, performance.now());
-    //     }
-    //   }
-
-    //   animate();
-
-    //   return () => {
-    //     cancelAnimationFrame(frameId);
-    //   };
-    // }
-    // Start the Matter.js renderer
 
     initializeStage1Objects(
       engine,
@@ -119,9 +64,23 @@ const useStage1Setup = (
       isTutorialImage2End,
       setResultState
     );
+    // // Event to draw the background before each render
+    // Events.on(render, "beforeRender", () => {
+    //   console.log("Before render.");
+    //   const ctx = render.canvas.getContext("2d");
+    //   if (ctx && backgroundImage) {
+    //     console.log("Drawing the background.");
+    //     console.log(ctx);
+    //     ctx.globalCompositeOperation = "destination-over";
+    //     ctx.drawImage(backgroundImage, 0, 0, canvasSize.x, canvasSize.y);
+    //   } else {
+    //     console.log("Context or backgroundImage is not available.");
+    //   }
+    // });
 
-    // const stopBackgroundAnimation = startBackgroundAnimation();
-
+    // Events.on(render, "afterRender", () => {
+    //   console.log("After render.");
+    // });
     Render.run(render);
 
     return () => {
@@ -133,7 +92,7 @@ const useStage1Setup = (
       // // Cancel the animation frame request
       // stopBackgroundAnimation?.();
     };
-  }, [canvasSize, isTutorialImage2End]);
+  }, [isTutorialImage2End]);
 
   useSimulation({
     isSimStarted,

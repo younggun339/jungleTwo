@@ -86,7 +86,7 @@ const useWebRTC = (
             if (data.length == 2) {
               element1!.textContent = data[1][1];
             } else {
-              element1!.textContent = "기다리는 중...";
+              element1!.textContent = "WAITING";
             }
           });
 

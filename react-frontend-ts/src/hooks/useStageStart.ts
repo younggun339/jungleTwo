@@ -241,8 +241,10 @@ const useStageStart = (
 ) => {
   useEffect(() => {
     if (nestjsSocketRef.current) {
-      nestjsSocketRef.current.on("response-ready",(players: [string, string, boolean][]) => {
-        const readyPlayers = players.filter(
+      nestjsSocketRef.current.on(
+        "response-ready",
+        (players: [string, string, boolean][]) => {
+          const readyPlayers = players.filter(
             (player: [string, string, boolean]) => player[2] === true
           );
           const element0 = document.getElementById("ready0");
@@ -260,7 +262,7 @@ const useStageStart = (
               element1!.textContent = "X";
             }
           }
-          if (readyPlayers.length === 2) {
+          if (readyPlayers.length === 1) {
             setIsGameStarted(true);
             setResultState(null);
           }
