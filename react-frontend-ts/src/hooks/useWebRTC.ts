@@ -50,7 +50,7 @@ const useWebRTC = (
 
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({ video: false, audio: true })
       .then((stream) => {
         if (userVideo.current) {
           userVideo.current.srcObject = stream;

@@ -80,9 +80,9 @@ body {
   background-repeat: no-repeat; /* 이미지 반복 없음 */
 }
 
-#video-container-1 {
-  position: absolute; /* 부모 기준 위치 */
-  width: 50%; /* 전체 너비의 50% */
+/* #video-container-1 {
+  position: absolute;
+  width: 50%;
   height: 100%;
   z-index: 0;
   opacity: 0.3;
@@ -91,15 +91,15 @@ body {
 }
 
 #video-container-2 {
-  position: absolute; /* 부모 기준 위치 */
-  right: 0; /* 오른쪽 정렬 */
-  width: 50%; /* 전체 너비의 50% */
+  position: absolute;
+  right: 0;
+  width: 50%;
   height: 100%;
   z-index: 0;
   opacity: 0.3;
   background-color: "white";
   transform: scaleX(-1);
-}
+} */
 
 canvas {
   width: 100%;

@@ -414,7 +414,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           </div>
         )}
         <div id="matter-container" ref={sceneRef}>
-          {/* {peers.slice(0, indexRef.current).map((peer, index) => (
+          {peers.slice(0, indexRef.current).map((peer, index) => (
           <Video
             key={`${peer.peerID}-${index}`}
             peer={peer.peer}
@@ -441,7 +441,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             peers={peers}
             myIndexRef={0}
           />
-        ))} */}
+        ))}
           <canvas
             ref={canvasRef}
             className="canvas-transparent"
