@@ -42,6 +42,7 @@ export const initializeStage5Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
+          playSound("/sound/Jump.wav");
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2 });
         }
@@ -56,6 +57,7 @@ export const initializeStage5Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
+          playSound("/sound/SuperJump.wav");
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x * 6, y: -velocity.y * 3 });
         }
@@ -64,12 +66,15 @@ export const initializeStage5Objects = (
 
     // 충돌 시 호출될 burnMouse 함수
     function burnMouse() {
+      playSound("/sound/Burn.wav");
+      playSound("/sound/GameOver.wav");
       Body.setStatic(mouseRef.current, true);
     }
 
     
     function explosion() {
       // Bomb가 없어지고 bombGround가 없어진다.
+      playSound("/sound/Bomb.wav");
       World.remove(engine.world, bombRef.current);
       World.remove(engine.world, bombGround);
     }
@@ -77,7 +82,8 @@ export const initializeStage5Objects = (
 //사라지는 벽
 const collapsesGround = (engine, mouseRef) => {
   if (239 <= mouseRef.position.x && mouseRef.position.x <= 249 && (377 === Math.floor(mouseRef.position.y))) {
-      Composite.remove(engine.world, ground);
+    playSound("/sound/BrokenGround.wav");  
+    Composite.remove(engine.world, ground);
   }// x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
 };
 
@@ -531,6 +537,8 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
           if (!(cat.render.fillStyle ===  '/assets/CatClose.png')) {
             alert("게임오버");
+            playSound("/sound/CatMeow.wav");
+            playSound("/sound/GameOver.wav");
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {
             cat.collisionFilter = {
@@ -546,6 +554,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
           mouseRef.current.isStatic = true;
+          playSound("/sound/GameClear.wav");
           setResultState(0);
         }
         //------------cheese--------------
@@ -605,6 +614,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           (bodyA === mouseRef.current && bodyB === box1) ||
           (bodyA === box1 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           //console.log("사라지는 바닥의 좌표:", mouse.position);
@@ -613,6 +623,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
           (bodyA === mouseRef.current && bodyB === box2) ||
           (bodyA === box2 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box2]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           //console.log("사라지는 바닥의 좌표:", mouse.position);
@@ -681,6 +692,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
       }
       //마우스추에충돌시
       function crashMouse() {
+        playSound("/sound/GameOver.wav");
         Body.setStatic(mouseRef.current, true);
       }
 
@@ -699,6 +711,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
             ((bodyA === portal2 && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === portal2))
           ) {
+            playSound("/sound/Portal.wav");
             Body.setPosition(mouseRef.current, {
               x: portal1.position.x,
               y:
@@ -729,6 +742,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
             ((bodyA === portal1 && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === portal1))
           ) {
+            playSound("/sound/Portal.wav");
             console.log("here");
             console.log(
               portal1.position.x,
@@ -768,6 +782,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
             ((bodyA === portal4 && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === portal4))
           ) {
+            playSound("/sound/Portal.wav");
             Body.setPosition(mouseRef.current, {
               x: portal3.position.x,
               y:
@@ -798,6 +813,7 @@ const ground = Bodies.rectangle(300, 410, 100, 25, {
             ((bodyA === portal3 && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === portal3))
           ) {
+            playSound("/sound/Portal.wav");
             console.log("here");
             console.log(
               portal3.position.x,

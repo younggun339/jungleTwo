@@ -40,10 +40,10 @@ body {
 
 .mainImg {
   display: none;
+  width: 1rem;
   border-radius: 20px;
   border: 10px pink solid;
   margin-top: 1rem;
-  width: 80%;
 }
 
 .totalContain {

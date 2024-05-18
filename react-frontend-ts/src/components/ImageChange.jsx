@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 function MainImage() {
-  const images = ['/images/image1.gif', '/images/image.gif', '/images/image2.gif'];
+  const images = ['/images/aaa.jpg', '/images/bbb.jpg', '/images/aaa1.jpg'];
   const [currentImage, setCurrentImage] = useState(images[0]);
 
   useEffect(() => {

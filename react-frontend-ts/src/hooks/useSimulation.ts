@@ -47,7 +47,7 @@ const useSimulation = ({
       leftArmTerrain = Bodies.rectangle(
         leftArmLeftRef.current.position.x,
         leftArmLeftRef.current.position.y,
-        leftArmLeftRef.current.bounds.max.x - leftArmLeftRef.current.bounds.min.x,
+        Math.sqrt(Math.pow((leftArmLeftRef.current.bounds.max.x - leftArmLeftRef.current.bounds.min.x), 2) + Math.pow((leftArmLeftRef.current.bounds.max.y - leftArmLeftRef.current.bounds.min.y), 2)),
         5,
         {
           isStatic: true,
@@ -65,11 +65,11 @@ const useSimulation = ({
       rightArmTerrain = Bodies.rectangle(
         rightArmRightRef.current.position.x,
         rightArmRightRef.current.position.y,
-        rightArmRightRef.current.bounds.max.x - rightArmRightRef.current.bounds.min.x,
+        Math.sqrt(Math.pow((rightArmRightRef.current.bounds.max.x - rightArmRightRef.current.bounds.min.x), 2) + Math.pow((rightArmRightRef.current.bounds.max.y - rightArmRightRef.current.bounds.min.y), 2)),
         5,
         {
           isStatic: true,
-          angle: leftArmLeftRef.current.angle,
+          angle: rightArmRightRef.current.angle,
           render: {
             sprite: {
               texture: "/sprite/Ground4.png",

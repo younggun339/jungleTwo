@@ -287,6 +287,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         setShowWaitingPopup(false);
         if (accepted) {
           clearStageObjects[currentStage - 1](
+            canvasSize,
             { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
             setIsSimStarted,
             setShowModal,
@@ -301,6 +302,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   // 다음 스테이지 버튼 클릭 시 처리 로직
   const handleNextStage = () => {
     resetStageObjects[currentStage - 1](
+      canvasSize,
       { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       setIsGameStarted,
       setIsSimStarted,

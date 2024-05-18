@@ -14,6 +14,7 @@ import { Body } from 'matter-js';
  */
 // ================================================ STAGE 1 ====================================================
 export function resetStage1Objects(
+  canvasSize,
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -24,16 +25,13 @@ export function resetStage1Objects(
   setCountdown,
   setIsPlayerReady
 ) {
-  console.log("resetStage1 called");
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
-  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
-  Body.setPosition(mouseRef.current, { x: 100, y: 100 });
+  Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 
   // bomb 객체를 리셋
-  Body.setVelocity(bombRef.current, { x: 0, y: 0 });
   Body.setPosition(bombRef.current, { x: 1000, y: 100 });
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
@@ -55,6 +53,7 @@ export function resetStage1Objects(
 
 // ================================================ STAGE 2 ====================================================
 export function resetStage2Objects(
+  canvasSize,
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -68,12 +67,10 @@ export function resetStage2Objects(
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
-  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
-  Body.setPosition(mouseRef.current, { x: 100, y: 100 });
+  Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 
   // bomb 객체를 리셋
-  Body.setVelocity(bombRef.current, { x: 0, y: 0 });
   Body.setPosition(bombRef.current, { x: 1000, y: 100 });
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
@@ -95,6 +92,7 @@ export function resetStage2Objects(
 
 // ================================================ STAGE 3 ====================================================
 export function resetStage3Objects(
+  canvasSize,
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -108,12 +106,10 @@ export function resetStage3Objects(
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
-  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
-  Body.setPosition(mouseRef.current, { x: 100, y: 100 });
+  Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 
   // bomb 객체를 리셋
-  Body.setVelocity(bombRef.current, { x: 0, y: 0 });
   Body.setPosition(bombRef.current, { x: 1000, y: 100 });
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
@@ -135,6 +131,7 @@ export function resetStage3Objects(
 
 // ================================================ STAGE 4 ====================================================
 export function resetStage4Objects(
+  canvasSize,
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -148,12 +145,10 @@ export function resetStage4Objects(
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
-  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
-  Body.setPosition(mouseRef.current, { x: 100, y: 100 });
+  Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 
   // bomb 객체를 리셋
-  Body.setVelocity(bombRef.current, { x: 0, y: 0 });
   Body.setPosition(bombRef.current, { x: 1000, y: 100 });
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
@@ -175,6 +170,7 @@ export function resetStage4Objects(
 
 // ================================================ STAGE 5 ====================================================
 export function resetStage5Objects(
+  canvasSize,
   refs,
   setIsGameStarted,
   setIsSimStarted,
@@ -188,12 +184,10 @@ export function resetStage5Objects(
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
-  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
-  Body.setPosition(mouseRef.current, { x: 100, y: 100 });
+  Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 
   // bomb 객체를 리셋
-  Body.setVelocity(bombRef.current, { x: 0, y: 0 });
   Body.setPosition(bombRef.current, { x: 1000, y: 100 });
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);

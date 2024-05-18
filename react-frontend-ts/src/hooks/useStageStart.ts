@@ -262,7 +262,8 @@ const useStageStart = (
               element1!.textContent = "X";
             }
           }
-          if (readyPlayers.length === 1) {
+          /////////////////////////////////////////////////////////////////////////////////////////////// 레디 인원수 조절
+          if (readyPlayers.length === 2) {
             setIsGameStarted(true);
             setResultState(null);
           }

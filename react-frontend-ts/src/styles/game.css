@@ -282,7 +282,7 @@ canvas {
 
 .retry-popup {
   position: fixed; /* 화면 중앙에 고정 위치 */
-  top: 25%;
+  top: 50%;
   left: 50%;
   width: 80%;
   max-width: 500px;
@@ -325,7 +325,7 @@ canvas {
 
 .waiting-popup {
   position: fixed; /* 화면 중앙에 고정 위치 */
-  top: 50%;
+  top: 25%;
   left: 50%;
   width: 80%;
   max-width: 500px;
@@ -333,7 +333,7 @@ canvas {
   border: 2px solid black;
   border-radius: 10px;
   padding: 20px;
-  z-index: 10; /* 팝업이 다른 요소들 위에 나타나도록 설정 */
+  z-index: 12; /* 팝업이 다른 요소들 위에 나타나도록 설정 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;

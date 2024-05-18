@@ -668,7 +668,7 @@ function loadImage(url, callback) {
           (bodyA === mouseRef.current && bodyB === box1) ||
           (bodyA === box1 && bodyB === mouseRef.current)
         ) {
-          playSound("/sound/Pointer.wav")
+          playSound("/sound/Pointer.mp3")
           World.remove(engine.world, [box1]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           //console.log("사라지는 바닥의 좌표:", mouse.position);
@@ -677,7 +677,7 @@ function loadImage(url, callback) {
           (bodyA === mouseRef.current && bodyB === box2) ||
           (bodyA === box2 && bodyB === mouseRef.current)
         ) {
-          playSound("/sound/Pointer.wav")
+          playSound("/sound/Pointer.mp3")
           World.remove(engine.world, [box2]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           //console.log("사라지는 바닥의 좌표:", mouse.position);
@@ -686,7 +686,7 @@ function loadImage(url, callback) {
           (bodyA === mouseRef.current && bodyB === box3) ||
           (bodyA === box3 && bodyB === mouseRef.current)
         ) {
-          playSound("/sound/Pointer.wav")
+          playSound("/sound/Pointer.mp3")
           World.remove(engine.world, [box3]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
@@ -704,7 +704,7 @@ function loadImage(url, callback) {
           (bodyA === mouseRef.current && bodyB === box5) ||
           (bodyA === box5 && bodyB === mouseRef.current)
         ) {
-          playSound("/sound/Pointer.wav")
+          playSound("/sound/Pointer.mp3")
           World.remove(engine.world, [box5]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
