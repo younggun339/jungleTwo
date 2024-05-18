@@ -34,6 +34,7 @@ import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
 import { updateSkeleton } from "../utils/updateSkeleton";
 import Video from "./Video";
 import "../styles/game.css";
+import useSoundEffects from "../hooks/useSoundEffects";
 
 interface GameProps {
   userName: string;
@@ -73,12 +74,18 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showRetryRequest, setShowRetryRequest] = useState(false);
   const [showWaitingPopup, setShowWaitingPopup] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [placeholder, setPlaceholder] = useState("");
   const textareaRef = useRef(null); // textarea 요소에 대한 참조 생성
 
   //--------------get coordinates---------------
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [mouseEndPos, setMouseEndPos] = useState({ x: 0, y: 0 });
+
+  const stretchAudioRef = useRef<HTMLAudioElement | null>(null);
+  const releaseAudioRef = useRef<HTMLAudioElement | null>(null);
+
   const handleMouseDown = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
@@ -88,6 +95,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const mouseY = event.clientY - rect.top;
     setIsMouseDown(true);
     setIsMouseUP(false);
+    // if (isTutorialImage2End && !isSimStarted) {
+    //   playSound("/sound/band_stretch.wav");
+    // }
 
     setMousePos({ x: mouseX, y: mouseY });
   };
@@ -103,6 +113,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
       setMouseEndPos({ x: mouseX, y: mouseY });
     }
+  };
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
+    setIsMouseUP(true);
+    // if (isTutorialImage2End && !isSimStarted) {
+    //   playSound("/sound/band_release.wav");
+    // }
   };
   //--------------get coordinates----------------
 
@@ -339,12 +357,49 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       // 필요하다면 복사 완료 알림 등 추가 로직 작성
     }
   };
-
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    console.log("modal open");
+  };
+  const handleCloseModal = () => setIsModalOpen(false);
   return (
     <>
       <div className="animated-background"></div>
 
       <div className="App">
+        <div className="header">
+          <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
+            메뉴
+          </button>
+          <img src="/images/Rattus.webp" className="logo"></img>
+          <div className="leftheader">
+            {/* <textarea
+              ref={textareaRef} // ref 연결
+              className="searchInput"
+              id="search"
+              value={placeholder}
+              readOnly
+            /> */}
+            <button className="roomSearch" onClick={handleOpenModal}>
+              친구초대
+            </button>
+            {/* <button className="roomSearch" onClick={handleCopyClick}>
+              친구초대
+            </button> */}
+          </div>
+        </div>
+        {isModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={handleCloseModal}>
+                &times;
+              </span>
+              <p>친구 초대 링크:</p>
+              <textarea readOnly value={placeholder} />
+              <button onClick={handleCopyClick}>Copy URL</button>
+            </div>
+          </div>
+        )}
         <div id="matter-container" ref={sceneRef}>
           {/* {peers.slice(0, indexRef.current).map((peer, index) => (
           <Video
@@ -380,10 +435,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             // handleMouseDown 및 setIsMouseDown 함수 추가
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
-            onMouseUp={() => {
-              setIsMouseDown(false);
-              setIsMouseUP(true);
-            }}
+            onMouseUp={handleMouseUp}
           />
         </div>
 
@@ -422,23 +474,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
               READY
             </button>
           )}
-
-        <div className="header">
-          <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
-            메뉴
-          </button>
-          <img src="/images/Rattus.webp" className="logo"></img>
-          <textarea
-            ref={textareaRef} // ref 연결
-            className="searchInput"
-            id="search"
-            value={placeholder}
-            readOnly
-          />
-          <button className="roomSearch" onClick={handleCopyClick}>
-            친구초대
-          </button>
-        </div>
 
         {isMenuOpen && (
           <div className="menu-popup">

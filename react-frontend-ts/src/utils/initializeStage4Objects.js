@@ -52,6 +52,7 @@ export const initializeStage4Objects = (
         (bodyA === ball && bodyB === jumpPad) ||
         (bodyA === jumpPad && bodyB === ball)
       ) {
+        playSound("/sound/Jump.wav");
         const velocity = ball.velocity;
         Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2 });
       }
@@ -66,6 +67,7 @@ export const initializeStage4Objects = (
         (bodyA === ball && bodyB === jumpPad) ||
         (bodyA === jumpPad && bodyB === ball)
       ) {
+        playSound("/sound/SuperJump.wav");
         const velocity = ball.velocity;
         Body.setVelocity(ball, { x: velocity.x * 6, y: -velocity.y * 3 });
       }
@@ -74,6 +76,8 @@ export const initializeStage4Objects = (
 
   // 충돌 시 호출될 burnMouse 함수
   function burnMouse() {
+    playSound("/sound/Burn.wav");
+    playSound("/sound/GameOver.wav");
     Body.setStatic(mouseRef.current, true);
   }
 
@@ -588,6 +592,7 @@ export const initializeStage4Objects = (
           (bodyA === mouseRef.current && bodyB === fallFloor) ||
           (bodyA === fallFloor && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/BrokenGround.wav");
           setResultState(5);
         }
         // mouse과 cat이 충돌했을 때
@@ -612,6 +617,7 @@ export const initializeStage4Objects = (
           (pair.bodyA === cheese && pair.bodyB === mouseRef.current)
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
+          playSound("/sound/GameClear.wav");
           mouseRef.currentf.isStatic = true;
           // 게임 클리어
           setResultState(0);
@@ -658,6 +664,7 @@ export const initializeStage4Objects = (
 
         function explosion() {
           // Bomb가 없어지고 bombGround가 없어진다.
+          playSound("/sound/Bomb.wav");
           World.remove(engine.world, bombRef.current);
           World.remove(engine.world, bombGround);
         }
@@ -669,6 +676,7 @@ export const initializeStage4Objects = (
           (bodyA === floor && bodyB === weight) ||
           (bodyA === weight && bodyB === floor)
         ) {
+          playSound("/sound/Weight.wav");
           weight.isStatic = true;
         }
         //----------추가 바닥에 닿았을때-------------
@@ -678,6 +686,7 @@ export const initializeStage4Objects = (
           (bodyA === mouseRef.current && bodyB === box1) ||
           (bodyA === box1 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           //console.log("사라지는 바닥의 좌표:", mouse.position);
@@ -686,6 +695,7 @@ export const initializeStage4Objects = (
           (bodyA === mouseRef.current && bodyB === box2) ||
           (bodyA === box2 && bodyB === mouseRef.currente)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box2]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           //console.log("사라지는 바닥의 좌표:", mouse.position);
@@ -694,6 +704,7 @@ export const initializeStage4Objects = (
           (bodyA === mouseRef.current && bodyB === box3) ||
           (bodyA === box3 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box3]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           //console.log("사라지는 바닥의 좌표:", mouse.position);
@@ -702,6 +713,7 @@ export const initializeStage4Objects = (
           (bodyA === mouseRef.current && bodyB === box4) ||
           (bodyA === box4 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box4]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           // console.log("사라지는 바닥의 좌표:", mouse.position);
@@ -710,6 +722,7 @@ export const initializeStage4Objects = (
           (bodyA === mouseRef.current && bodyB === box5) ||
           (bodyA === box5 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box5]); //box제거
           engine.gravity.x = engine.gravity.x * -1; //좌우반전
           console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
@@ -753,6 +766,8 @@ export const initializeStage4Objects = (
       }
       //마우스추에충돌시
       function crashMouse() {
+        playSound("/sound/Weight.wav");
+        playSound("/sound/GameOver.wav");
         Body.setStatic(mouseRef.current, true);
       }
 
@@ -771,6 +786,7 @@ export const initializeStage4Objects = (
             ((bodyA === portal2 && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === portal2))
           ) {
+            playSound("/sound/Portal.wav");
             Body.setPosition(mouseRef.current, {
               x: portal1.position.x,
               y:
@@ -801,6 +817,7 @@ export const initializeStage4Objects = (
             ((bodyA === portal1 && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === portal1))
           ) {
+            playSound("/sound/Portal.wav");
             console.log("here");
             console.log(
               portal1.position.x,
@@ -840,6 +857,7 @@ export const initializeStage4Objects = (
             ((bodyA === portal4 && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === portal4))
           ) {
+            playSound("/sound/Portal.wav");
             Body.setPosition(mouseRef.current, {
               x: portal3.position.x,
               y:
@@ -870,6 +888,7 @@ export const initializeStage4Objects = (
             ((bodyA === portal3 && bodyB === mouseRef.current) ||
               (bodyA === mouseRef.current && bodyB === portal3))
           ) {
+            playSound("/sound/Portal.wav");
             console.log("here");
             console.log(
               portal3.position.x,

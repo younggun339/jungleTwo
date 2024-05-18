@@ -97,6 +97,8 @@ export const initializeStage1Objects = (
     // 충돌 시 호출될 burnMouse 함수
     function burnMouse() {
       Body.setStatic(mouseRef.current, true);
+      mouseIsDead = true; // 쥐의 상태를 죽음으로 설정
+      currentImageIndex = 0; // 죽은 쥐 이미지 배열의 시작으로 인덱스 초기화
     }
 
     //사라지는 벽
@@ -353,21 +355,56 @@ export const initializeStage1Objects = (
     //----------------------------end region 아이템----------------------------
 
     //------------------------------region 쥐---------------------------------
-
-    const mouseImages = [
-      "/assets/MouseWalk_0.png",
-      "/assets/MouseWalk_1.png",
-      "/assets/MouseWalk_2.png",
-      "/assets/MouseWalk_3.png",
+    const mouseImagesRight = [
+      "/assets/RatWalkRight_0.png",
+      "/assets/RatWalkRight_1.png",
+      "/assets/RatWalkRight_2.png",
+      "/assets/RatWalkRight_3.png",
+      "/assets/RatWalkRight_4.png",
+      "/assets/RatWalkRight_5.png",
+      "/assets/RatWalkRight_6.png",
+      "/assets/RatWalkRight_7.png",
+      "/assets/RatWalkRight_8.png",
     ];
+
+    const mouseImagesLeft = [
+      "/assets/RatWalkLeft_0.png",
+      "/assets/RatWalkLeft_1.png",
+      "/assets/RatWalkLeft_2.png",
+      "/assets/RatWalkLeft_3.png",
+      "/assets/RatWalkLeft_4.png",
+      "/assets/RatWalkLeft_5.png",
+      "/assets/RatWalkLeft_6.png",
+      "/assets/RatWalkLeft_7.png",
+      "/assets/RatWalkLeft_8.png",
+    ];
+
+    // 죽은 쥐 이미지 배열
+    const mouseImagesDead = [
+      "/assets/RatDead_0.png",
+      "/assets/RatDead_1.png",
+      "/assets/RatDead_2.png",
+      "/assets/RatDead_3.png",
+    ];
+
     let currentImageIndex = 0;
+    let mouseIsDead = false; // 쥐의 상태를 추적하는 변수
 
     // 매초마다 이미지를 변경하는 로직
-    setInterval(() => {
-      currentImageIndex = (currentImageIndex + 1) % mouseImages.length;
+    const intervalId = setInterval(() => {
+      if (!mouseIsDead) {
+        currentImageIndex = (currentImageIndex + 1) % mouseImagesRight.length; // 살아있는 쥐 이미지 순환
+      } else {
+        // 죽은 쥐 이미지가 한 번만 순환하도록 처리
+        if (currentImageIndex < mouseImagesDead.length - 1) {
+          currentImageIndex++;
+        }
+      }
     }, 100);
-    const scaleMultiplier = 2;
-    // 커스텀 렌더링 함수
+
+    // 너비를 조정할 스케일 팩터
+    const widthScaleFactor = 1.7; // 너비를 170%로 조정
+    // 커스텀 렌더링 함수    // 커스텀 렌더링 함수
     function handleMouseRender(event) {
       const context = render.context;
       const bodies = Matter.Composite.allBodies(engine.world);
@@ -376,25 +413,44 @@ export const initializeStage1Objects = (
         if (body.circleRadius) {
           const { x, y } = body.position;
           const img = new Image();
-          img.src = mouseImages[currentImageIndex];
-          const yOffset = img.height / 2; // 이미지의 높이의 절반
+          // bombRef.current 예외 처리
+          if (body === bombRef.current) {
+            // 폭탄 객체에 대해서는 다른 텍스처 또는 렌더링을 스킵
+            continue; // 이 라인은 폭탄 객체에 대해 아무 작업도 하지 않음
+          }
 
-          const scale = (body.circleRadius * 2 * scaleMultiplier) / img.width; // 스케일을 조절합니다.
+          // 쥐의 상태에 따라 이미지 배열 선택
+          let mouseImages;
+          if (!mouseIsDead) {
+            mouseImages =
+              body.velocity.x >= 0 ? mouseImagesRight : mouseImagesLeft;
+          } else {
+            mouseImages = mouseImagesDead;
+          }
+
+          img.src = mouseImages[currentImageIndex];
+
+          const scaledWidth = body.circleRadius * 2 * widthScaleFactor;
+          const originalHeight = body.circleRadius * 2;
+
           context.save();
-          context.translate(x, y - yOffset);
+          context.translate(x, y);
           context.drawImage(
             img,
-            -body.circleRadius * scaleMultiplier,
-            -body.circleRadius * scaleMultiplier,
-            body.circleRadius * 2 * scaleMultiplier,
-            body.circleRadius * 2 * scaleMultiplier
+            -scaledWidth / 2,
+            -originalHeight / 2,
+            scaledWidth,
+            originalHeight
           );
           context.restore();
         }
       }
     }
+
     // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
     Events.on(render, "afterRender", handleMouseRender);
+
+    //고양이버튼생성
     //----------------------------end region 쥐-------------------------------
 
     //----------------내가만든기물------------------
@@ -519,8 +575,9 @@ export const initializeStage1Objects = (
     Events.on(engine, "collisionStart", (event) => {
       // console.log(mouse)
       handleCrasheweight(event);
-      //handleBurnMouse(event);
+      // handleBurnMouse(event);
       handleTeleport(event);
+
       //-------------텔레포트---------
       event.pairs.forEach((pair) => {
         //--------------cats--------------
@@ -531,7 +588,7 @@ export const initializeStage1Objects = (
           (bodyA === catButton && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
-          // playSound("/sound/CatMeow.wav"); 문닫히는 소리로 변경 
+          // playSound("/sound/CatMeow.wav"); 문닫히는 소리로 변경
           catButton.render.sprite.texture = "/assets/CatButtonPush.png";
           catButton.render.sprite.xScale = 0.05;
           catButton.render.sprite.yScale = 0.05;
@@ -689,7 +746,7 @@ export const initializeStage1Objects = (
         //--------------점프대----------------
       });
       //불
-      // function handleBurnmouseRef.current(event) {
+      // function handleBurnMouse(event) {
       //   event.pairs.forEach((pair) => {
       //     const { bodyA, bodyB } = pair;
       //     // fire 배열의 각 요소에 대해 충돌을 감지하여 게임 오버 처리
@@ -699,7 +756,7 @@ export const initializeStage1Objects = (
       //         (bodyA === mouseRef.current && bodyB === fireBody)
       //       ) {
       //         setResultState(2);
-      //         burnmouseRef.current(); // 충돌 시 burnmouseRef.current 함수 호출
+      //         burnMouse();
       //       }
       //     });
       //   });

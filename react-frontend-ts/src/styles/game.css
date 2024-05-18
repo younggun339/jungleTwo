@@ -43,7 +43,23 @@ body {
   animation: fadeInOut 10s infinite linear; /* Adjusted duration for smoother transition */
   z-index: 1; /* Sit on top of the base background */
 }
-
+#search.searchInput {
+  padding: 12px;
+  margin-right: 12px;
+  border: 2px solid #362210;
+  border-radius: 5px;
+  font-size: 18px;
+  outline: none;
+  transition: border-color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 20rem; /* Ensures input is responsive */
+}
+.leftheader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto; /* set this based on your actual content */
+}
 .main-content {
   position: relative; /* z-index가 적용되도록 position 설정 */
   z-index: 2; /* animated-background 위에 위치 */
@@ -222,7 +238,7 @@ canvas {
 .modal {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 50%; /* ensures it's perfectly centered */
   background-color: white;
   border: 2px solid black;
   border-radius: 10px;
@@ -230,7 +246,28 @@ canvas {
   z-index: 10;
   animation: zoomInBounce 0.5s ease forwards;
 }
+.modal-content {
+  text-align: center; /* Centers the text and the button */
+}
+.url-container {
+  margin-top: 10px; /* Gives some space above the container */
+}
+textarea {
+  width: 100%; /* Makes the textarea take up full container width */
+  margin-bottom: 10px; /* Space between textarea and button */
+}
+.close {
+  color: #aaa;
+  float: none; /* If previously set to float */
+  font-size: 28px;
+  cursor: pointer;
+  margin-bottom: 20px; /* Give some space above the content */
+  margin-left: 90%;
+}
 
+.close:hover {
+  color: black;
+}
 .canvas-transparent {
   position: absolute; /* 절대 위치 */
   top: 0;
@@ -240,19 +277,24 @@ canvas {
   background-color: transparent; /* 투명 배경 */
   z-index: 10; /* 필요에 따라 z-index를 조절 */
 }
-
 .menu-button {
-  margin-left: 12px;
-  padding: 10px 20px;
-  background-color: #4b0082;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  outline: none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
+  margin-top: 1rem;
+  padding: 1.25em 2em;
+  font-family: "MyFont";
+  color: #ede7f6;
+  text-transform: uppercase;
+  background: #362210;
+  border: 2px solid #362210;
+  border-radius: 0.75em;
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 2rem;
+  width: 13rem;
+  height: 5rem;
 }
 
 .menu-popup {

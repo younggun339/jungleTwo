@@ -62,6 +62,8 @@ body {
   font-size: 24px; /* Increased font size for header */
   height: 10rem;
   background-image: url("./header2.webp");
+  z-index: 2;
+  position: relative;
 }
 
 /* Profile section styles */
@@ -114,12 +116,11 @@ body {
   height: 5rem;
 }
 
-/* Logo styles */
 .logo {
-  width: 45rem;
+  width: auto;
+  max-width: 45rem; /* adjust if the logo is too big */
   height: auto;
 }
-
 /* Search form styles */
 .search {
   display: flex;
@@ -148,7 +149,7 @@ body {
   align-items: center;
   margin-right: 1rem;
   font-size: 2rem;
-  width: 12rem;
+  width: 17rem;
   height: 5rem;
 }
 
