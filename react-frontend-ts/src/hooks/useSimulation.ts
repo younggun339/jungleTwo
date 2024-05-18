@@ -135,7 +135,6 @@ const useSimulation = ({
             (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
           ) {
             onSlope = false;
-            console.log("쥐: ", mouseRef?.current);
           }
     
           if (

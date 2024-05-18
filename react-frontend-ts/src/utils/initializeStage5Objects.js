@@ -12,12 +12,19 @@ import createBox from "../Items/PlotTwistBox";
 export const initializeStage5Objects = (
   engine,
   refs,
+  isSimStarted,
   isTutorialImage2End,
   setResultState,
   playSound
 ) => {
-  const { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } =
-    refs;
+  const {
+    render,
+    canvasSize,
+    mouseRef,
+    bombRef,
+    leftArmLeftRef,
+    rightArmRightRef,
+  } = refs;
 
   const walls = [
     Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, { isStatic: true, render: { sprite:{texture:'/sprite/Wall.png', yScale:0.85,xScale:0.1 } }, }), //좌

@@ -12,12 +12,19 @@ import createBox from "../Items/PlotTwistBox";
 export const initializeStage4Objects = (
   engine,
   refs,
+  isSimStarted,
   isTutorialImage2End,
   setResultState,
   playSound
 ) => {
-  const { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } =
-    refs;
+  const {
+    render,
+    canvasSize,
+    mouseRef,
+    bombRef,
+    leftArmLeftRef,
+    rightArmRightRef,
+  } = refs;
 
   const walls = [
     Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, {
@@ -145,12 +152,18 @@ export const initializeStage4Objects = (
       },
     });
     // 쥐가 낙사 시 죽는 이벤트를 걸기 위한 바닥 생성
-    const fallFloor = Bodies.rectangle(canvasSize.x / 2, canvasSize.y + 50, canvasSize.x, 1, {
-      isStatic: true,
-      render: {
-        fillStyle: "red",
-      },
-    });
+    const fallFloor = Bodies.rectangle(
+      canvasSize.x / 2,
+      canvasSize.y + 50,
+      canvasSize.x,
+      1,
+      {
+        isStatic: true,
+        render: {
+          fillStyle: "red",
+        },
+      }
+    );
     // bombGround
     const bombGround = Bodies.rectangle(1090, canvasSize.y - 500, 100, 25, {
       isStatic: true,

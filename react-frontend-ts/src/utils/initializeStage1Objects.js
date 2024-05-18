@@ -14,6 +14,7 @@ import createBox from "../Items/PlotTwistBox";
 export const initializeStage1Objects = (
   engine,
   refs,
+  isSimStarted,
   isTutorialImage2End,
   setResultState,
   playSound
@@ -427,6 +428,10 @@ export const initializeStage1Objects = (
           } else {
             mouseImages = mouseImagesDead;
           }
+          // if (!isSimStarted) {
+          //   mouseImages =
+          //     body.velocity.x >= 0 ? mouseImagesRight : mouseImagesLeft;
+          // }
 
           img.src = mouseImages[currentImageIndex];
 
@@ -629,6 +634,8 @@ export const initializeStage1Objects = (
           (bodyA === fire && bodyB === mouseRef.current)
         ) {
           playSound("/sound/Burn.wav");
+          mouseIsDead = true; // 쥐의 상태를 죽음으로 설정
+          currentImageIndex = 0; // 죽은 쥐 이미지 배열의 시작으로 인덱스 초기화
           setResultState(2);
         }
         // mouse과 cat이 충돌했을 때

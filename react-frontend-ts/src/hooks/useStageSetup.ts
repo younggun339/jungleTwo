@@ -20,20 +20,17 @@ const useStage1Setup = (
   isSimStarted: boolean,
   isTutorialImage2End: boolean,
   setResultState: (value: number) => void
-) => {
+  ) => {
   const engineRef = useRef<Engine>(Engine.create());
-
+  
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
-
+  
   const renderRef = useRef<Render | null>(null);
-  const [backgroundImage, setBackgroundImage] =
-    useState<HTMLImageElement | null>(null); // Empty dependency array ensures this effect runs only once
-  // const container = document.getElementById('matter-container');
-  // if(!container) return;
   const playSound = useSoundEffects();
+  
   useEffect(() => {
     const engine = engineRef.current;
 
@@ -63,27 +60,12 @@ const useStage1Setup = (
         leftArmLeftRef,
         rightArmRightRef,
       },
+      isSimStarted,
       isTutorialImage2End,
       setResultState,
       playSound
     );
-    // // Event to draw the background before each render
-    // Events.on(render, "beforeRender", () => {
-    //   console.log("Before render.");
-    //   const ctx = render.canvas.getContext("2d");
-    //   if (ctx && backgroundImage) {
-    //     console.log("Drawing the background.");
-    //     console.log(ctx);
-    //     ctx.globalCompositeOperation = "destination-over";
-    //     ctx.drawImage(backgroundImage, 0, 0, canvasSize.x, canvasSize.y);
-    //   } else {
-    //     console.log("Context or backgroundImage is not available.");
-    //   }
-    // });
 
-    // Events.on(render, "afterRender", () => {
-    //   console.log("After render.");
-    // });
     Render.run(render);
 
     return () => {
@@ -91,9 +73,6 @@ const useStage1Setup = (
       World.clear(engine.world, false);
       Engine.clear(engine);
       render.canvas.remove();
-
-      // // Cancel the animation frame request
-      // stopBackgroundAnimation?.();
     };
   }, [isTutorialImage2End]);
 
@@ -123,10 +102,11 @@ const useStage2Setup = (
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
+
+  const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
 
   useEffect(() => {
-    console.log("stage2 setup useEffect called");
     const engine = engineRef.current;
 
     const render = Render.create({
@@ -136,10 +116,10 @@ const useStage2Setup = (
         width: canvasSize.x,
         height: canvasSize.y,
         wireframes: false,
-        background: "transparent",
+        background: "transparent", // Set canvas background to transparent
       },
     });
-
+    renderRef.current = render;
     if (!engine.world) {
       console.error("World not initialized");
       return;
@@ -147,7 +127,15 @@ const useStage2Setup = (
 
     initializeStage2Objects(
       engine,
-      { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      {
+        render,
+        canvasSize,
+        mouseRef,
+        bombRef,
+        leftArmLeftRef,
+        rightArmRightRef,
+      },
+      isSimStarted,
       isTutorialImage2End,
       setResultState,
       playSound
@@ -161,7 +149,7 @@ const useStage2Setup = (
       Engine.clear(engine);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End, isSimStarted]);
+  }, [isTutorialImage2End]);
 
   useSimulation({
     isSimStarted,
@@ -174,7 +162,6 @@ const useStage2Setup = (
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
 };
-
 // ================================================ STAGE 3 ====================================================
 const useStage3Setup = (
   canvasSize: CanvasSize,
@@ -184,16 +171,16 @@ const useStage3Setup = (
   setResultState: (value: number) => void
 ) => {
   const engineRef = useRef<Engine>(Engine.create());
-  const runner = Runner.create();
 
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
+
+  const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
 
   useEffect(() => {
-    console.log("stage3 setup useEffect called");
     const engine = engineRef.current;
 
     const render = Render.create({
@@ -203,10 +190,10 @@ const useStage3Setup = (
         width: canvasSize.x,
         height: canvasSize.y,
         wireframes: false,
-        background: "transparent",
+        background: "transparent", // Set canvas background to transparent
       },
     });
-
+    renderRef.current = render;
     if (!engine.world) {
       console.error("World not initialized");
       return;
@@ -214,23 +201,29 @@ const useStage3Setup = (
 
     initializeStage3Objects(
       engine,
-      { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      {
+        render,
+        canvasSize,
+        mouseRef,
+        bombRef,
+        leftArmLeftRef,
+        rightArmRightRef,
+      },
+      isSimStarted,
       isTutorialImage2End,
       setResultState,
       playSound
     );
 
     Render.run(render);
-    Runner.run(runner, engine);
 
     return () => {
       Render.stop(render);
       World.clear(engine.world, false);
       Engine.clear(engine);
-      Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End, isSimStarted]);
+  }, [isTutorialImage2End]);
 
   useSimulation({
     isSimStarted,
@@ -253,16 +246,16 @@ const useStage4Setup = (
   setResultState: (value: number) => void
 ) => {
   const engineRef = useRef<Engine>(Engine.create());
-  const runner = Runner.create();
 
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
+
+  const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
 
   useEffect(() => {
-    console.log("stage4 setup useEffect called");
     const engine = engineRef.current;
 
     const render = Render.create({
@@ -272,10 +265,10 @@ const useStage4Setup = (
         width: canvasSize.x,
         height: canvasSize.y,
         wireframes: false,
-        background: "transparent",
+        background: "transparent", // Set canvas background to transparent
       },
     });
-
+    renderRef.current = render;
     if (!engine.world) {
       console.error("World not initialized");
       return;
@@ -283,23 +276,29 @@ const useStage4Setup = (
 
     initializeStage4Objects(
       engine,
-      { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      {
+        render,
+        canvasSize,
+        mouseRef,
+        bombRef,
+        leftArmLeftRef,
+        rightArmRightRef,
+      },
+      isSimStarted,
       isTutorialImage2End,
       setResultState,
       playSound
     );
 
     Render.run(render);
-    Runner.run(runner, engine);
 
     return () => {
       Render.stop(render);
       World.clear(engine.world, false);
       Engine.clear(engine);
-      Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End, isSimStarted]);
+  }, [isTutorialImage2End]);
 
   useSimulation({
     isSimStarted,
@@ -322,16 +321,16 @@ const useStage5Setup = (
   setResultState: (value: number) => void
 ) => {
   const engineRef = useRef<Engine>(Engine.create());
-  const runner = Runner.create();
 
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
+
+  const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
 
   useEffect(() => {
-    console.log("stage5 setup useEffect called");
     const engine = engineRef.current;
 
     const render = Render.create({
@@ -341,34 +340,40 @@ const useStage5Setup = (
         width: canvasSize.x,
         height: canvasSize.y,
         wireframes: false,
-        background: "transparent",
+        background: "transparent", // Set canvas background to transparent
       },
     });
-
+    renderRef.current = render;
     if (!engine.world) {
       console.error("World not initialized");
       return;
     }
 
-    initializeStage5Objects(
+    initializeStage3Objects(
       engine,
-      { canvasSize, mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      {
+        render,
+        canvasSize,
+        mouseRef,
+        bombRef,
+        leftArmLeftRef,
+        rightArmRightRef,
+      },
+      isSimStarted,
       isTutorialImage2End,
       setResultState,
       playSound
     );
 
     Render.run(render);
-    Runner.run(runner, engine);
 
     return () => {
       Render.stop(render);
       World.clear(engine.world, false);
       Engine.clear(engine);
-      Runner.stop(runner);
       render.canvas.remove();
     };
-  }, [isTutorialImage2End, isSimStarted]);
+  }, [isTutorialImage2End]);
 
   useSimulation({
     isSimStarted,

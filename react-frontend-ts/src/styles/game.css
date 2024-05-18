@@ -447,7 +447,7 @@ textarea {
   font-fmily: "myFont";
   font-size: 16px;
   font-weight: bold;
-  color: #dddddd; /* 적당한 색상으로 조정 */
+  color: #4a434a; /* 적당한 색상으로 조정 */
 }
 
 @keyframes zoomInBounce {

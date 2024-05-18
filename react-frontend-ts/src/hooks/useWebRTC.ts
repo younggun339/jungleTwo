@@ -1,3 +1,4 @@
+// react-frontend-ts/src/hooks/useWebRTC.ts
 import { useEffect, useRef, useState, MutableRefObject } from "react";
 import { Body } from "matter-js";
 import { Socket } from "socket.io-client";
@@ -51,26 +52,26 @@ const useWebRTC = (
 
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({ video: false, audio: true })
       .then((stream) => {
         if (userVideo.current) {
           userVideo.current.srcObject = stream;
         }
 
         if (nestjsSocketRef.current && nestjsSocketRef.current.id) {
-          nestjsSocketRef.current.on("delete", async (data: string) => {
-            try {
-              await retryFetch("https://zzrot.store/room/delete", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ room_id: data }),
-              });
-            } catch (error) {
-              console.error("Fetch failed after retries", error);
-            }
-          });
+          // nestjsSocketRef.current.on("delete", async (data: string) => {
+          //   try {
+          //     await retryFetch("https://zzrot.store/room/delete", {
+          //       method: "POST",
+          //       headers: {
+          //         "Content-Type": "application/json",
+          //       },
+          //       body: JSON.stringify({ room_id: data }),
+          //     });
+          //   } catch (error) {
+          //     console.error("Fetch failed after retries", error);
+          //   }
+          // });
 
           nestjsSocketRef.current.emit("join-room", roomName);
 
@@ -130,13 +131,13 @@ const useWebRTC = (
             }
           );
 
-          nestjsSocketRef.current.on("user-left", (id: string) => {
-            const peerObj = peersRef.current.find((p) => p.peerID === id);
-            if (peerObj) peerObj.peer.destroy();
-            const peers = peersRef.current.filter((p) => p.peerID !== id);
-            peersRef.current = peers;
-            setPeers(peers);
-          });
+          // nestjsSocketRef.current.on("user-left", (id: string) => {
+          //   const peerObj = peersRef.current.find((p) => p.peerID === id);
+          //   if (peerObj) peerObj.peer.destroy();
+          //   const peers = peersRef.current.filter((p) => p.peerID !== id);
+          //   peersRef.current = peers;
+          //   setPeers(peers);
+          // });
         }
       });
   }, [roomName]);

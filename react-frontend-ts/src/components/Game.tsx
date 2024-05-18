@@ -85,6 +85,11 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
   const stretchAudioRef = useRef<HTMLAudioElement | null>(null);
   const releaseAudioRef = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    // 오디오 파일 로드
+    stretchAudioRef.current = new Audio('/sound/band_stretch.wav');
+    releaseAudioRef.current = new Audio('/sound/band_release.wav');
+  }, []);
 
   const handleMouseDown = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
@@ -95,9 +100,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     const mouseY = event.clientY - rect.top;
     setIsMouseDown(true);
     setIsMouseUP(false);
-    // if (isTutorialImage2End && !isSimStarted) {
-    //   playSound("/sound/band_stretch.wav");
-    // }
+    if (stretchAudioRef.current && isTutorialImage2End && !isSimStarted) {
+      stretchAudioRef.current.play();
+    }
 
     setMousePos({ x: mouseX, y: mouseY });
   };
@@ -118,9 +123,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const handleMouseUp = () => {
     setIsMouseDown(false);
     setIsMouseUP(true);
-    // if (isTutorialImage2End && !isSimStarted) {
-    //   playSound("/sound/band_release.wav");
-    // }
+    if (releaseAudioRef.current && isTutorialImage2End && !isSimStarted) {
+      releaseAudioRef.current.play();
+    }
   };
   //--------------get coordinates----------------
 
@@ -280,6 +285,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         accepted: true,
       });
     }
+    clearStageObjects[currentStage - 1](
+      canvasSize,
+      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      setIsSimStarted,
+      setShowModal,
+      setResultState,
+      setCountdown
+    );
   };
 
   const handleRejectRetry = () => {
