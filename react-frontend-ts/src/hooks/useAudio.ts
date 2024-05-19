@@ -45,6 +45,13 @@ const useAudio = ({ initialSrc }: UseAudioProps) => {
     }
   }, []);
 
+  // 볼륨 조절
+  const setVolume = useCallback((volume: number) => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, []);
+
   // 컴포넌트 마운트 시 오디오 자동 재생 시도
   useEffect(() => {
     audioRef.current = new Audio(initialSrc);
@@ -82,7 +89,7 @@ const useAudio = ({ initialSrc }: UseAudioProps) => {
     };
   }, [play]);
 
-  return { play, pause, changeSource, setLoop };
+  return { play, pause, changeSource, setLoop, setVolume };
 };
 
 export default useAudio;

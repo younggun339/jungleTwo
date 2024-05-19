@@ -10,7 +10,7 @@ import { Body, Bodies } from 'matter-js';
 export function updateSkeleton(skeletonRef, jointStart, jointEnd) {
 
   // width 최대 길이 제한 100
-  const width = Math.min(Math.sqrt(Math.pow((jointStart.x - jointEnd.x), 2) + Math.pow((jointStart.y - jointEnd.y), 2)), 200);
+  const width = Math.min(Math.sqrt(Math.pow((jointStart.x - jointEnd.x), 2) + Math.pow((jointStart.y - jointEnd.y), 2)), 300);
   const angle = Math.atan2(jointEnd.y - jointStart.y, jointEnd.x - jointStart.x);
 
   // Adjust the X coordinate for right-to-left mirroring

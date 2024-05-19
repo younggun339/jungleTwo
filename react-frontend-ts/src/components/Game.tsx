@@ -16,6 +16,7 @@ import {
   useStage4Start,
   useStage5Start,
 } from "../hooks/useStageStart";
+import useAudio from "../hooks/useAudio";
 import {
   resetStage1Objects,
   resetStage2Objects,
@@ -32,9 +33,7 @@ import {
 } from "../utils/clearStageObjects";
 import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
 import { updateSkeleton } from "../utils/updateSkeleton";
-import Video from "./Video";
 import "../styles/game.css";
-import useAudio from "../hooks/useAudio";
 
 interface GameProps {
   userName: string;
@@ -85,9 +84,13 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [mouseEndPos, setMouseEndPos] = useState({ x: 0, y: 0 });
   
   //--------------play sound---------------
-  const { play, pause, changeSource, setLoop } = useAudio({
+  const { play, pause, changeSource, setLoop, setVolume } = useAudio({
     initialSrc: "/music/stage_BGM_squeakSystem.mp3",
   });
+
+  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setVolume(Number(event.target.value));
+  };
   
   useEffect(() => {
     setLoop(true);
@@ -330,6 +333,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       setResultState,
       setCountdown
     );
+    play();
   };
 
   const handleRejectRetry = () => {
@@ -364,6 +368,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             setResultState,
             setCountdown
           );
+          play();
         }
       });
     }
@@ -509,12 +514,23 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             <button onClick={readyGame} id="ready-button">
               READY
             </button>
-          )}
+        )}
 
         {isMenuOpen && (
           <div className="menu-popup">
             <button onClick={handleRetry}>RE-TRY</button>
             <button onClick={() => setIsMenuOpen(false)}>닫기</button>
+            <label>
+              Volume:
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                defaultValue="0.3"
+                onChange={handleVolumeChange}
+              />
+            </label>
           </div>
         )}
 

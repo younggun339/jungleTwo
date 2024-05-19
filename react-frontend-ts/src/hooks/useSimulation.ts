@@ -85,8 +85,6 @@ const useSimulation = ({
         Body.setVelocity(mouse, parallelComponent);
       }
     };
-    
-    
 
     if (
       isSimStarted &&
