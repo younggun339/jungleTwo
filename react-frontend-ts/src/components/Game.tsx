@@ -458,19 +458,37 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             </div>
           </div>
         )}
+
         <div id="matter-container" ref={sceneRef}>
-          <div className="overlay-left"></div>
-          <div className="overlay-right"></div>
-
-          {peers.slice(indexRef.current).map((peer, index) => (
-            isTutorialImage2End && !isSimStarted &&  <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}></div>
-          ))}
-
-          {isTutorialImage2End && !isSimStarted && <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"}></div>}
-
-          {peers.slice(indexRef.current).map((peer, index) => (
-            isTutorialImage2End && !isSimStarted && <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}></div>
-          ))}
+          
+        {peers.slice(indexRef.current).map((peer, index) => (
+          isTutorialImage2End && !isSimStarted &&  (
+            <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}>
+              <div className="corner tl"></div>
+              <div className="corner tr"></div>
+              <div className="corner bl"></div>
+              <div className="corner br"></div>
+            </div>
+          )
+        ))}
+        {isTutorialImage2End && !isSimStarted && (
+          <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"}>
+            <div className="corner tl"></div>
+            <div className="corner tr"></div>
+            <div className="corner bl"></div>
+            <div className="corner br"></div>
+          </div>
+        )}
+        {peers.slice(indexRef.current).map((peer, index) => (
+          isTutorialImage2End && !isSimStarted && (
+            <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}>
+              <div className="corner tl"></div>
+              <div className="corner tr"></div>
+              <div className="corner bl"></div>
+              <div className="corner br"></div>
+            </div>
+          )
+        ))}
 
           {peers.slice(0, indexRef.current).map((peer, index) => (
             <Video

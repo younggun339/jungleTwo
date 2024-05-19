@@ -32,7 +32,7 @@ const ChangeName = ({isOpen, closeModal}) => {
         <button onClick={handleConfirm}>확인</button>
       </p>
       <p>{message}</p>
-      {<button onClick={closeModal}>닫기</button>}
+      {/* {<button onClick={closeModal}>닫기</button>} */}
     </Modal>
   );
 };

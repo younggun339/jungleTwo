@@ -32,7 +32,7 @@ export const initializeStage1Objects = (
   mouseRef.current = Bodies.circle(220, canvasSize.y - 480, 20, {
     restitution: 0, // 반발 계수
     friction: 0.8, // 마찰 계수
-    frictionAir: Number.MIN_VALUE,
+    // frictionAir: Number.MIN_VALUE,
     render: {
       fillStyle: "transparent",
       strokeStyle: "transparent",
@@ -964,76 +964,74 @@ export const initializeStage1Objects = (
       //------------사라지는 바닥------------
 
       //---------rightArm---------
-      // if (onSlopeRight) {
-      //   // 경사면에서 공이 움직이는 로직
-      //   const angle = rightArmRightRef.current.angle;
-      //   //console.log("angle:", angle);
-      //   if (angle === Math.PI) {
-      //     Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
-      //   } else {
-      //     let modifiedAngle = angle;
-      //     // 공이 오른쪽에서 왼쪽으로 가는 경우
-      //     if (mouseRef.current.velocity.x < 0) {
-      //       if (mouseRef.current.angle > 0) {
-      //         modifiedAngle *= -3;
-      //       } else {
-      //         modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
-      //       }
-      //     } else {
-      //       if (mouseRef.current.angle > 0) {
-      //         modifiedAngle *= -3;
-      //       } else {
-      //         modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
-      //       }
-      //     }
-      //     // 경사면의 법선 벡터 계산
-      //     const normalVector = {
-      //       x: Math.sin(modifiedAngle),
-      //       y: Math.cos(angle) * 0,
-      //     };
-      //     // 경사면 방향으로 속도 설정
-      //     const parallelComponent = Vector.mult(normalVector, originalSpeedX);
-      //     Body.setVelocity(mouseRef.current, parallelComponent);
-      //   }
-      // }
-      //---------rightArm---------
+      if (onSlopeRight) {
+        // 경사면에서 공이 움직이는 로직
+        const angle = rightArm.angle;
+        //console.log("angle:", angle);
+        if (angle === Math.PI) {
+            Body.setVelocity(mouse, mouse.velocity);
+        } else {
+            let modifiedAngle = angle;
+            // 공이 오른쪽에서 왼쪽으로 가는 경우
+            if (mouse.velocity.x < 0) {
+                if (angle > 0) {
+                    modifiedAngle *= -3;
+                } else {
+                    modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
+                }
 
-      //----------leftArm---------
-      // if (onSlope) {
+            } else {
+                if (angle > 0) {
+                    modifiedAngle *= 3;
+                } else {
+                    modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
+                }
+            }
+            // 경사면의 법선 벡터 계산
+            const normalVector = { x: Math.sin(modifiedAngle), y: Math.cos(angle) * 0 };
+            // 경사면 방향으로 속도 설정
+            const parallelComponent = Vector.mult(normalVector, originalSpeedX);
+            Body.setVelocity(mouse, parallelComponent);
+        }
 
-      //   // 경사면에서 공이 움직이는 로직
-      //   const angle = leftArmLeftRef.current.angle;
-      //   //console.log("leftArm angle: ", angle, "mouseRef.current velocity.x:", mouseRef.current.velocity.x)
-      //   if (angle === Math.PI) {
-      //     Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
-      //   } else {
-      //     let modifiedAngle = angle;
-      //     // 공이 오른쪽에서 왼쪽으로 가는 경우
-      //     if (mouseRef.current.velocity.x < 0) {
-      //       if (mouseRef.current.angle > 0) {
-      //         modifiedAngle *= 3;
-      //       } else {
-      //         modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
-      //       }
-      //     } else {
-      //       if (mouseRef.current.angle > 0) {
-      //         modifiedAngle *= -3;
-      //       } else {
-      //         modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
-      //       }
-      //     }
-      //     // 경사면의 법선 벡터 계산
-      //     const normalVector = {
-      //       x: Math.sin(modifiedAngle),
-      //       y: Math.cos(angle) * 0,
-      //     };
-      //     // 경사면 방향으로 속도 설정
-      //     const parallelComponent = Vector.mult(normalVector, originalSpeedX);
-      //     Body.setVelocity(mouseRef.current, parallelComponent);
-      //     //mouseRef.current.collisionFilter({category: 0x0004, mask:0xFFFFFFFF})
-      //   }
-      // }
-      //----------leftArm---------
+    }
+    //---------rightArm---------
+
+
+    //----------leftArm---------
+    if (onSlope) {
+      console.log("mosue on leftArm");
+        // 경사면에서 공이 움직이는 로직
+        const angle = leftArm.angle;
+        console.log("leftArm angle: ", angle, "mouse velocity.x:", mouse.velocity.x)
+        if (angle === Math.PI) {
+            Body.setVelocity(mouse, mouse.velocity);
+        } else {
+            let modifiedAngle = angle;
+            // 공이 오른쪽에서 왼쪽으로 가는 경우
+            if (mouse.velocity.x < 0) {
+                if (angle > 0) {
+                    modifiedAngle *= -3;
+                } else {
+                    modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
+                }
+
+            } else {
+                if (angle > 0) {
+                    modifiedAngle *= 3;
+                } else {
+                    modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
+                }
+            }
+            // 경사면의 법선 벡터 계산
+            const normalVector = { x: Math.sin(modifiedAngle), y: Math.cos(angle) * 0 };
+            // 경사면 방향으로 속도 설정
+            const parallelComponent = Vector.mult(normalVector, originalSpeedX);
+            Body.setVelocity(mouse, parallelComponent);
+        }
+
+    }
+    //----------leftArm---------
       //----------panel---------
       if (onPanel) {
         // 경사면에서 공이 움직이는 로직

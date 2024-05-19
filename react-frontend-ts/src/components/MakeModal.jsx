@@ -63,7 +63,7 @@ const RoomModal = ({ room }) => {
           <button onClick={handleConfirm}>확인</button>
         </p>
         <p>{message}</p>
-        {result && <button onClick={closeModal}>닫기</button>}
+        {/* {result && <button onClick={closeModal}>닫기</button>} */}
       </Modal>
     </div>
   );

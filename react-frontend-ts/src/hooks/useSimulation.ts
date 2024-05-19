@@ -67,16 +67,32 @@ const useSimulation = ({
     //   }
     // };
     const updateVelocity = (mouse: Body, angle: number): void => {
-      if (angle === 0) {
+      // normalVectoy 선언
+      let normalVector = { x: 0, y: 0 };
+      if (angle === Math.PI) {
         // Keep current velocity if angle is flat
         Body.setVelocity(mouse, mouse.velocity);
       } else {
-        // Calculate the desired velocity direction based on the angle
-        const normalVector = {
-          x: Math.cos(angle), // Assuming the angle is in radians
-          y: Math.sin(angle)  // This will provide a downward component for descending
-        };
+        let modifiedAngle = angle;
+        // 공이 오른쪽에서 왼쪽으로 가는 경우
+        if (mouse.velocity.x < 0) {
+            if (angle > 0) {
+                modifiedAngle *= -3;
+            } else {
+                modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
+            }
+        } else {
+            if (angle > 0) {
+                modifiedAngle *= 3;
+            } else {
+                modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
+            }
+        }
         
+        normalVector = {
+          x: Math.sin(modifiedAngle), // Assuming the angle is in radians
+          y: 0  // This will provide a downward component for descending
+        };
         // Adjust speed based on angle
         const speed = 0.9; // Example speed multiplier, can be adjusted
         const parallelComponent = Vector.mult(normalVector, speed);
@@ -94,7 +110,6 @@ const useSimulation = ({
       bombRef.current &&
       engineRef.current
     ) {
-      console.log("시뮬레이션 시작");
       // leftArmLeftRef.current 및 rightArmRightRef.current의 width 정의
       const leftArmWidth = Math.sqrt(
         Math.pow(
@@ -173,8 +188,8 @@ const useSimulation = ({
         { x: 0, y: 0 },
       ]);
 
-      engineRef.current!.world.gravity.y = 0.15;
-      engineRef.current!.world.gravity.x = 0.04;
+      engineRef.current!.world.gravity.y = 0.075;
+      engineRef.current!.world.gravity.x = 0.02;
       Runner.run(runner, engineRef.current);
       Engine.run(engineRef.current);
       // engineRef.current!.world.gravity.x = 0.04;
@@ -186,7 +201,6 @@ const useSimulation = ({
 
     let onSlope = false;
     let onSlopeRight = false;
-    const originalSpeedX = 0.9;
 
     const liftSlopeStart = (event: IEventCollision<Matter.Engine>) => {
       event.pairs.forEach((pair) => {
@@ -195,6 +209,7 @@ const useSimulation = ({
           (bodyA === mouseRef?.current && bodyB === leftArmTerrain) ||
           (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
         ) {
+          console.log("왼쪽 쥐 속도: ", mouseRef.current.velocity);
           onSlope = true;
         }
 
@@ -202,6 +217,7 @@ const useSimulation = ({
           (bodyA === mouseRef?.current && bodyB === rightArmTerrain) ||
           (bodyA === rightArmTerrain && bodyB === mouseRef?.current)
         ) {
+          console.log("오른쪽 쥐 속도: ", mouseRef.current.velocity);
           onSlopeRight = true;
         }
       });

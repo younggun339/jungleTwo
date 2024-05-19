@@ -3,6 +3,9 @@ import "../styles/room.css";
 import RoomModal from "./MakeModal";
 import ChangeName from "./ChangeName";
 import MainImage from "./ImageChange";
+import useAudio from "../hooks/useAudio";
+import useSoundEffects from "../hooks/useSoundEffects";
+
 
 const CreateRoom = ({ userName }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -11,7 +14,11 @@ const CreateRoom = ({ userName }) => {
   const images = ["/images/image1.gif", "/images/image.gif"];
   const [currentImage, setCurrentImage] = useState(images[0]);
   const isLoggedIn = userName !== null;
-
+  const { play, changeSource, setLoop } = useAudio({
+    initialSrc: "/music/lobby_BGM.mp3",
+  });
+  setLoop(true);
+  
   const handleCreateRoom = (event) => {
     event.preventDefault(); // 기본 제출 행동 방지
 

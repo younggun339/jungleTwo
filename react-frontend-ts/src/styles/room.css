@@ -12,6 +12,7 @@
     opacity: 1; /* Fully opaque at the middle */
   }
 }
+
 .animated-background {
   position: absolute;
   top: 0;
@@ -39,11 +40,26 @@ body {
 }
 
 .mainImg {
-  display: none;
-  width: 1rem;
   border-radius: 20px;
-  border: 10px pink solid;
+  border: 2px #e38e44 solid;
   margin-top: 1rem;
+}
+
+.mainImg > img {
+  border-radius: 20px;
+  width: 300px;
+}
+
+.imageModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.imageModal > img {
+  height: 600px;
+  border-radius: 20px;
 }
 
 .totalContain {
@@ -422,6 +438,7 @@ input[type="checkbox"] {
 }
 
 .createButton {
+  background-color: #603613;
   display: flex;
   align-items: center;
   justify-content: center;

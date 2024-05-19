@@ -118,7 +118,7 @@ export const useStage3Start = (
     countdown,
     3, // firstImageTime
     3, // secondImageTime
-    30, // chatTime
+    10, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,
@@ -161,7 +161,7 @@ export const useStage4Start = (
     countdown,
     3, // firstImageTime
     3, // secondImageTime
-    30, // chatTime
+    10, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,

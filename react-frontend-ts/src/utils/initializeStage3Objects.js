@@ -29,18 +29,6 @@ export const initializeStage3Objects = (
   } = refs;
 
   const walls = [
-    Bodies.rectangle(canvasSize.x / 2, 0, canvasSize.x, 50, {
-      isStatic: true,
-      render: {
-        sprite: { texture: "/sprite/Wall.png", yScale: 0.85, xScale: 0.1 },
-      },
-    }),
-    Bodies.rectangle(canvasSize.x / 2, canvasSize.y, canvasSize.x, 50, {
-      isStatic: true,
-      render: {
-        sprite: { texture: "/sprite/Wall.png", yScale: 0.85, xScale: 0.1 },
-      },
-    }),
     Bodies.rectangle(0, canvasSize.y / 2, 50, canvasSize.y, {
       isStatic: true,
       render: {

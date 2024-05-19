@@ -6,7 +6,6 @@ import { initializeStage2Objects } from "../utils/initializeStage2Objects";
 import { initializeStage3Objects } from "../utils/initializeStage3Objects";
 import { initializeStage4Objects } from "../utils/initializeStage4Objects";
 import { initializeStage5Objects } from "../utils/initializeStage5Objects";
-import { initializeStageObjects } from "../utils/initializeStageObjects";
 import useSoundEffects from "./useSoundEffects";
 interface CanvasSize {
   x: number;
@@ -84,6 +83,10 @@ const useStage1Setup = (
     bombRef,
     engineRef,
   });
+
+  useEffect(() => {
+    console.log("시뮬 중력 쥐 속도@@@@@@@@: ", engineRef.current!.world.gravity, mouseRef.current!.velocity);
+  }, [isTutorialImage2End, isSimStarted]);
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
 };
@@ -349,7 +352,7 @@ const useStage5Setup = (
       return;
     }
 
-    initializeStage3Objects(
+    initializeStage5Objects(
       engine,
       {
         render,
