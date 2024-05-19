@@ -383,17 +383,17 @@ export const initializeStage2Objects = (
 
     //------------------------------region 쥐---------------------------------
     // 쥐 생성
-    mouseRef.current = Bodies.circle(220, canvasSize.y - 480, 20, {
+    mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
       restitution: 0, // 반발 계수
       friction: 0.8, // 마찰 계수
       frictionAir: Number.MIN_VALUE,
-      isStatic: true,
       render: {
-        fillStyle: "blue",
+        fillStyle: "transparent",
+        strokeStyle: "transparent",
       },
       collisionFilter: {
-        category: 0x0004, // category 4
-        mask: 0xffff, // 모든 category와 충돌
+        category: 0x0004, // 충돌 그룹 설정
+        mask: 0xffff, // 다른 모든 그룹과 충돌하도록 설정
       },
     });
 

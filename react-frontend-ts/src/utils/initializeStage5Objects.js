@@ -432,14 +432,14 @@ export const initializeStage5Objects = (
     mouseRef.current = Bodies.circle(100, canvasSize.y - 530, 20, {
       restitution: 0, // 반발 계수
       friction: 0.8, // 마찰 계수
+      frictionAir: Number.MIN_VALUE,
       render: {
-        sprite: {
-          texture: "/assets/MouseWalk_0.png",
-        },
+        fillStyle: "transparent",
+        strokeStyle: "transparent",
       },
       collisionFilter: {
-        category: 0x0004, // category 4
-        mask: 0xffff, // 모든 category와 충돌
+        category: 0x0004, // 충돌 그룹 설정
+        mask: 0xffff, // 다른 모든 그룹과 충돌하도록 설정
       },
     });
     //----------------------------end region 쥐-------------------------------
@@ -455,22 +455,22 @@ export const initializeStage5Objects = (
     //     angle: Math.PI,
     //     render: {sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:1.1} }
     // })
-    // leftArmLeftRef.current = Bodies.rectangle(
-    //   canvasSize.x / 4,
-    //   canvasSize.y / 2,
-    //   0,
-    //   15,
-    //   {
-    //     isStatic: true,
-    //     angle: 0,
-    //     collisionFilter: { mask: 0 },
-    //     render: {
-    //       fillStyle: "blue",
-    //       strokeStyle: "black",
-    //       lineWidth: 1,
-    //     },
-    //   }
-    // );
+    leftArmLeftRef.current = Bodies.rectangle(
+      canvasSize.x / 4,
+      canvasSize.y / 2,
+      0,
+      15,
+      {
+        isStatic: true,
+        angle: 0,
+        collisionFilter: { mask: 0 },
+        render: {
+          fillStyle: "#b67361",
+          strokeStyle: "black",
+          lineWidth: 1,
+        },
+      }
+    );
 
     //----------------내가만든기물------------------
 
@@ -482,22 +482,22 @@ export const initializeStage5Objects = (
     //     angle: -Math.PI / 5, // 45도를 라디안으로 변환
     //     render: { sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:0.7} }
     // })
-    // rightArmRightRef.current = Bodies.rectangle(
-    //   (canvasSize.x * 3) / 4,
-    //   canvasSize.y / 2,
-    //   0,
-    //   15,
-    //   {
-    //     isStatic: true,
-    //     angle: 0,
-    //     collisionFilter: { mask: 0 },
-    //     render: {
-    //       fillStyle: "blue",
-    //       strokeStyle: "black",
-    //       lineWidth: 1,
-    //     },
-    //   }
-    // );
+    rightArmRightRef.current = Bodies.rectangle(
+      (canvasSize.x * 3) / 4,
+      canvasSize.y / 2,
+      0,
+      15,
+      {
+        isStatic: true,
+        angle: 0,
+        collisionFilter: { mask: 0 },
+        render: {
+          fillStyle: "#b67361",
+          strokeStyle: "black",
+          lineWidth: 1,
+        },
+      }
+    );
     //---------------피어가만든기물-----------------
 
     // // 이미지를 순환시키기 위한 로직

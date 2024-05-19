@@ -73,10 +73,10 @@ export const useStage2Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    1, // firstImageTime
-    1, // secondImageTime
-    1, // chatTime
-    1, // simTime
+    3, // firstImageTime
+    3, // secondImageTime
+    10, // chatTime
+    20, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -116,10 +116,10 @@ export const useStage3Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    1, // firstImageTime
-    1, // secondImageTime
-    1, // chatTime
-    1, // simTime
+    3, // firstImageTime
+    3, // secondImageTime
+    10, // chatTime
+    20, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -159,10 +159,10 @@ export const useStage4Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    1, // firstImageTime
-    1, // secondImageTime
-    1, // chatTime
-    1, // simTime
+    3, // firstImageTime
+    3, // secondImageTime
+    10, // chatTime
+    20, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,
@@ -202,10 +202,10 @@ export const useStage5Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    1, // firstImageTime
-    1, // secondImageTime
-    1, // chatTime
-    1, // simTime
+    3, // firstImageTime
+    3, // secondImageTime
+    10, // chatTime
+    20, // simTime
     resultState,
     setIsPlayerReady,
     setIsGameStarted,

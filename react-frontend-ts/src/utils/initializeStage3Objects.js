@@ -426,11 +426,12 @@ export const initializeStage3Objects = (
       friction: 0.8, // 마찰 계수
       frictionAir: Number.MIN_VALUE,
       render: {
-        fillStyle: "blue",
+        fillStyle: "transparent",
+        strokeStyle: "transparent",
       },
       collisionFilter: {
-        category: 0x0004, // category 4
-        mask: 0xffff, // 모든 category와 충돌
+        category: 0x0004, // 충돌 그룹 설정
+        mask: 0xffff, // 다른 모든 그룹과 충돌하도록 설정
       },
     });
 

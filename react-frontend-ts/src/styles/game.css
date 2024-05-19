@@ -66,42 +66,38 @@ body {
 }
 #matter-container {
   position: absolute;
-  top: 50%; /* 중앙 정렬 */
-  left: 50%; /* 중앙 정렬 */
-  transform: translate(-50%, -50%); /* 정확한 중앙 위치 */
-  width: 1600px; /* 너비 설정 */
-  height: 600px; /* 높이 설정 */
-  z-index: 2; /* Matter.js 캔버스를 상위에 */
-  display: flex; /* 자식 요소를 가로로 배치 */
-  justify-content: space-between; /* 공간을 고르게 분배 */
-  background-image: url("./bg3.png"); /* 이미지 경로 수정 */
-  background-size: cover; /* 이미지가 컨테이너를 꽉 채우도록 */
-  background-position: center; /* 이미지를 컨테이너 중앙에 위치 */
-  background-repeat: no-repeat; /* 이미지 반복 없음 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1600px;
+  height: 600px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  background-image: url("./bg3.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   background-color: black;
-}
-
-#video-container-1 {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  z-index: 5;
-  border-radius: 25px;
-  opacity: 0.3;
-  background-color: white;
-  mix-blend-mode: difference;
 }
 
 #video-container-2 {
   position: absolute;
+  width: 50%;
+  height: 100%;
+  z-index: 3;
+  background-color: black;
+  opacity: 0.3;
+}
+
+#video-container-1 {
+  position: absolute;
   right: 0;
   width: 50%;
   height: 100%;
-  z-index: 5;
-  border-radius: 25px;
+  z-index: 3;
+  background-color: black;
   opacity: 0.3;
-  background-color: white;
-  mix-blend-mode: difference;
 }
 
 canvas {

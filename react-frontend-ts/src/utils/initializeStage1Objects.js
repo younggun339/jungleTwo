@@ -29,7 +29,7 @@ export const initializeStage1Objects = (
   } = refs;
 
   // 쥐 생성
-  mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
+  mouseRef.current = Bodies.circle(220, canvasSize.y - 480, 20, {
     restitution: 0, // 반발 계수
     friction: 0.8, // 마찰 계수
     frictionAir: Number.MIN_VALUE,

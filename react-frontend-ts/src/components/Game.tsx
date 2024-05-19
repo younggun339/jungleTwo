@@ -453,23 +453,22 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           </div>
         )}
         <div id="matter-container" ref={sceneRef}>
-        {peers.slice(indexRef.current).map((peer, index) => (
-          <div id={ indexRef.current === 0 ? "video-container-1" : "video-container-2" }>
-          </div>
-        ))}
+          <div className="overlay-left"></div>
+          <div className="overlay-right"></div>
 
-        <div id={ indexRef.current === 0 ? "video-container-1" : "video-container-2" }>
-          가나다라
-        </div>
+          {peers.slice(indexRef.current).map((peer, index) => (
+            isTutorialImage2End && !isSimStarted &&  <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}></div>
+          ))}
 
-        {peers.slice(indexRef.current).map((peer, index) => (
-          <div id={ indexRef.current === 0 ? "video-container-1" : "video-container-2" }>
-          </div>
-        ))}
-        <canvas
+          {isTutorialImage2End && !isSimStarted && <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"}></div>}
+
+          {peers.slice(indexRef.current).map((peer, index) => (
+            isTutorialImage2End && !isSimStarted && <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}></div>
+          ))}
+
+          <canvas
             ref={canvasRef}
             className="canvas-transparent"
-            // handleMouseDown 및 setIsMouseDown 함수 추가
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -500,7 +499,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             <div id="countdown-bar">
               <div id="countdown-stripes"></div>
             </div>
-            <div id="loading-text">작전 타임...</div>
+            <div id="loading-text">드래그로 지형을 설치해주세요</div>
           </div>
         )}
 
