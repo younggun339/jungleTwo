@@ -81,15 +81,25 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [placeholder, setPlaceholder] = useState("");
   const textareaRef = useRef(null); // textarea 요소에 대한 참조 생성
 
-  //--------------get coordinates---------------
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [mouseEndPos, setMouseEndPos] = useState({ x: 0, y: 0 });
-
-  const { play, changeSource, setLoop } = useAudio({
+  
+  //--------------play sound---------------
+  const { play, pause, changeSource, setLoop } = useAudio({
     initialSrc: "/music/stage_BGM_squeakSystem.mp3",
   });
-  setLoop(true);
-
+  
+  useEffect(() => {
+    setLoop(true);
+    play();
+  }, [play, setLoop]);
+  
+  useEffect(() => {
+    if (resultState !== null && resultState !== 0) {
+      pause();
+    }
+  }, [resultState, pause]);
+  
   const stretchAudioRef = useRef<HTMLAudioElement | null>(null);
   const releaseAudioRef = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
@@ -97,7 +107,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     stretchAudioRef.current = new Audio('/sound/band_stretch.wav');
     releaseAudioRef.current = new Audio('/sound/band_release.wav');
   }, []);
-
+  //--------------play sound---------------
+  
+  //--------------get coordinates---------------
   const handleMouseDown = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
@@ -441,35 +453,20 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           </div>
         )}
         <div id="matter-container" ref={sceneRef}>
-          {peers.slice(0, indexRef.current).map((peer, index) => (
-          <Video
-            key={`${peer.peerID}-${index}`}
-            peer={peer.peer}
-            peers={peers}
-            myIndexRef={1}
-          />
+        {peers.slice(indexRef.current).map((peer, index) => (
+          <div id={ indexRef.current === 0 ? "video-container-1" : "video-container-2" }>
+          </div>
         ))}
 
-        <video
-          id={
-            indexRef.current === 0 ? "video-container-1" : "video-container-2"
-          }
-          muted
-          ref={userVideo}
-          autoPlay
-          playsInline
-          style={{ order: indexRef.current }}
-        />
+        <div id={ indexRef.current === 0 ? "video-container-1" : "video-container-2" }>
+          가나다라
+        </div>
 
         {peers.slice(indexRef.current).map((peer, index) => (
-          <Video
-            key={`${peer.peerID}-${index}`}
-            peer={peer.peer}
-            peers={peers}
-            myIndexRef={0}
-          />
+          <div id={ indexRef.current === 0 ? "video-container-1" : "video-container-2" }>
+          </div>
         ))}
-          <canvas
+        <canvas
             ref={canvasRef}
             className="canvas-transparent"
             // handleMouseDown 및 setIsMouseDown 함수 추가

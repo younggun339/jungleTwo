@@ -1,4 +1,4 @@
-import {
+import Matter, {
   Engine,
   World,
   Bodies,
@@ -6,6 +6,7 @@ import {
   Body,
   Vector,
   Composite,
+  Render,
 } from "matter-js";
 import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";

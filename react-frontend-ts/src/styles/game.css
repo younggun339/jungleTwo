@@ -78,16 +78,18 @@ body {
   background-size: cover; /* 이미지가 컨테이너를 꽉 채우도록 */
   background-position: center; /* 이미지를 컨테이너 중앙에 위치 */
   background-repeat: no-repeat; /* 이미지 반복 없음 */
+  background-color: black;
 }
 
 #video-container-1 {
   position: absolute;
   width: 50%;
   height: 100%;
-  z-index: 0;
+  z-index: 5;
+  border-radius: 25px;
   opacity: 0.3;
-  background-color: "white";
-  transform: scaleX(-1);
+  background-color: white;
+  mix-blend-mode: difference;
 }
 
 #video-container-2 {
@@ -95,10 +97,11 @@ body {
   right: 0;
   width: 50%;
   height: 100%;
-  z-index: 0;
+  z-index: 5;
+  border-radius: 25px;
   opacity: 0.3;
-  background-color: "white";
-  transform: scaleX(-1);
+  background-color: white;
+  mix-blend-mode: difference;
 }
 
 canvas {

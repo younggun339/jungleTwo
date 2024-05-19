@@ -1,13 +1,14 @@
 import Matter, {
+  Engine,
+  World,
   Bodies,
   Events,
   Body,
-  World,
-  Render,
-  Engine,
-  Composite,
   Vector,
+  Composite,
+  Render,
 } from "matter-js";
+import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
 export const initializeStage4Objects = (
   engine,

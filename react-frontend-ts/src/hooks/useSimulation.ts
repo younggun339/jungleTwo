@@ -46,54 +46,24 @@ const useSimulation = ({
     let leftArmTerrain = Bodies.rectangle(0, 0, 0, 0);
     let rightArmTerrain = Bodies.rectangle(0, 0, 0, 0);
     const runner = Runner.create();
+    // 여기에 updateVelocity 함수 정의
     const updateVelocity = (mouse: Body, angle: number): void => {
-      console.log(
-        `Called updateVelocity with angle: ${angle} radians (${
-          angle * (180 / Math.PI)
-        } degrees) and initial velocity: (${mouse.velocity.x}, ${
-          mouse.velocity.y
-        })`
-      );
-
       if (angle === Math.PI) {
         // Keep current velocity if angle is flat
         Body.setVelocity(mouse, mouse.velocity);
-        console.log(
-          `Flat surface detected, velocity unchanged: (${mouse.velocity.x}, ${mouse.velocity.y})`
-        );
       } else {
-        const modifiedAngle = angle * (mouse.velocity.x < 0 ? -1 : 1);
-        console.log(
-          `Modified angle based on velocity direction: ${modifiedAngle} radians (${
-            modifiedAngle * (180 / Math.PI)
-          } degrees)`
-        );
-
-        // Calculate normal vector based on the angle, enhanced for steep inclines
+        let modifiedAngle = angle;
+        if (mouse.velocity.x < 0) {
+          modifiedAngle *= mouse.angle > 0 ? -3 : 3;
+        } else {
+          modifiedAngle *= mouse.angle > 0 ? -3 : 3;
+        }
         const normalVector = {
-          x: Math.cos(modifiedAngle),
-          y: -Math.sin(modifiedAngle),
+          x: Math.sin(modifiedAngle),
+          y: 0, // Assuming only horizontal movement is needed
         };
-        console.log(
-          `Calculated normal vector: (${normalVector.x}, ${normalVector.y})`
-        );
-
-        // Increase the y-component for steeper slopes
-        const speedMultiplier = Math.abs(angle) > 0.1 ? 1.5 : 1;
-        console.log(`Speed multiplier based on steepness: ${speedMultiplier}`);
-
-        const parallelComponent = {
-          x: normalVector.x * originalSpeedX,
-          y: normalVector.y * originalSpeedX * speedMultiplier,
-        };
-        console.log(
-          `Calculated parallel component of velocity: (${parallelComponent.x}, ${parallelComponent.y})`
-        );
-
+        const parallelComponent = Vector.mult(normalVector, 0.9); // originalSpeedX
         Body.setVelocity(mouse, parallelComponent);
-        console.log(
-          `New velocity set to: (${parallelComponent.x}, ${parallelComponent.y})`
-        );
       }
     };
 
