@@ -32,6 +32,7 @@ export const initializeStage1Objects = (
   mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
     restitution: 0, // 반발 계수
     friction: 0.8, // 마찰 계수
+    frictionAir: Number.MIN_VALUE,
     render: {
       fillStyle: "transparent",
       strokeStyle: "transparent",
@@ -197,6 +198,7 @@ export const initializeStage1Objects = (
     //----------------------------region 아이템----------------------------
     //폭탄
     bombRef.current = Bodies.circle(1285, 300, 20, {
+      frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
         sprite: {
@@ -479,7 +481,7 @@ export const initializeStage1Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "blue",
+          fillStyle: "#b67361",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -506,7 +508,7 @@ export const initializeStage1Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "blue",
+          fillStyle: "#b67361",
           strokeStyle: "black",
           lineWidth: 1,
         },

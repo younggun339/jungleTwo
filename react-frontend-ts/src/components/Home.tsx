@@ -13,7 +13,7 @@ const Home: React.FC = () => {
     initialSrc: "/music/wait1.mp3",
   });
   const playSound = useSoundEffects();
-  setLoop(false);
+  setLoop(true);
   const handleKakaoLogin = () => {
     navigate("/auth/kakao/login"); // Use navigate to change the route
     window.location.reload();

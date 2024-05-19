@@ -34,7 +34,7 @@ import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
 import { updateSkeleton } from "../utils/updateSkeleton";
 import Video from "./Video";
 import "../styles/game.css";
-import useSoundEffects from "../hooks/useSoundEffects";
+import useAudio from "../hooks/useAudio";
 
 interface GameProps {
   userName: string;
@@ -69,7 +69,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [isTutorialImage2End, setIsTutorialImage2End] = useState(false);
   const [isSimStarted, setIsSimStarted] = useState(false);
   const [resultState, setResultState] = useState<number | null>(null);
-
+  const [simStartTime, setSimStartTime] = useState<number | null>(null);
+  const [elapsedTime, setElapsedTime] = useState<number | null>(null);
+  
   const [showModal, setShowModal] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showRetryRequest, setShowRetryRequest] = useState(false);
@@ -82,6 +84,11 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   //--------------get coordinates---------------
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [mouseEndPos, setMouseEndPos] = useState({ x: 0, y: 0 });
+
+  const { play, changeSource, setLoop } = useAudio({
+    initialSrc: "/music/stage_BGM_squeakSystem.mp3",
+  });
+  setLoop(true);
 
   const stretchAudioRef = useRef<HTMLAudioElement | null>(null);
   const releaseAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -128,6 +135,22 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     }
   };
   //--------------get coordinates----------------
+
+  // ---------- 게임 시뮬레이션 시간 기록 ----------
+  useEffect(() => {
+    if (isSimStarted) {
+      setSimStartTime(Date.now());
+    } else {
+      setSimStartTime(null);
+    }
+  }, [isSimStarted]);
+
+  useEffect(() => {
+    if (resultState === 0 && simStartTime) {
+      setElapsedTime((Date.now() - simStartTime) / 1000);
+    }
+  }, [resultState]);
+  // ---------- 게임 시뮬레이션 시간 기록 ----------
 
   // 인게임 및 통신 관련 소켓
   useEffect(() => {
@@ -288,6 +311,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     clearStageObjects[currentStage - 1](
       canvasSize,
       { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      setIsTutorialImage1End,
+      setIsTutorialImage2End,
       setIsSimStarted,
       setShowModal,
       setResultState,
@@ -320,6 +345,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           clearStageObjects[currentStage - 1](
             canvasSize,
             { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+            setIsTutorialImage1End,
+            setIsTutorialImage2End,
             setIsSimStarted,
             setShowModal,
             setResultState,
@@ -523,6 +550,10 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             {resultState === 0 && (
               <div>
                 <h1>YOU WON!</h1>
+                <h2>현재 스테이지: {currentStage} </h2>
+                {elapsedTime !== null && (
+                  <h2>걸린 시간: {elapsedTime.toFixed(2)}초</h2>
+                )}
                 {/* <h1> 치즈를 찾았습니다! </h1> */}
                 {/* <img src="/images/resultState_clear.png" alt="Victory" /> */}
                 {/* <button onClick={handleRetry}>다시하기</button> */}

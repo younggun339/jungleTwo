@@ -45,28 +45,58 @@ const useSimulation = ({
 
     let leftArmTerrain = Bodies.rectangle(0, 0, 0, 0);
     let rightArmTerrain = Bodies.rectangle(0, 0, 0, 0);
-
-    // 여기에 updateVelocity 함수 정의
+    const runner = Runner.create();
     const updateVelocity = (mouse: Body, angle: number): void => {
+      console.log(
+        `Called updateVelocity with angle: ${angle} radians (${
+          angle * (180 / Math.PI)
+        } degrees) and initial velocity: (${mouse.velocity.x}, ${
+          mouse.velocity.y
+        })`
+      );
+
       if (angle === Math.PI) {
         // Keep current velocity if angle is flat
         Body.setVelocity(mouse, mouse.velocity);
+        console.log(
+          `Flat surface detected, velocity unchanged: (${mouse.velocity.x}, ${mouse.velocity.y})`
+        );
       } else {
-        let modifiedAngle = angle;
-        if (mouse.velocity.x < 0) {
-          modifiedAngle *= mouse.angle > 0 ? -3 : 3;
-        } else {
-          modifiedAngle *= mouse.angle > 0 ? -3 : 3;
-        }
+        const modifiedAngle = angle * (mouse.velocity.x < 0 ? -1 : 1);
+        console.log(
+          `Modified angle based on velocity direction: ${modifiedAngle} radians (${
+            modifiedAngle * (180 / Math.PI)
+          } degrees)`
+        );
+
+        // Calculate normal vector based on the angle, enhanced for steep inclines
         const normalVector = {
-          x: Math.sin(modifiedAngle),
-          y: 0, // Assuming only horizontal movement is needed
+          x: Math.cos(modifiedAngle),
+          y: -Math.sin(modifiedAngle),
         };
-        const parallelComponent = Vector.mult(normalVector, 0.9); // originalSpeedX
+        console.log(
+          `Calculated normal vector: (${normalVector.x}, ${normalVector.y})`
+        );
+
+        // Increase the y-component for steeper slopes
+        const speedMultiplier = Math.abs(angle) > 0.1 ? 1.5 : 1;
+        console.log(`Speed multiplier based on steepness: ${speedMultiplier}`);
+
+        const parallelComponent = {
+          x: normalVector.x * originalSpeedX,
+          y: normalVector.y * originalSpeedX * speedMultiplier,
+        };
+        console.log(
+          `Calculated parallel component of velocity: (${parallelComponent.x}, ${parallelComponent.y})`
+        );
+
         Body.setVelocity(mouse, parallelComponent);
+        console.log(
+          `New velocity set to: (${parallelComponent.x}, ${parallelComponent.y})`
+        );
       }
     };
-    const runner = Runner.create();
+
     if (
       isSimStarted &&
       leftArmLeftRef.current &&
@@ -77,9 +107,30 @@ const useSimulation = ({
     ) {
       console.log("시뮬레이션 시작");
       // leftArmLeftRef.current 및 rightArmRightRef.current의 width 정의
-      const leftArmWidth = Math.sqrt(Math.pow(leftArmLeftRef.current.vertices[0].x - leftArmLeftRef.current.vertices[1].x, 2)
-      + Math.pow(leftArmLeftRef.current.vertices[0].y - leftArmLeftRef.current.vertices[2].y, 2));
-      const rightArmWidth = Math.sqrt(Math.pow(rightArmRightRef.current.vertices[0].x - rightArmRightRef.current.vertices[1].x, 2));
+      const leftArmWidth = Math.sqrt(
+        Math.pow(
+          leftArmLeftRef.current.vertices[0].x -
+            leftArmLeftRef.current.vertices[1].x,
+          2
+        ) +
+          Math.pow(
+            leftArmLeftRef.current.vertices[0].y -
+              leftArmLeftRef.current.vertices[1].y,
+            2
+          )
+      );
+      const rightArmWidth = Math.sqrt(
+        Math.pow(
+          rightArmRightRef.current.vertices[0].x -
+            rightArmRightRef.current.vertices[1].x,
+          2
+        ) +
+          Math.pow(
+            rightArmRightRef.current.vertices[0].y -
+              rightArmRightRef.current.vertices[1].y,
+            2
+          )
+      );
 
       leftArmTerrain = Bodies.rectangle(
         leftArmLeftRef.current.position.x,
@@ -93,8 +144,7 @@ const useSimulation = ({
             sprite: {
               texture: "/sprite/Ground4.png",
               yScale: 15 / 62.5,
-              xScale:
-              leftArmWidth / 247.06,
+              xScale: leftArmWidth / 247.06,
             },
           },
         }
@@ -112,8 +162,7 @@ const useSimulation = ({
             sprite: {
               texture: "/sprite/Ground4.png",
               yScale: 15 / 62.5,
-              xScale:
-              rightArmWidth / 247.06,
+              xScale: rightArmWidth / 247.06,
             },
           },
         }

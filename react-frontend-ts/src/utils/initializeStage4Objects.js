@@ -185,6 +185,7 @@ export const initializeStage4Objects = (
     //----------------------------region 아이템----------------------------
 
     bombRef.current = Bodies.circle(1085, 40, 20, {
+      frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
         fillStyle: "indigo",
@@ -354,6 +355,7 @@ export const initializeStage4Objects = (
     mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
       restitution: 0, // 반발 계수
       friction: 0.8, // 마찰 계수
+      frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
         fillStyle: "transparent", // 기본 채우기 스타일을 투명으로 설정

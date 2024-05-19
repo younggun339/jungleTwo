@@ -232,6 +232,7 @@ export const initializeStage3Objects = (
     //----------------------------region 아이템----------------------------
     //폭탄
     bombRef.current = Bodies.circle(1255, 40, 20, {
+      frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
         sprite: {
@@ -422,6 +423,7 @@ export const initializeStage3Objects = (
     mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
       restitution: 0, // 반발 계수
       friction: 0.8, // 마찰 계수
+      frictionAir: Number.MIN_VALUE,
       render: {
         fillStyle: "blue",
       },
@@ -539,22 +541,22 @@ export const initializeStage3Objects = (
     //     angle: Math.PI,
     //     render: {sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:1.1} }
     // })
-    // leftArmLeftRef.current = Bodies.rectangle(
-    //   canvasSize.x / 4,
-    //   canvasSize.y / 2,
-    //   0,
-    //   15,
-    //   {
-    //     isStatic: true,
-    //     angle: 0,
-    //     collisionFilter: { mask: 0 },
-    //     render: {
-    //       fillStyle: "blue",
-    //       strokeStyle: "black",
-    //       lineWidth: 1,
-    //     },
-    //   }
-    // );
+    leftArmLeftRef.current = Bodies.rectangle(
+      canvasSize.x / 4,
+      canvasSize.y / 2,
+      0,
+      15,
+      {
+        isStatic: true,
+        angle: 0,
+        collisionFilter: { mask: 0 },
+        render: {
+          fillStyle: "#b67361",
+          strokeStyle: "black",
+          lineWidth: 1,
+        },
+      }
+    );
 
     //----------------내가만든기물------------------
 
@@ -566,22 +568,22 @@ export const initializeStage3Objects = (
     //     angle: -Math.PI / 5, // 45도를 라디안으로 변환
     //     render: { sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:0.7} }
     // })
-    // rightArmRightRef.current = Bodies.rectangle(
-    //   (canvasSize.x * 3) / 4,
-    //   canvasSize.y / 2,
-    //   0,
-    //   15,
-    //   {
-    //     isStatic: true,
-    //     angle: 0,
-    //     collisionFilter: { mask: 0 },
-    //     render: {
-    //       fillStyle: "blue",
-    //       strokeStyle: "black",
-    //       lineWidth: 1,
-    //     },
-    //   }
-    // );
+    rightArmRightRef.current = Bodies.rectangle(
+      (canvasSize.x * 3) / 4,
+      canvasSize.y / 2,
+      0,
+      15,
+      {
+        isStatic: true,
+        angle: 0,
+        collisionFilter: { mask: 0 },
+        render: {
+          fillStyle: "#b67361",
+          strokeStyle: "black",
+          lineWidth: 1,
+        },
+      }
+    );
     //---------------피어가만든기물-----------------
 
     // // 이미지를 순환시키기 위한 로직

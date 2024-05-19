@@ -14,18 +14,16 @@ import { CanvasSize } from '../components/Game';
 export function clearStage1Objects(
   canvasSize,
   refs,
+  setIsTutorialImage1End,
+  setIsTutorialImage2End,
   setIsSimStarted,
   setShowModal,
   setResultState,
   setCountdown,
 ) {
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
-  console.log("스테이지1 클리어 함수 호출");
-  console.log(mouseRef.current.position);
   Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
-  console.log(mouseRef.current.position);
   Body.setStatic(mouseRef.current, true);
-  console.log(mouseRef.current);
 
   // bomb 객체를 리셋
   Body.setPosition(bombRef.current, { x: 1000, y: 100 });
@@ -37,16 +35,20 @@ export function clearStage1Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
+  setIsTutorialImage1End(false);
+  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(10);
+  setCountdown(3);
 }
 
 // ================================================ STAGE 2 ====================================================
 export function clearStage2Objects(
   canvasSize,
   refs,
+  setIsTutorialImage1End,
+  setIsTutorialImage2End,
   setIsSimStarted,
   setShowModal,
   setResultState,
@@ -70,16 +72,20 @@ export function clearStage2Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
+  setIsTutorialImage1End(false);
+  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(15);
+  setCountdown(3);
 }
 
 // ================================================ STAGE 3 ====================================================
 export function clearStage3Objects(
   canvasSize,
   refs,
+  setIsTutorialImage1End,
+  setIsTutorialImage2End,
   setIsSimStarted,
   setShowModal,
   setResultState,
@@ -103,16 +109,20 @@ export function clearStage3Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
+  setIsTutorialImage1End(false);
+  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(15);
+  setCountdown(3);
 }
 
 // ================================================ STAGE 4 ====================================================
 export function clearStage4Objects(
   canvasSize,
   refs,
+  setIsTutorialImage1End,
+  setIsTutorialImage2End,
   setIsSimStarted,
   setShowModal,
   setResultState,
@@ -137,16 +147,20 @@ export function clearStage4Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
+  setIsTutorialImage1End(false);
+  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(15);
+  setCountdown(3);
 }
 
 // ================================================ STAGE 5 ====================================================
 export function clearStage5Objects(
   canvasSize,
   refs,
+  setIsTutorialImage1End,
+  setIsTutorialImage2End,
   setIsSimStarted,
   setShowModal,
   setResultState,
@@ -171,8 +185,10 @@ export function clearStage5Objects(
   rightArmRightRef.current.vertices[1].x = 0;
 
   // 게임 상태를 리셋
+  setIsTutorialImage1End(false);
+  setIsTutorialImage2End(false);
   setIsSimStarted(false);
   setResultState(null);
   setShowModal(false);
-  setCountdown(15);
+  setCountdown(3);
 }

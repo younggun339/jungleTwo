@@ -30,8 +30,8 @@ export const useStage1Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    1, // firstImageTime
-    1, // secondImageTime
+    3, // firstImageTime
+    3, // secondImageTime
     10, // chatTime
     20, // simTime
     resultState,
@@ -263,7 +263,7 @@ const useStageStart = (
             }
           }
           /////////////////////////////////////////////////////////////////////////////////////////////// 레디 인원수 조절
-          if (readyPlayers.length === 1) {
+          if (readyPlayers.length === 2) {
             setIsGameStarted(true);
             setResultState(null);
           }
@@ -335,7 +335,7 @@ const useStageStart = (
 
   // =============== 카운트다운 바 처리 ===============
   useEffect(() => {
-    if (countdown === chatTime) {
+    if (isTutorialImage2End && countdown === chatTime) {
       document.getElementById("countdown-bar")!.style.width = "100%";
     }
     if (countdown && countdown > 0) {
