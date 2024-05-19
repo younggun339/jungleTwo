@@ -302,49 +302,49 @@ export const initializeStage2Objects = (
           sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
         },
       }),
-      Bodies.rectangle(480, 210, 50, 50, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
-        },
-      }),
+      // Bodies.rectangle(480, 210, 50, 50, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+      //   },
+      // }),
 
-      Bodies.rectangle(230, 50, 50, 50, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
-        },
-      }),
-      Bodies.rectangle(280, 50, 50, 50, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
-        },
-      }),
-      Bodies.rectangle(330, 50, 50, 50, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
-        },
-      }),
-      Bodies.rectangle(380, 50, 50, 50, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
-        },
-      }),
-      Bodies.rectangle(430, 50, 50, 50, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
-        },
-      }),
-      Bodies.rectangle(480, 50, 50, 50, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
-        },
-      }),
+      // Bodies.rectangle(230, 50, 50, 50, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+      //   },
+      // }),
+      // Bodies.rectangle(280, 50, 50, 50, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+      //   },
+      // }),
+      // Bodies.rectangle(330, 50, 50, 50, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+      //   },
+      // }),
+      // Bodies.rectangle(380, 50, 50, 50, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+      //   },
+      // }),
+      // Bodies.rectangle(430, 50, 50, 50, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+      //   },
+      // }),
+      // Bodies.rectangle(480, 50, 50, 50, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+      //   },
+      // }),
     ];
 
     // 추
@@ -553,7 +553,7 @@ export const initializeStage2Objects = (
     let lastUpdateTime = 0;
     let currentFrame = 0;
     Events.on(engine, "beforeUpdate", function (event) {
-      console.log("beforeupdate");
+      // console.log("beforeupdate");
       const currentTime = event.timestamp;
       let frameDuration = 300; // 매 초마다 이미지 변경
 

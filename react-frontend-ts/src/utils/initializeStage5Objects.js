@@ -434,8 +434,8 @@ export const initializeStage5Objects = (
       friction: 0.8, // 마찰 계수
       frictionAir: Number.MIN_VALUE,
       render: {
-        fillStyle: "transparent",
-        strokeStyle: "transparent",
+        fillStyle: "blue",
+        strokeStyle: "black",
       },
       collisionFilter: {
         category: 0x0004, // 충돌 그룹 설정

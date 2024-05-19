@@ -49,7 +49,7 @@ const useStage1Setup = (
       return;
     }
 
-    initializeStage1Objects(
+    initializeStage5Objects(
       engine,
       {
         render,
@@ -84,10 +84,6 @@ const useStage1Setup = (
     engineRef,
   });
 
-  useEffect(() => {
-    console.log("시뮬 중력 쥐 속도@@@@@@@@: ", engineRef.current!.world.gravity, mouseRef.current!.velocity);
-  }, [isTutorialImage2End, isSimStarted]);
-
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
 };
 
@@ -108,7 +104,7 @@ const useStage2Setup = (
 
   const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
-
+  
   useEffect(() => {
     const engine = engineRef.current;
 
@@ -352,21 +348,21 @@ const useStage5Setup = (
       return;
     }
 
-    initializeStage5Objects(
-      engine,
-      {
-        render,
-        canvasSize,
-        mouseRef,
-        bombRef,
-        leftArmLeftRef,
-        rightArmRightRef,
-      },
-      isSimStarted,
-      isTutorialImage2End,
-      setResultState,
-      playSound
-    );
+    // initializeStage5Objects(
+    //   engine,
+    //   {
+    //     render,
+    //     canvasSize,
+    //     mouseRef,
+    //     bombRef,
+    //     leftArmLeftRef,
+    //     rightArmRightRef,
+    //   },
+    //   isSimStarted,
+    //   isTutorialImage2End,
+    //   setResultState,
+    //   playSound
+    // );
 
     Render.run(render);
 
