@@ -34,6 +34,7 @@ import {
 import useWebRTC, { WebRTCResult } from "../hooks/useWebRTC";
 import { updateSkeleton } from "../utils/updateSkeleton";
 import "../styles/game.css";
+import Video from "./Video";
 
 interface GameProps {
   userName: string;
@@ -471,6 +472,33 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             isTutorialImage2End && !isSimStarted && <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}></div>
           ))}
 
+          {peers.slice(0, indexRef.current).map((peer, index) => (
+            <Video
+              key={`${peer.peerID}-${index}`}
+              peer={peer.peer}
+              peers={peers}
+              myIndexRef={1}
+            />
+          ))}
+          <video
+            id={
+              indexRef.current === 0 ? "video-container-1" : "video-container-2"
+            }
+            muted
+            ref={userVideo}
+            autoPlay
+            playsInline
+            style={{ order: indexRef.current }}
+          />
+          {peers.slice(indexRef.current).map((peer, index) => (
+            <Video
+              key={`${peer.peerID}-${index}`}
+              peer={peer.peer}
+              peers={peers}
+              myIndexRef={0}
+            />
+          ))}
+
           <canvas
             ref={canvasRef}
             className="canvas-transparent"
@@ -527,7 +555,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                 min="0"
                 max="1"
                 step="0.01"
-                defaultValue="0.3"
+                defaultValue="0.1"
                 onChange={handleVolumeChange}
               />
             </label>
