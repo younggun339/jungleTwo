@@ -93,9 +93,17 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     setVolume(Number(event.target.value));
   };
 
+  // 볼륨 조절 함수
+  const VoiceSetVolume = (volume: number) => {
+    if (userVideo.current) {
+      userVideo.current.volume = volume;
+    }
+  };
+
   useEffect(() => {
     setLoop(true);
     play();
+    setVolume(0.5);
   }, [play, setLoop]);
 
   useEffect(() => {
@@ -108,8 +116,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const releaseAudioRef = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
     // 오디오 파일 로드
-    stretchAudioRef.current = new Audio('/sound/band_stretch.wav');
-    releaseAudioRef.current = new Audio('/sound/band_release.wav');
+    stretchAudioRef.current = new Audio("/sound/band_stretch.wav");
+    releaseAudioRef.current = new Audio("/sound/band_release.wav");
   }, []);
   //--------------play sound---------------
 
@@ -211,9 +219,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     clearStage5Objects,
   ];
 
-  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef } = stageSetups[
-    currentStage - 1
-  ](canvasSize, sceneRef, isSimStarted, isTutorialImage2End, setResultState);
+  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef } =
+    stageSetups[currentStage - 1](
+      canvasSize,
+      sceneRef,
+      isSimStarted,
+      isTutorialImage2End,
+      setResultState
+    );
 
   const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } =
     useWebRTC(
@@ -475,35 +488,58 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           <span id="player1-name">player2</span>
         </div>
         <div id="matter-container" ref={sceneRef}>
-
-          {peers.slice(indexRef.current).map((peer, index) => (
-            isTutorialImage2End && !isSimStarted && (
-              <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}>
-                <div className="corner tl"></div>
-                <div className="corner tr"></div>
-                <div className="corner bl"></div>
-                <div className="corner br"></div>
-              </div>
-            )
-          ))}
+          {peers.slice(indexRef.current).map(
+            (peer, index) =>
+              isTutorialImage2End &&
+              !isSimStarted && (
+                <div
+                  id={
+                    indexRef.current === 0
+                      ? "video-container-1"
+                      : "video-container-2"
+                  }
+                  key={index}
+                >
+                  <div className="corner tl"></div>
+                  <div className="corner tr"></div>
+                  <div className="corner bl"></div>
+                  <div className="corner br"></div>
+                </div>
+              )
+          )}
           {isTutorialImage2End && !isSimStarted && (
-            <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"}>
+            <div
+              id={
+                indexRef.current === 0
+                  ? "video-container-1"
+                  : "video-container-2"
+              }
+            >
               <div className="corner tl"></div>
               <div className="corner tr"></div>
               <div className="corner bl"></div>
               <div className="corner br"></div>
             </div>
           )}
-          {peers.slice(indexRef.current).map((peer, index) => (
-            isTutorialImage2End && !isSimStarted && (
-              <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}>
-                <div className="corner tl"></div>
-                <div className="corner tr"></div>
-                <div className="corner bl"></div>
-                <div className="corner br"></div>
-              </div>
-            )
-          ))}
+          {peers.slice(indexRef.current).map(
+            (peer, index) =>
+              isTutorialImage2End &&
+              !isSimStarted && (
+                <div
+                  id={
+                    indexRef.current === 0
+                      ? "video-container-1"
+                      : "video-container-2"
+                  }
+                  key={index}
+                >
+                  <div className="corner tl"></div>
+                  <div className="corner tr"></div>
+                  <div className="corner bl"></div>
+                  <div className="corner br"></div>
+                </div>
+              )
+          )}
 
           {peers.slice(0, indexRef.current).map((peer, index) => (
             <Video
@@ -571,7 +607,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
         {!isPlayerReady &&
           document.getElementById("player" + indexRef)?.textContent !=
-          "WAITING" && (
+            "WAITING" && (
             <button onClick={readyGame} id="ready-button">
               READY
             </button>
@@ -590,6 +626,17 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                 step="0.01"
                 defaultValue="0.1"
                 onChange={handleVolumeChange}
+              />
+            </label>
+            <label>
+              Voice:
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                onChange={(e) => VoiceSetVolume(+e.target.value)}
+                defaultValue="0.5"
               />
             </label>
           </div>

@@ -194,8 +194,11 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('reset-ready')
   handleResetReady(client: Socket, payload: { roomName: string }) {
     const roomName = payload.roomName;
+    const readyPlayers = this.room_user[roomName].filter(
+      (player: [string, string, boolean]) => player[2] === true
+    );
 
-    if (this.room_user[roomName]) {
+    if (this.room_user[roomName] && readyPlayers.length === 0) {
       for (let i = 0; i < this.room_user[roomName].length; i++) {
         this.room_user[roomName][i][2] = false;
       }

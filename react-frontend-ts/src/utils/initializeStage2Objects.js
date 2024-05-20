@@ -84,9 +84,10 @@ export const initializeStage2Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
+          console.log("점프대 밟음.");
           playSound("/sound/Jump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2 });
+          Body.setVelocity(ball, { x: velocity.x * 0.8, y: -velocity.y * 2 });
         }
       });
     };
@@ -99,6 +100,7 @@ export const initializeStage2Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
+          console.log("슈퍼 점프대 밟음.");
           playSound("/sound/SuperJump.wav");
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x * 6, y: -velocity.y * 3 });
@@ -113,7 +115,7 @@ export const initializeStage2Objects = (
     }
 
     //사라지는 벽
-    const collapsesGround = (engine, mouse) => {
+    const collapsesGround = () => {
       if (
         920 <= mouseRef.current.position.x &&
         mouseRef.current.position.x <= 930 &&
@@ -121,6 +123,7 @@ export const initializeStage2Objects = (
       ) {
         playSound("/sound/BrokenGround.wav");
         Composite.remove(engine.world, ground);
+        Events.off(engine, "collisionActive", collapsesGround);
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
     };
 
@@ -790,47 +793,42 @@ export const initializeStage2Objects = (
           (bodyA === mouseRef.current && bodyB === box1) ||
           (bodyA === box1 && bodyB === mouseRef.current)
         ) {
+          setIsRightPointer(true);
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
-          setIsRightPointer(!isRightPointer);
-          console.log("좌우반전 박스 1", isRightPointer);
         }
         if (
           (bodyA === mouseRef.current && bodyB === box2) ||
           (bodyA === box2 && bodyB === mouseRef.current)
         ) {
+          setIsRightPointer(false);
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box2]); //box제거
-          setIsRightPointer(!isRightPointer);
-          //console.log("사라지는 바닥의 좌표:", mouse.position);
-          console.log("좌우반전 박스 2", isRightPointer);
+          console.log("좌우반전 상자 2: ", isRightPointer);
         }
         if (
           (bodyA === mouseRef.current && bodyB === box3) ||
           (bodyA === box3 && bodyB === mouseRef.current)
         ) {
+          setIsRightPointer(!isRightPointer);
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box3]); //box제거
-          setIsRightPointer(!isRightPointer);
-          console.log("좌우반전 박스 3", isRightPointer);
         }
         if (
           (bodyA === mouseRef.current && bodyB === box4) ||
           (bodyA === box4 && bodyB === mouseRef.current)
         ) {
+          setIsRightPointer(!isRightPointer);
           playSound("/sound/Pointer.wav");
           World.remove(engine.world, [box4]); //box제거
-          setIsRightPointer(!isRightPointer);
-          console.log("좌우반전 박스 4", isRightPointer);
         }
         if (
           (bodyA === mouseRef.current && bodyB === box5) ||
           (bodyA === box5 && bodyB === mouseRef.current)
         ) {
+          setIsRightPointer(!isRightPointer);
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box5]); //box제거
-          setIsRightPointer(!isRightPointer);
-          console.log("좌우반전 박스 5", isRightPointer);
         }
         //--------------좌우반전---------------
         //--------------점프대----------------
@@ -1026,6 +1024,10 @@ export const initializeStage2Objects = (
       }
     });
 
+    // ------------사라지는 바닥------------
+    Events.on(engine, "collisionActive", collapsesGround);
+    // ------------사라지는 바닥------------
+
     Events.on(engine, "collisionEnd", (event) => {
       const pairs = event.pairs;
 
@@ -1042,9 +1044,6 @@ export const initializeStage2Objects = (
           onSlope = false;
         }
         //------------------------------leftArm---------------
-      // ------------사라지는 바닥------------
-      collapsesGround(engine, mouseRef.current);
-      //------------사라지는 바닥------------
         //------------------------------rightArm---------------
         if (
           (bodyA === mouseRef.current && bodyB === rightArmRightRef.current) ||

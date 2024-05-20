@@ -14,25 +14,15 @@ import {
 } from "matter-js";
 import { on } from "events";
 
-interface UseSimulationProps {
-  isSimStarted: boolean;
-  leftArmLeftRef: MutableRefObject<Body | null>;
-  rightArmRightRef: MutableRefObject<Body | null>;
-  mouseRef: MutableRefObject<Body | null>;
-  bombRef: MutableRefObject<Body | null>;
-  engineRef: MutableRefObject<Engine | null>;
-  isRightPointer: boolean;
-}
-
-const useSimulation = ({
-  isSimStarted,
-  leftArmLeftRef,
-  rightArmRightRef,
-  mouseRef,
-  bombRef,
-  engineRef,
-  isRightPointer
-}: UseSimulationProps) => {
+const useSimulation = (
+  isSimStarted: boolean,
+  leftArmLeftRef: MutableRefObject<Body | null>,
+  rightArmRightRef: MutableRefObject<Body | null>,
+  mouseRef: MutableRefObject<Body | null>,
+  bombRef: MutableRefObject<Body | null>,
+  engineRef: MutableRefObject<Engine | null>,
+  isRightPointer: boolean,
+) => {
   useEffect(() => {
     console.log("useSimulation called", isSimStarted);
 
@@ -45,16 +35,14 @@ const useSimulation = ({
     // mouseRef의 x 방향 속도를 0.85로 설정하는 beforeUpdate Events
     const setVelocityAlways = () => {
       if (mouseRef.current && mouseRef.current.velocity.y < 0.1) {
-        console.log("mouseRef velocity: ", mouseRef.current.velocity.x, mouseRef.current.velocity.y);
-
         if (!isRightPointer) {
           Body.setVelocity(mouseRef.current, {
-            x: 2.2,
+            x: 1.8,
             y: mouseRef.current.velocity.y,
           });
         } else {
           Body.setVelocity(mouseRef.current, {
-            x: -2.2,
+            x: -1.8,
             y: mouseRef.current.velocity.y,
           });
         }
@@ -232,7 +220,7 @@ const useSimulation = ({
       ]);
 
       // engineRef의 시간스케일을 1.25로 설정
-      engineRef.current!.world.gravity.y = 0.25;
+      engineRef.current!.world.gravity.y = 0.5;
       Runner.run(runner, engineRef.current);
 
       // 쥐를 움직이기 위해 static 해제
@@ -252,7 +240,7 @@ const useSimulation = ({
       }
       Runner.stop(runner);
     };
-  }, [isSimStarted]);
+  }, [isSimStarted, isRightPointer]);
 };
 
 export default useSimulation;

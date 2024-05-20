@@ -4,7 +4,7 @@ import { Body } from "matter-js";
 import { Socket } from "socket.io-client";
 import Peer from "simple-peer";
 import { updateSkeleton } from "../utils/updateSkeleton";
-
+import html2canvas from "html2canvas";
 import "process/browser";
 
 const pcConfig = {
@@ -47,7 +47,64 @@ const useWebRTC = (
   const [peers, setPeers] = useState<PeerObject[]>([]);
   const indexRef = useRef(0);
   const userVideo = useRef<HTMLVideoElement | null>(null);
+  // -------여기서부터 화면 공유 ---------
+  // const lastImageData = useRef<string | null>(null);
+  // // State to hold the current frame rate, initialized to 10 FPS
+  // const [frameRate, setFrameRate] = useState(10); // Initial frame rate in frames per second
 
+  // // Adjust frame rate based on network conditions or other metrics
+  // useEffect(() => {
+  //   const adjustFrameRate = () => {
+  //     // Example of dynamic adjustment
+  //     const newRate = Math.random() * (30 - 5) + 5; // Randomly choosing a new rate between 5 and 30 FPS
+  //     setFrameRate(newRate);
+  //   };
+
+  //   // Adjust every 5 seconds
+  //   const intervalId = setInterval(adjustFrameRate, 5000);
+
+  //   return () => clearInterval(intervalId);
+  // }, []);
+
+  // useEffect(() => {
+  //   const captureAndSend = () => {
+  //     // Ensure we capture and send only when indexRef.current is 0
+  //     // and other conditions are met
+  //     if (indexRef.current !== 0 || !isTutorialImage2End || isSimStarted) {
+  //       return;
+  //     }
+
+  //     const container = document.getElementById("matter-container");
+  //     if (container) {
+  //       html2canvas(container, { scale: 1 }).then((canvas) => {
+  //         const dataURL = canvas.toDataURL("image/png");
+
+  //         // Only send if the image data has changed
+  //         if (lastImageData.current !== dataURL) {
+  //           lastImageData.current = dataURL;
+  //           peersRef.current.forEach((peerObj) => {
+  //             if (peerObj.peer.connected) {
+  //               peerObj.peer.send(
+  //                 JSON.stringify({ type: "image-data", data: dataURL })
+  //               );
+  //             }
+  //           });
+  //         }
+  //       });
+  //     }
+  //   };
+
+  //   // Calculate the interval in milliseconds from the frame rate
+  //   const intervalMs = 1000 / frameRate;
+
+  //   // Set interval to capture and send
+  //   const intervalId = setInterval(captureAndSend, intervalMs);
+
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, [isTutorialImage2End, isSimStarted, frameRate, indexRef.current]); // Ensure indexRef.current is a dependency
+  // -------여기까지 화면 공유 ---------
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
@@ -230,6 +287,22 @@ const useWebRTC = (
       const { joint1Start, joint1End } = parsedData.data;
       updateSkeleton(rightArmRightRef, joint1Start, joint1End);
     }
+    // ---------- 여기서부터 화면 공유
+    // else if (parsedData.type === "image-data") {
+    //   const canvas = document.getElementById(
+    //     "received-canvas"
+    //   ) as HTMLCanvasElement;
+    //   if (canvas) {
+    //     const ctx = canvas.getContext("2d");
+    //     const image = new Image();
+    //     image.onload = () => {
+    //       ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    //       ctx?.drawImage(image, 0, 0, canvas.width, canvas.height);
+    //     };
+    //     image.src = parsedData.data;
+    //   }
+    // }
+    // ---------- 여기까지 화면 공유 ---------
   };
 
   const sendLeftHandJoint = (joint1Start: any, joint1End: any) => {

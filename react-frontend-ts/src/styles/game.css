@@ -74,14 +74,15 @@ body {
   z-index: 2;
   display: flex;
   justify-content: space-between;
-  background-image: url("./bg3.png");
+  background-image: url("./bg4.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-color: black;
 }
 
-#video-container-1, #video-container-2 {
+#video-container-1,
+#video-container-2 {
   position: absolute;
   width: 800px;
   height: 600px;

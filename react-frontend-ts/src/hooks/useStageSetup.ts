@@ -51,7 +51,7 @@ const useStage1Setup = (
       return;
     }
 
-    initializeStage1Objects(
+    initializeStage2Objects(
       engine,
       {
         render,
@@ -79,7 +79,7 @@ const useStage1Setup = (
     };
   }, [isTutorialImage2End]);
 
-  useSimulation({
+  useSimulation(
     isSimStarted,
     leftArmLeftRef,
     rightArmRightRef,
@@ -87,7 +87,7 @@ const useStage1Setup = (
     bombRef,
     engineRef,
     isRightPointer
-  });
+  );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
@@ -159,7 +159,7 @@ const useStage2Setup = (
     };
   }, [isTutorialImage2End]);
 
-  useSimulation({
+  useSimulation(
     isSimStarted,
     leftArmLeftRef,
     rightArmRightRef,
@@ -167,7 +167,7 @@ const useStage2Setup = (
     bombRef,
     engineRef,
     isRightPointer
-  });
+  );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
@@ -238,7 +238,7 @@ const useStage3Setup = (
     };
   }, [isTutorialImage2End]);
 
-  useSimulation({
+  useSimulation(
     isSimStarted,
     leftArmLeftRef,
     rightArmRightRef,
@@ -246,7 +246,7 @@ const useStage3Setup = (
     bombRef,
     engineRef,
     isRightPointer
-  });
+  );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
@@ -318,7 +318,7 @@ const useStage4Setup = (
     };
   }, [isTutorialImage2End]);
 
-  useSimulation({
+  useSimulation(
     isSimStarted,
     leftArmLeftRef,
     rightArmRightRef,
@@ -326,7 +326,7 @@ const useStage4Setup = (
     bombRef,
     engineRef,
     isRightPointer
-  });
+  );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
@@ -398,7 +398,7 @@ const useStage5Setup = (
     };
   }, [isTutorialImage2End]);
 
-  useSimulation({
+  useSimulation(
     isSimStarted,
     leftArmLeftRef,
     rightArmRightRef,
@@ -406,7 +406,7 @@ const useStage5Setup = (
     bombRef,
     engineRef,
     isRightPointer
-  });
+  );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };

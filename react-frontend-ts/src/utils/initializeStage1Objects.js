@@ -78,7 +78,8 @@ export const initializeStage1Objects = (
         if (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
-        ) {
+          ) {
+          console.log("점프대 밟음.");
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2 });
         }
@@ -93,6 +94,7 @@ export const initializeStage1Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
+          console.log("슈퍼 점프대 밟음.");
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x * 6, y: -velocity.y * 3 });
         }
@@ -115,6 +117,7 @@ export const initializeStage1Objects = (
         mouseRef.current.velocity.x >= 0
       ) {
         Composite.remove(engine.world, ground);
+        collapsesGround = () => {};
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
     };
 
@@ -718,7 +721,7 @@ export const initializeStage1Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(true);
           //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
