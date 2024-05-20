@@ -33,39 +33,11 @@ const useSimulation = ({
 }: UseSimulationProps) => {
   useEffect(() => {
     console.log("useSimulation called", isSimStarted);
-    const applyContinuousForce = () => {
-      if (mouseRef.current) {
-        Body.applyForce(mouseRef.current, mouseRef.current.position, {
-          x: 0.0001,
-          y: 0,
-        });
-        Body.setAngle(mouseRef.current, 0);
-      }
-    };
 
     let leftArmTerrain = Bodies.rectangle(0, 0, 0, 0);
     let rightArmTerrain = Bodies.rectangle(0, 0, 0, 0);
     const runner = Runner.create();
-    // 여기에 updateVelocity 함수 정의
-    // const updateVelocity = (mouse: Body, angle: number): void => {
-    //   if (angle === Math.PI) {
-    //     // Keep current velocity if angle is flat
-    //     Body.setVelocity(mouse, mouse.velocity);
-    //   } else {
-    //     let modifiedAngle = angle;
-    //     if (mouse.velocity.x < 0) {
-    //       modifiedAngle *= mouse.angle > 0 ? -3 : 3;
-    //     } else {
-    //       modifiedAngle *= mouse.angle > 0 ? -3 : 3;
-    //     }
-    //     const normalVector = {
-    //       x: Math.sin(modifiedAngle),
-    //       y: 0, // Assuming only horizontal movement is needed
-    //     };
-    //     const parallelComponent = Vector.mult(normalVector, 0.9); // originalSpeedX
-    //     Body.setVelocity(mouse, parallelComponent);
-    //   }
-    // };
+
     const updateVelocity = (mouse: Body, angle: number): void => {
       // normalVectoy 선언
       let normalVector = { x: 0, y: 0 };
@@ -256,14 +228,14 @@ const useSimulation = ({
 
     return () => {
       if (engineRef.current) {
-        engineRef.current!.world.gravity.y = 0;
-        engineRef.current!.world.gravity.x = 0;
+        // engineRef.current!.world.gravity.y = 0;
+        // engineRef.current!.world.gravity.x = 0;
         Composite.remove(engineRef.current.world, leftArmTerrain, true);
         Composite.remove(engineRef.current.world, rightArmTerrain, true);
-        Events.off(engineRef.current, "beforeUpdate", applyContinuousForce);
-        Events.off(engineRef.current, "collisionStart", liftSlopeStart);
-        Events.off(engineRef.current, "collisionEnd", liftSlopeEnd);
-        Events.off(engineRef.current, "beforeUpdate", updateVelocityAll);
+        // Events.off(engineRef.current, "beforeUpdate", applyContinuousForce);
+        // Events.off(engineRef.current, "collisionStart", liftSlopeStart);
+        // Events.off(engineRef.current, "collisionEnd", liftSlopeEnd);
+        // Events.off(engineRef.current, "beforeUpdate", updateVelocityAll);
       }
       Runner.stop(runner);
     };

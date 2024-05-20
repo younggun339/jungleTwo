@@ -71,6 +71,7 @@ export function resetStage2Objects(
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
+  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
   Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 
@@ -113,6 +114,7 @@ export function resetStage3Objects(
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
+  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
   Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 
@@ -155,6 +157,7 @@ export function resetStage4Objects(
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
+  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
   Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 
@@ -197,6 +200,7 @@ export function resetStage5Objects(
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
   
   // mouse 객체를 리셋
+  Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
   Body.setPosition(mouseRef.current, { x: 200, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
 

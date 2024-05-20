@@ -1040,7 +1040,9 @@ export const initializeStage2Objects = (
           onSlope = false;
         }
         //------------------------------leftArm---------------
-
+      // ------------사라지는 바닥------------
+      collapsesGround(engine, mouseRef.current);
+      //------------사라지는 바닥------------
         //------------------------------rightArm---------------
         if (
           (bodyA === mouseRef.current && bodyB === rightArmRightRef.current) ||
@@ -1066,9 +1068,7 @@ export const initializeStage2Objects = (
     const originalSpeedX = 0.9;
     //----------leftArm---------
     Events.on(engine, "beforeUpdate", () => {
-      // ------------사라지는 바닥------------
-      collapsesGround(engine, mouseRef.current);
-      //------------사라지는 바닥------------
+
 
       //---------rightArm---------
       if (onSlopeRight) {
