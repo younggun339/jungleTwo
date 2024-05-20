@@ -59,10 +59,18 @@ export const initializeStage1Objects = (
   ];
 
   if (!isTutorialImage2End) {
+    if (engine) {
+        Engine.clear(engine);
+    }
+    Events.off(engine);
+
     World.add(engine.world, walls);
-    console.log("isTutorialImage2End", isTutorialImage2End);
   } else {
-    console.log("!isTutorialImage2End", isTutorialImage2End);
+    if (engine) {
+      Engine.clear(engine);
+    }
+    Events.off(engine);
+
     let teleportLock = false;
     let onPanel = false;
     let onSlope = false;

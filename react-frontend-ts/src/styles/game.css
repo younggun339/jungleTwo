@@ -96,7 +96,7 @@ body {
   position: absolute;
   width: 40px;
   height: 40px;
-  border: 4px solid green;
+  border: 12px solid green;
 }
 .corner.tl {
   top: 0;
@@ -165,13 +165,20 @@ canvas {
   z-index: 4;
 }
 
-#tutorial-image-1,
-#tutorial-image-2 {
+#tutorial-image-1 {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
+}
+
+#tutorial-image-2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  animation: zoomInBounce 0.5s ease forwards;
 }
 
 #loading-overlay {

@@ -191,8 +191,6 @@ const useSimulation = ({
       engineRef.current!.world.gravity.y = 0.075;
       engineRef.current!.world.gravity.x = 0.02;
       Runner.run(runner, engineRef.current);
-      Engine.run(engineRef.current);
-      // engineRef.current!.world.gravity.x = 0.04;
 
       // 쥐를 움직이기 위해 static 해제
       Body.setStatic(mouseRef.current, false);

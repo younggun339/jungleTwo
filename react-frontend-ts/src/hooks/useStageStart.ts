@@ -30,8 +30,8 @@ export const useStage1Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    3, // firstImageTime
-    3, // secondImageTime
+    2, // firstImageTime
+    2, // secondImageTime
     10, // chatTime
     20, // simTime
     resultState,
@@ -73,8 +73,8 @@ export const useStage2Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    3, // firstImageTime
-    3, // secondImageTime
+    2, // firstImageTime
+    2, // secondImageTime
     15, // chatTime
     20, // simTime
     resultState,
@@ -116,8 +116,8 @@ export const useStage3Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    3, // firstImageTime
-    3, // secondImageTime
+    2, // firstImageTime
+    2, // secondImageTime
     30, // chatTime
     20, // simTime
     resultState,
@@ -159,8 +159,8 @@ export const useStage4Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    3, // firstImageTime
-    3, // secondImageTime
+    2, // firstImageTime
+    2, // secondImageTime
     10, // chatTime
     20, // simTime
     resultState,
@@ -202,8 +202,8 @@ export const useStage5Start = (
     isTutorialImage2End,
     isSimStarted,
     countdown,
-    3, // firstImageTime
-    3, // secondImageTime
+    2, // firstImageTime
+    2, // secondImageTime
     30, // chatTime
     20, // simTime
     resultState,

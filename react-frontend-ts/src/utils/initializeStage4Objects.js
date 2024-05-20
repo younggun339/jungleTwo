@@ -106,8 +106,18 @@ export const initializeStage4Objects = (
   // };
 
   if (!isTutorialImage2End) {
+    if (engine) {
+      Engine.clear(engine);
+    }
+    Events.off(engine);
+
     World.add(engine.world, walls);
   } else {
+    if (engine) {
+      Engine.clear(engine);
+    }
+    Events.off(engine);
+    
     const floors = [
       Bodies.rectangle(800, canvasSize.y - 450, 1450, 25, {
         isStatic: true,

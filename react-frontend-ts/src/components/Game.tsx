@@ -531,7 +531,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           countdown &&
           countdown > 0 && (
             <div id="tutorial-image-1">
-              <img src="/images/tutorialImage_001.png" alt="tutorial1" />
+              <img src="/images/ingame_ready.png" alt="tutorial1" />
             </div>
           )}
 
@@ -540,7 +540,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           countdown &&
           countdown > 0 && (
             <div id="tutorial-image-2">
-              <img src="/images/tutorialImage_002.png" alt="tutorial2" />
+              <img src="/images/ingame_go.png" alt="tutorial2" />
             </div>
           )}
 
