@@ -71,7 +71,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const [resultState, setResultState] = useState<number | null>(null);
   const [simStartTime, setSimStartTime] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number | null>(null);
-  
+
   const [showModal, setShowModal] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showRetryRequest, setShowRetryRequest] = useState(false);
@@ -83,7 +83,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [mouseEndPos, setMouseEndPos] = useState({ x: 0, y: 0 });
-  
+
   //--------------play sound---------------
   const { play, pause, changeSource, setLoop, setVolume } = useAudio({
     initialSrc: "/music/stage_BGM_squeakSystem.mp3",
@@ -92,18 +92,18 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(Number(event.target.value));
   };
-  
+
   useEffect(() => {
     setLoop(true);
     play();
   }, [play, setLoop]);
-  
+
   useEffect(() => {
     if (resultState !== null && resultState !== 0) {
       pause();
     }
   }, [resultState, pause]);
-  
+
   const stretchAudioRef = useRef<HTMLAudioElement | null>(null);
   const releaseAudioRef = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
@@ -112,7 +112,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     releaseAudioRef.current = new Audio('/sound/band_release.wav');
   }, []);
   //--------------play sound---------------
-  
+
   //--------------get coordinates---------------
   const handleMouseDown = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
@@ -211,7 +211,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     clearStage5Objects,
   ];
 
-  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = stageSetups[
+  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef } = stageSetups[
     currentStage - 1
   ](canvasSize, sceneRef, isSimStarted, isTutorialImage2End, setResultState);
 
@@ -309,10 +309,21 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   // ============== 게임 결과 모달 =====================
   const handleRetry = () => {
     setIsMenuOpen(false);
-    setShowWaitingPopup(true);
-    if (nestjsSocketRef.current) {
-      nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
-    }
+    // setShowWaitingPopup(true);
+    // if (nestjsSocketRef.current) {
+    //   nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
+    // }
+    clearStageObjects[currentStage - 1](
+      canvasSize,
+      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef },
+      setIsTutorialImage1End,
+      setIsTutorialImage2End,
+      setIsSimStarted,
+      setShowModal,
+      setResultState,
+      setCountdown
+    );
+    play();
   };
 
   const handleAcceptRetry = () => {
@@ -379,7 +390,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const handleNextStage = () => {
     resetStageObjects[currentStage - 1](
       canvasSize,
-      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef },
       setIsGameStarted,
       setIsSimStarted,
       setIsTutorialImage1End,
@@ -459,36 +470,40 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           </div>
         )}
 
+        <div className="player-name">
+          <span id="player0-name">player1</span>
+          <span id="player1-name">player2</span>
+        </div>
         <div id="matter-container" ref={sceneRef}>
-          
-        {peers.slice(indexRef.current).map((peer, index) => (
-          isTutorialImage2End && !isSimStarted &&  (
-            <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}>
+
+          {peers.slice(indexRef.current).map((peer, index) => (
+            isTutorialImage2End && !isSimStarted && (
+              <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}>
+                <div className="corner tl"></div>
+                <div className="corner tr"></div>
+                <div className="corner bl"></div>
+                <div className="corner br"></div>
+              </div>
+            )
+          ))}
+          {isTutorialImage2End && !isSimStarted && (
+            <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"}>
               <div className="corner tl"></div>
               <div className="corner tr"></div>
               <div className="corner bl"></div>
               <div className="corner br"></div>
             </div>
-          )
-        ))}
-        {isTutorialImage2End && !isSimStarted && (
-          <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"}>
-            <div className="corner tl"></div>
-            <div className="corner tr"></div>
-            <div className="corner bl"></div>
-            <div className="corner br"></div>
-          </div>
-        )}
-        {peers.slice(indexRef.current).map((peer, index) => (
-          isTutorialImage2End && !isSimStarted && (
-            <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}>
-              <div className="corner tl"></div>
-              <div className="corner tr"></div>
-              <div className="corner bl"></div>
-              <div className="corner br"></div>
-            </div>
-          )
-        ))}
+          )}
+          {peers.slice(indexRef.current).map((peer, index) => (
+            isTutorialImage2End && !isSimStarted && (
+              <div id={indexRef.current === 0 ? "video-container-1" : "video-container-2"} key={index}>
+                <div className="corner tl"></div>
+                <div className="corner tr"></div>
+                <div className="corner bl"></div>
+                <div className="corner br"></div>
+              </div>
+            )
+          ))}
 
           {peers.slice(0, indexRef.current).map((peer, index) => (
             <Video
@@ -556,11 +571,11 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
         {!isPlayerReady &&
           document.getElementById("player" + indexRef)?.textContent !=
-            "WAITING" && (
+          "WAITING" && (
             <button onClick={readyGame} id="ready-button">
               READY
             </button>
-        )}
+          )}
 
         {isMenuOpen && (
           <div className="menu-popup">

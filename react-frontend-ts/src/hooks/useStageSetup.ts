@@ -30,6 +30,8 @@ const useStage1Setup = (
   const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
 
+  const [isRightPointer, setIsRightPointer] = useState(false);
+
   useEffect(() => {
     const engine = engineRef.current;
 
@@ -61,8 +63,10 @@ const useStage1Setup = (
       },
       isSimStarted,
       isTutorialImage2End,
+      isRightPointer,
       setResultState,
-      playSound
+      playSound,
+      setIsRightPointer
     );
 
     Render.run(render);
@@ -82,9 +86,10 @@ const useStage1Setup = (
     mouseRef,
     bombRef,
     engineRef,
+    isRightPointer
   });
 
-  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
+  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
 
 // ================================================ STAGE 2 ====================================================
@@ -104,6 +109,8 @@ const useStage2Setup = (
 
   const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
+
+  const [isRightPointer, setIsRightPointer] = useState(false);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -136,8 +143,10 @@ const useStage2Setup = (
       },
       isSimStarted,
       isTutorialImage2End,
+      isRightPointer,
       setResultState,
-      playSound
+      playSound,
+      setIsRightPointer
     );
 
     Render.run(render);
@@ -157,9 +166,10 @@ const useStage2Setup = (
     mouseRef,
     bombRef,
     engineRef,
+    isRightPointer
   });
 
-  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
+  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
 // ================================================ STAGE 3 ====================================================
 const useStage3Setup = (
@@ -178,6 +188,8 @@ const useStage3Setup = (
 
   const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
+
+  const [isRightPointer, setIsRightPointer] = useState(false);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -210,8 +222,10 @@ const useStage3Setup = (
       },
       isSimStarted,
       isTutorialImage2End,
+      isRightPointer,
       setResultState,
-      playSound
+      playSound,
+      setIsRightPointer
     );
 
     Render.run(render);
@@ -231,9 +245,10 @@ const useStage3Setup = (
     mouseRef,
     bombRef,
     engineRef,
+    isRightPointer
   });
 
-  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
+  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
 
 // ================================================ STAGE 4 ====================================================
@@ -253,6 +268,8 @@ const useStage4Setup = (
 
   const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
+
+  const [isRightPointer, setIsRightPointer] = useState(false);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -285,8 +302,10 @@ const useStage4Setup = (
       },
       isSimStarted,
       isTutorialImage2End,
+      isRightPointer,
       setResultState,
-      playSound
+      playSound,
+      setIsRightPointer
     );
 
     Render.run(render);
@@ -306,9 +325,10 @@ const useStage4Setup = (
     mouseRef,
     bombRef,
     engineRef,
+    isRightPointer
   });
 
-  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
+  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
 
 // ================================================ STAGE 5 ====================================================
@@ -328,6 +348,8 @@ const useStage5Setup = (
 
   const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
+
+  const [isRightPointer, setIsRightPointer] = useState(false);
 
   useEffect(() => {
     const engine = engineRef.current;
@@ -360,8 +382,10 @@ const useStage5Setup = (
       },
       isSimStarted,
       isTutorialImage2End,
+      isRightPointer,
       setResultState,
-      playSound
+      playSound,
+      setIsRightPointer
     );
 
     Render.run(render);
@@ -381,9 +405,10 @@ const useStage5Setup = (
     mouseRef,
     bombRef,
     engineRef,
+    isRightPointer
   });
 
-  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef };
+  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
 };
 
 export {

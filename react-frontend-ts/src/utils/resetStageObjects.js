@@ -1,4 +1,4 @@
-import { Body } from 'matter-js';
+import { Body, Events } from 'matter-js';
 
 /**
  * Reset the game objects to their initial positions.
@@ -25,8 +25,9 @@ export function resetStage1Objects(
   setCountdown,
   setIsPlayerReady
 ) {
-  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef } = refs;
-  
+  const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef } = refs;
+  Events.off(engineRef.current);
+
   // mouse 객체를 리셋
   Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
   Body.setPosition(mouseRef.current, { x: 220, y: canvasSize.y - 480 });

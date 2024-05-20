@@ -21,6 +21,7 @@ interface UseSimulationProps {
   mouseRef: MutableRefObject<Body | null>;
   bombRef: MutableRefObject<Body | null>;
   engineRef: MutableRefObject<Engine | null>;
+  isRightPointer: boolean;
 }
 
 const useSimulation = ({
@@ -30,6 +31,7 @@ const useSimulation = ({
   mouseRef,
   bombRef,
   engineRef,
+  isRightPointer
 }: UseSimulationProps) => {
   useEffect(() => {
     console.log("useSimulation called", isSimStarted);
@@ -37,6 +39,75 @@ const useSimulation = ({
     let leftArmTerrain = Bodies.rectangle(0, 0, 0, 0);
     let rightArmTerrain = Bodies.rectangle(0, 0, 0, 0);
     const runner = Runner.create();
+    let onSlope = false;
+    let onSlopeRight = false;
+
+    // mouseRef의 x 방향 속도를 0.85로 설정하는 beforeUpdate Events
+    const setVelocityAlways = () => {
+      if (mouseRef.current && mouseRef.current.velocity.y < 0.1) {
+        console.log("mouseRef velocity: ", mouseRef.current.velocity.x, mouseRef.current.velocity.y);
+
+        if (!isRightPointer) {
+          Body.setVelocity(mouseRef.current, {
+            x: 2.2,
+            y: mouseRef.current.velocity.y,
+          });
+        } else {
+          Body.setVelocity(mouseRef.current, {
+            x: -2.2,
+            y: mouseRef.current.velocity.y,
+          });
+        }
+      }
+    }
+
+    const liftSlopeStart = (event: IEventCollision<Matter.Engine>) => {
+      event.pairs.forEach((pair) => {
+        const { bodyA, bodyB } = pair;
+        if (
+          (bodyA === mouseRef?.current && bodyB === leftArmTerrain) ||
+          (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
+        ) {
+          console.log("왼쪽 쥐 속도: ", mouseRef.current.velocity);
+          onSlope = true;
+        }
+
+        if (
+          (bodyA === mouseRef?.current && bodyB === rightArmTerrain) ||
+          (bodyA === rightArmTerrain && bodyB === mouseRef?.current)
+        ) {
+          console.log("오른쪽 쥐 속도: ", mouseRef.current.velocity);
+          onSlopeRight = true;
+        }
+      });
+    }
+    const liftSlopeEnd = (event: IEventCollision<Matter.Engine>) => {
+      event.pairs.forEach((pair) => {
+        const { bodyA, bodyB } = pair;
+        if (
+          (bodyA === mouseRef?.current && bodyB === leftArmTerrain) ||
+          (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
+        ) {
+          onSlope = false;
+        }
+
+        if (
+          (bodyA === mouseRef?.current && bodyB === rightArmTerrain) ||
+          (bodyA === rightArmTerrain && bodyB === mouseRef?.current)
+        ) {
+          onSlopeRight = false;
+        }
+      });
+    }
+    const updateVelocityAll = () => {
+      if (onSlope && mouseRef.current) {
+        updateVelocity(mouseRef.current, leftArmTerrain.angle);
+      }
+
+      if (onSlopeRight && mouseRef.current) {
+        updateVelocity(mouseRef.current, rightArmTerrain.angle);
+      }
+    }
 
     const updateVelocity = (mouse: Body, angle: number): void => {
       // normalVectoy 선언
@@ -160,82 +231,24 @@ const useSimulation = ({
         { x: 0, y: 0 },
       ]);
 
-      engineRef.current!.world.gravity.y = 0.075;
-      engineRef.current!.world.gravity.x = 0.02;
+      // engineRef의 시간스케일을 1.25로 설정
+      engineRef.current!.world.gravity.y = 0.25;
       Runner.run(runner, engineRef.current);
 
       // 쥐를 움직이기 위해 static 해제
       Body.setStatic(mouseRef.current, false);
       Body.setStatic(bombRef.current, false);
-    }
 
-    let onSlope = false;
-    let onSlopeRight = false;
-
-    const liftSlopeStart = (event: IEventCollision<Matter.Engine>) => {
-      event.pairs.forEach((pair) => {
-        const { bodyA, bodyB } = pair;
-        if (
-          (bodyA === mouseRef?.current && bodyB === leftArmTerrain) ||
-          (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
-        ) {
-          console.log("왼쪽 쥐 속도: ", mouseRef.current.velocity);
-          onSlope = true;
-        }
-
-        if (
-          (bodyA === mouseRef?.current && bodyB === rightArmTerrain) ||
-          (bodyA === rightArmTerrain && bodyB === mouseRef?.current)
-        ) {
-          console.log("오른쪽 쥐 속도: ", mouseRef.current.velocity);
-          onSlopeRight = true;
-        }
-      });
-    }
-    const liftSlopeEnd = (event: IEventCollision<Matter.Engine>) => {
-      event.pairs.forEach((pair) => {
-        const { bodyA, bodyB } = pair;
-        if (
-          (bodyA === mouseRef?.current && bodyB === leftArmTerrain) ||
-          (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
-        ) {
-          onSlope = false;
-        }
-
-        if (
-          (bodyA === mouseRef?.current && bodyB === rightArmTerrain) ||
-          (bodyA === rightArmTerrain && bodyB === mouseRef?.current)
-        ) {
-          onSlopeRight = false;
-        }
-      });
-    }
-    const updateVelocityAll = () => {
-      if (onSlope && mouseRef.current) {
-        updateVelocity(mouseRef.current, leftArmTerrain.angle);
-      }
-
-      if (onSlopeRight && mouseRef.current) {
-        updateVelocity(mouseRef.current, rightArmTerrain.angle);
-      }
-    }
-
-    if (engineRef?.current) {
       Events.on(engineRef.current, "collisionStart", liftSlopeStart);
       Events.on(engineRef.current, "collisionEnd", liftSlopeEnd);
       Events.on(engineRef.current, "beforeUpdate", updateVelocityAll);
+      Events.on(engineRef.current, "beforeUpdate", setVelocityAlways);
     }
 
     return () => {
       if (engineRef.current) {
-        // engineRef.current!.world.gravity.y = 0;
-        // engineRef.current!.world.gravity.x = 0;
         Composite.remove(engineRef.current.world, leftArmTerrain, true);
         Composite.remove(engineRef.current.world, rightArmTerrain, true);
-        // Events.off(engineRef.current, "beforeUpdate", applyContinuousForce);
-        // Events.off(engineRef.current, "collisionStart", liftSlopeStart);
-        // Events.off(engineRef.current, "collisionEnd", liftSlopeEnd);
-        // Events.off(engineRef.current, "beforeUpdate", updateVelocityAll);
       }
       Runner.stop(runner);
     };

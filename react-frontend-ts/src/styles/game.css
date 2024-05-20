@@ -507,3 +507,19 @@ textarea {
     left: 0;
   }
 }
+
+#player0-name {
+  color: #ffffff;
+  font-size: 140px;
+  margin-right: 20%;
+}
+#player1-name {
+  border: #000;
+  color: #ffffff;
+  font-size: 140px;
+}
+.player-name {
+  position: relative;
+  margin-top: 30px;
+  z-index: 99;
+}

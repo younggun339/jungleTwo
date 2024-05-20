@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Matter, {
   Engine,
   World,
@@ -16,8 +17,10 @@ export const initializeStage1Objects = (
   refs,
   isSimStarted,
   isTutorialImage2End,
+  isRightPointer,
   setResultState,
-  playSound
+  playSound,
+  setIsRightPointer
 ) => {
   const {
     render,
@@ -59,18 +62,10 @@ export const initializeStage1Objects = (
   ];
 
   if (!isTutorialImage2End) {
-    if (engine) {
-        Engine.clear(engine);
-    }
-    Events.off(engine);
-
     World.add(engine.world, walls);
+    console.log("isTutorialImage2End", isTutorialImage2End);
   } else {
-    if (engine) {
-      Engine.clear(engine);
-    }
-    Events.off(engine);
-
+    console.log("!isTutorialImage2End", isTutorialImage2End);
     let teleportLock = false;
     let onPanel = false;
     let onSlope = false;
@@ -368,26 +363,26 @@ export const initializeStage1Objects = (
     //------------------------------region 쥐---------------------------------
     const mouseImagesRight = [
       "/assets/RatWalkRight_0.png",
-      "/assets/RatWalkRight_1.png",
-      "/assets/RatWalkRight_2.png",
+      // "/assets/RatWalkRight_1.png",
+      // "/assets/RatWalkRight_2.png",
       "/assets/RatWalkRight_3.png",
-      "/assets/RatWalkRight_4.png",
-      "/assets/RatWalkRight_5.png",
+      // "/assets/RatWalkRight_4.png",
+      // "/assets/RatWalkRight_5.png",
       "/assets/RatWalkRight_6.png",
-      "/assets/RatWalkRight_7.png",
-      "/assets/RatWalkRight_8.png",
+      // "/assets/RatWalkRight_7.png",
+      // "/assets/RatWalkRight_8.png",
     ];
 
     const mouseImagesLeft = [
       "/assets/RatWalkLeft_0.png",
-      "/assets/RatWalkLeft_1.png",
-      "/assets/RatWalkLeft_2.png",
+      // "/assets/RatWalkLeft_1.png",
+      // "/assets/RatWalkLeft_2.png",
       "/assets/RatWalkLeft_3.png",
-      "/assets/RatWalkLeft_4.png",
-      "/assets/RatWalkLeft_5.png",
+      // "/assets/RatWalkLeft_4.png",
+      // "/assets/RatWalkLeft_5.png",
       "/assets/RatWalkLeft_6.png",
-      "/assets/RatWalkLeft_7.png",
-      "/assets/RatWalkLeft_8.png",
+      // "/assets/RatWalkLeft_7.png",
+      // "/assets/RatWalkLeft_8.png",
     ];
 
     // 죽은 쥐 이미지 배열
@@ -411,7 +406,7 @@ export const initializeStage1Objects = (
           currentImageIndex++;
         }
       }
-    }, 100);
+    }, 400);
 
     // 너비를 조정할 스케일 팩터
     const widthScaleFactor = 1.7; // 너비를 170%로 조정
@@ -578,10 +573,10 @@ export const initializeStage1Objects = (
       rightArmRightRef.current,
       ...floors,
       panel,
-      fire,
-      bombRef.current,
-      bombGround,
-      weight,
+      // fire,
+      // bombRef.current,
+      // bombGround,
+      // weight,
       floor,
       fallFloor,
     ]);
@@ -636,6 +631,7 @@ export const initializeStage1Objects = (
           (bodyA === mouseRef.current && bodyB === fallFloor) ||
           (bodyA === fallFloor && bodyB === mouseRef.current)
         ) {
+          Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
           setResultState(5);
         }
         // mouse과 fire가 충돌했을 때
@@ -646,6 +642,7 @@ export const initializeStage1Objects = (
           playSound("/sound/Burn.wav");
           mouseIsDead = true; // 쥐의 상태를 죽음으로 설정
           currentImageIndex = 0; // 죽은 쥐 이미지 배열의 시작으로 인덱스 초기화
+          Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
           setResultState(2);
         }
         // mouse과 cat이 충돌했을 때
@@ -657,6 +654,7 @@ export const initializeStage1Objects = (
           if (!(cat.render.sprite.texture === "/assets/CatClose.png")) {
             playSound("/sound/CatMeow.wav");
             setResultState(4);
+            Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {
             cat.collisionFilter = {
@@ -713,46 +711,50 @@ export const initializeStage1Objects = (
           weight.isStatic = true;
         }
         //----------추가 바닥에 닿았을때-------------
-
         //--------------좌우반전---------------
         if (
           (bodyA === mouseRef.current && bodyB === box1) ||
           (bodyA === box1 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
-          engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          //console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
+          setIsRightPointer(!isRightPointer);
+          //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
           (bodyA === mouseRef.current && bodyB === box2) ||
           (bodyA === box2 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box2]); //box제거
-          engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          //console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
+          setIsRightPointer(!isRightPointer);
+          //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
           (bodyA === mouseRef.current && bodyB === box3) ||
           (bodyA === box3 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box3]); //box제거
-          engine.gravity.x = engine.gravity.x * -1; //좌우반전
+          setIsRightPointer(!isRightPointer);
           console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         if (
           (bodyA === mouseRef.current && bodyB === box4) ||
           (bodyA === box4 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.wav");
           World.remove(engine.world, [box4]); //box제거
-          engine.gravity.x = engine.gravity.x * -1; //좌우반전
-          // console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
+          setIsRightPointer(!isRightPointer);
+          // console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
           (bodyA === mouseRef.current && bodyB === box5) ||
           (bodyA === box5 && bodyB === mouseRef.current)
         ) {
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box5]); //box제거
-          engine.gravity.x = engine.gravity.x * -1; //좌우반전
+          setIsRightPointer(!isRightPointer);
           console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         //--------------좌우반전---------------
@@ -971,75 +973,77 @@ export const initializeStage1Objects = (
       collapsesGround(engine, mouseRef);
       //------------사라지는 바닥------------
 
-    //   //---------rightArm---------
-    //   if (onSlopeRight) {
-    //     // 경사면에서 공이 움직이는 로직
-    //     const angle = rightArm.angle;
-    //     //console.log("angle:", angle);
-    //     if (angle === Math.PI) {
-    //         Body.setVelocity(mouse, mouse.velocity);
-    //     } else {
-    //         let modifiedAngle = angle;
-    //         // 공이 오른쪽에서 왼쪽으로 가는 경우
-    //         if (mouse.velocity.x < 0) {
-    //             if (angle > 0) {
-    //                 modifiedAngle *= -3;
-    //             } else {
-    //                 modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
-    //             }
+      //---------rightArm---------
+      // if (onSlopeRight) {
+      //   // 경사면에서 공이 움직이는 로직
+      //   const angle = rightArmRightRef.current.angle;
+      //   //console.log("angle:", angle);
+      //   if (angle === Math.PI) {
+      //     Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
+      //   } else {
+      //     let modifiedAngle = angle;
+      //     // 공이 오른쪽에서 왼쪽으로 가는 경우
+      //     if (mouseRef.current.velocity.x < 0) {
+      //       if (mouseRef.current.angle > 0) {
+      //         modifiedAngle *= -3;
+      //       } else {
+      //         modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
+      //       }
+      //     } else {
+      //       if (mouseRef.current.angle > 0) {
+      //         modifiedAngle *= -3;
+      //       } else {
+      //         modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
+      //       }
+      //     }
+      //     // 경사면의 법선 벡터 계산
+      //     const normalVector = {
+      //       x: Math.sin(modifiedAngle),
+      //       y: Math.cos(angle) * 0,
+      //     };
+      //     // 경사면 방향으로 속도 설정
+      //     const parallelComponent = Vector.mult(normalVector, originalSpeedX);
+      //     Body.setVelocity(mouseRef.current, parallelComponent);
+      //   }
+      // }
+      //---------rightArm---------
 
-    //         } else {
-    //             if (angle > 0) {
-    //                 modifiedAngle *= 3;
-    //             } else {
-    //                 modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
-    //             }
-    //         }
-    //         // 경사면의 법선 벡터 계산
-    //         const normalVector = { x: Math.sin(modifiedAngle), y: Math.cos(angle) * 0 };
-    //         // 경사면 방향으로 속도 설정
-    //         const parallelComponent = Vector.mult(normalVector, originalSpeedX);
-    //         Body.setVelocity(mouse, parallelComponent);
-    //     }
+      //----------leftArm---------
+      // if (onSlope) {
 
-    // }
-    // //---------rightArm---------
-
-
-    // //----------leftArm---------
-    // if (onSlope) {
-    //   console.log("mosue on leftArm");
-    //     // 경사면에서 공이 움직이는 로직
-    //     const angle = leftArm.angle;
-    //     console.log("leftArm angle: ", angle, "mouse velocity.x:", mouse.velocity.x)
-    //     if (angle === Math.PI) {
-    //         Body.setVelocity(mouse, mouse.velocity);
-    //     } else {
-    //         let modifiedAngle = angle;
-    //         // 공이 오른쪽에서 왼쪽으로 가는 경우
-    //         if (mouse.velocity.x < 0) {
-    //             if (angle > 0) {
-    //                 modifiedAngle *= -3;
-    //             } else {
-    //                 modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
-    //             }
-
-    //         } else {
-    //             if (angle > 0) {
-    //                 modifiedAngle *= 3;
-    //             } else {
-    //                 modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
-    //             }
-    //         }
-    //         // 경사면의 법선 벡터 계산
-    //         const normalVector = { x: Math.sin(modifiedAngle), y: Math.cos(angle) * 0 };
-    //         // 경사면 방향으로 속도 설정
-    //         const parallelComponent = Vector.mult(normalVector, originalSpeedX);
-    //         Body.setVelocity(mouse, parallelComponent);
-    //     }
-
-    // }
-    // //----------leftArm---------
+      //   // 경사면에서 공이 움직이는 로직
+      //   const angle = leftArmLeftRef.current.angle;
+      //   //console.log("leftArm angle: ", angle, "mouseRef.current velocity.x:", mouseRef.current.velocity.x)
+      //   if (angle === Math.PI) {
+      //     Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
+      //   } else {
+      //     let modifiedAngle = angle;
+      //     // 공이 오른쪽에서 왼쪽으로 가는 경우
+      //     if (mouseRef.current.velocity.x < 0) {
+      //       if (mouseRef.current.angle > 0) {
+      //         modifiedAngle *= 3;
+      //       } else {
+      //         modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
+      //       }
+      //     } else {
+      //       if (mouseRef.current.angle > 0) {
+      //         modifiedAngle *= -3;
+      //       } else {
+      //         modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
+      //       }
+      //     }
+      //     // 경사면의 법선 벡터 계산
+      //     const normalVector = {
+      //       x: Math.sin(modifiedAngle),
+      //       y: Math.cos(angle) * 0,
+      //     };
+      //     // 경사면 방향으로 속도 설정
+      //     const parallelComponent = Vector.mult(normalVector, originalSpeedX);
+      //     Body.setVelocity(mouseRef.current, parallelComponent);
+      //     //mouseRef.current.collisionFilter({category: 0x0004, mask:0xFFFFFFFF})
+      //   }
+      // }
+      //----------leftArm---------
       //----------panel---------
       if (onPanel) {
         // 경사면에서 공이 움직이는 로직
@@ -1125,6 +1129,8 @@ export const initializeStage1Objects = (
     //     });
     //   });
   }
+
+  return isRightPointer;
 };
 
 export const initializeStageObjects = (
