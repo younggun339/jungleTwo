@@ -17,6 +17,7 @@ const CreateRoom = ({ userName }) => {
   const { play, changeSource, setLoop } = useAudio({
     initialSrc: "/music/lobby_BGM.mp3",
   });
+  const playSound = useSoundEffects();
   setLoop(true);
   
   const handleCreateRoom = (event) => {

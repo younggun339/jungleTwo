@@ -19,17 +19,17 @@ const useStage1Setup = (
   isSimStarted: boolean,
   isTutorialImage2End: boolean,
   setResultState: (value: number) => void
-  ) => {
+) => {
   const engineRef = useRef<Engine>(Engine.create());
-  
+
   const leftArmLeftRef = useRef<Body | null>(null);
   const rightArmRightRef = useRef<Body | null>(null);
   const mouseRef = useRef<Body | null>(null);
   const bombRef = useRef<Body | null>(null);
-  
+
   const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
-  
+
   useEffect(() => {
     const engine = engineRef.current;
 
@@ -49,7 +49,7 @@ const useStage1Setup = (
       return;
     }
 
-    initializeStage5Objects(
+    initializeStage1Objects(
       engine,
       {
         render,
@@ -104,7 +104,7 @@ const useStage2Setup = (
 
   const renderRef = useRef<Render | null>(null);
   const playSound = useSoundEffects();
-  
+
   useEffect(() => {
     const engine = engineRef.current;
 
@@ -348,21 +348,21 @@ const useStage5Setup = (
       return;
     }
 
-    // initializeStage5Objects(
-    //   engine,
-    //   {
-    //     render,
-    //     canvasSize,
-    //     mouseRef,
-    //     bombRef,
-    //     leftArmLeftRef,
-    //     rightArmRightRef,
-    //   },
-    //   isSimStarted,
-    //   isTutorialImage2End,
-    //   setResultState,
-    //   playSound
-    // );
+    initializeStage5Objects(
+      engine,
+      {
+        render,
+        canvasSize,
+        mouseRef,
+        bombRef,
+        leftArmLeftRef,
+        rightArmRightRef,
+      },
+      isSimStarted,
+      isTutorialImage2End,
+      setResultState,
+      playSound
+    );
 
     Render.run(render);
 
