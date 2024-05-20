@@ -112,6 +112,7 @@ export const initializeStage4Objects = (
       Engine.clear(engine);
     }
     Events.off(engine);
+    setIsRightPointer(false);
 
     World.add(engine.world, walls);
   } else {
@@ -119,6 +120,7 @@ export const initializeStage4Objects = (
       Engine.clear(engine);
     }
     Events.off(engine);
+    setIsRightPointer(false);
     
     const floors = [
       Bodies.rectangle(800, canvasSize.y - 450, 1450, 25, {

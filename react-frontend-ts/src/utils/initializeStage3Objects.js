@@ -50,6 +50,7 @@ export const initializeStage3Objects = (
       Engine.clear(engine);
     }
     Events.off(engine);
+    setIsRightPointer(false);
 
     World.add(engine.world, walls);
     console.log("isTutorialImage2End", isTutorialImage2End);
@@ -58,6 +59,7 @@ export const initializeStage3Objects = (
       Engine.clear(engine);
     }
     Events.off(engine);
+    setIsRightPointer(false);
     
     console.log("!isTutorialImage2End", isTutorialImage2End);
     let teleportLock = false;
@@ -266,7 +268,7 @@ export const initializeStage3Objects = (
     });
 
     //점프대-1
-    const jumpPad = Bodies.rectangle(870, canvasSize.y - 220, 20, 20, {
+    const jumpPad = Bodies.rectangle(900, canvasSize.y - 220, 20, 20, {
       isStatic: true,
       render: {
         sprite: {
@@ -284,7 +286,7 @@ export const initializeStage3Objects = (
       },
     });
     //슈퍼점프대-1
-    const superJumppad = Bodies.rectangle(870, canvasSize.y - 50, 20, 20, {
+    const superJumppad = Bodies.rectangle(900, canvasSize.y - 50, 20, 20, {
       isStatic: true,
       render: {
         sprite: {
@@ -800,7 +802,7 @@ export const initializeStage3Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(true);
           //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
@@ -809,7 +811,7 @@ export const initializeStage3Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box2]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(false);
           //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
@@ -818,7 +820,7 @@ export const initializeStage3Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box3]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(false);
           console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         if (
@@ -827,7 +829,7 @@ export const initializeStage3Objects = (
         ) {
           playSound("/sound/Pointer.wav");
           World.remove(engine.world, [box4]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(true);
           // console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (

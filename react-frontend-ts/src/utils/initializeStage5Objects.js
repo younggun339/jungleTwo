@@ -51,6 +51,7 @@ export const initializeStage5Objects = (
       Engine.clear(engine);
     }
     Events.off(engine);
+    setIsRightPointer(false);
 
     World.add(engine.world, walls);
     console.log("isTutorialImage2End", isTutorialImage2End);
@@ -59,6 +60,7 @@ export const initializeStage5Objects = (
       Engine.clear(engine);
     }
     Events.off(engine);
+    setIsRightPointer(false);
     
     console.log("!isTutorialImage2End", isTutorialImage2End);
     let teleportLock = false;

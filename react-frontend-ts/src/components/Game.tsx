@@ -322,21 +322,10 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   // ============== 게임 결과 모달 =====================
   const handleRetry = () => {
     setIsMenuOpen(false);
-    // setShowWaitingPopup(true);
-    // if (nestjsSocketRef.current) {
-    //   nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
-    // }
-    clearStageObjects[currentStage - 1](
-      canvasSize,
-      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef },
-      setIsTutorialImage1End,
-      setIsTutorialImage2End,
-      setIsSimStarted,
-      setShowModal,
-      setResultState,
-      setCountdown
-    );
-    play();
+    setShowWaitingPopup(true);
+    if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
+    }
   };
 
   const handleAcceptRetry = () => {

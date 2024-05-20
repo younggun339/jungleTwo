@@ -32,7 +32,7 @@ export const useStage1Start = (
     countdown,
     2, // firstImageTime
     2, // secondImageTime
-    3, // chatTime
+    10, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,
@@ -263,7 +263,7 @@ const useStageStart = (
             }
           }
           /////////////////////////////////////////////////////////////////////////////////////////////// 레디 인원수 조절
-          if (readyPlayers.length === 1) {
+          if (readyPlayers.length === 2) {
             setIsGameStarted(true);
             setResultState(null);
           }

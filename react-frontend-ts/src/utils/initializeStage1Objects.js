@@ -62,10 +62,20 @@ export const initializeStage1Objects = (
   ];
 
   if (!isTutorialImage2End) {
+    if (engine) {
+      Engine.clear(engine);
+    }
+    Events.off(engine);
+    setIsRightPointer(false);
+
     World.add(engine.world, walls);
-    console.log("isTutorialImage2End", isTutorialImage2End);
   } else {
-    console.log("!isTutorialImage2End", isTutorialImage2End);
+    if (engine) {
+      Engine.clear(engine);
+    }
+    Events.off(engine);
+    setIsRightPointer(false);
+
     let teleportLock = false;
     let onPanel = false;
     let onSlope = false;
@@ -154,18 +164,18 @@ export const initializeStage1Objects = (
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.6 },
         },
       }),
-      Bodies.rectangle(1180, canvasSize.y - 140, 100, 25, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.4 },
-        },
-      }),
-      Bodies.rectangle(1380, canvasSize.y - 140, 100, 25, {
-        isStatic: true,
-        render: {
-          sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.4 },
-        },
-      }),
+      // Bodies.rectangle(1180, canvasSize.y - 140, 100, 25, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.4 },
+      //   },
+      // }),
+      // Bodies.rectangle(1380, canvasSize.y - 140, 100, 25, {
+      //   isStatic: true,
+      //   render: {
+      //     sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.4 },
+      //   },
+      // }),
       //Bodies.rectangle(300, canvas.y - 140, 300, 25, { isStatic: true, render: { fillStyle: 'blue' } }),
     ];
 
@@ -576,11 +586,11 @@ export const initializeStage1Objects = (
       rightArmRightRef.current,
       ...floors,
       panel,
-      // fire,
+      fire,
       // bombRef.current,
       // bombGround,
       // weight,
-      floor,
+      // floor,
       fallFloor,
     ]);
 

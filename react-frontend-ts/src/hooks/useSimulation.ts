@@ -23,16 +23,9 @@ const useSimulation = (
   engineRef: MutableRefObject<Engine | null>,
   isRightPointer: boolean,
 ) => {
+  // 쥐의 x 방향 속도를 0.85로 설정하는 beforeUpdate Events
   useEffect(() => {
     console.log("useSimulation called", isSimStarted);
-
-    let leftArmTerrain = Bodies.rectangle(0, 0, 0, 0);
-    let rightArmTerrain = Bodies.rectangle(0, 0, 0, 0);
-    const runner = Runner.create();
-    let onSlope = false;
-    let onSlopeRight = false;
-
-    // mouseRef의 x 방향 속도를 0.85로 설정하는 beforeUpdate Events
     const setVelocityAlways = () => {
       if (mouseRef.current && mouseRef.current.velocity.y < 0.1) {
         if (!isRightPointer) {
@@ -47,7 +40,28 @@ const useSimulation = (
           });
         }
       }
+    };
+
+    if (
+      isSimStarted &&
+      leftArmLeftRef.current &&
+      rightArmRightRef.current &&
+      mouseRef.current &&
+      bombRef.current &&
+      engineRef.current
+    ) {
+      // leftArmLeftRef.current 및 rightArmRightRef.current의 width 정의
+      Events.on(engineRef.current, "beforeUpdate", setVelocityAlways);
     }
+  }, [isSimStarted, isRightPointer]);
+
+  // 시뮬레이션이 시작했을 때 기물 그리고 에스컬레이터 알고리즘 적용.
+  useEffect(() => {
+    const runner = Runner.create();
+    let leftArmTerrain = Bodies.rectangle(0, 0, 0, 0);
+    let rightArmTerrain = Bodies.rectangle(0, 0, 0, 0);
+    let onSlope = false;
+    let onSlopeRight = false;
 
     const liftSlopeStart = (event: IEventCollision<Matter.Engine>) => {
       event.pairs.forEach((pair) => {
@@ -141,7 +155,6 @@ const useSimulation = (
       bombRef.current &&
       engineRef.current
     ) {
-      // leftArmLeftRef.current 및 rightArmRightRef.current의 width 정의
       const leftArmWidth = Math.sqrt(
         Math.pow(
           leftArmLeftRef.current.vertices[0].x -
@@ -221,26 +234,25 @@ const useSimulation = (
 
       // engineRef의 시간스케일을 1.25로 설정
       engineRef.current!.world.gravity.y = 0.5;
-      Runner.run(runner, engineRef.current);
-
       // 쥐를 움직이기 위해 static 해제
       Body.setStatic(mouseRef.current, false);
       Body.setStatic(bombRef.current, false);
 
-      Events.on(engineRef.current, "collisionStart", liftSlopeStart);
-      Events.on(engineRef.current, "collisionEnd", liftSlopeEnd);
-      Events.on(engineRef.current, "beforeUpdate", updateVelocityAll);
-      Events.on(engineRef.current, "beforeUpdate", setVelocityAlways);
-    }
+      Runner.run(runner, engineRef.current);
 
-    return () => {
-      if (engineRef.current) {
-        Composite.remove(engineRef.current.world, leftArmTerrain, true);
-        Composite.remove(engineRef.current.world, rightArmTerrain, true);
-      }
-      Runner.stop(runner);
-    };
-  }, [isSimStarted, isRightPointer]);
+      // Events.on(engineRef.current, "collisionStart", liftSlopeStart);
+      // Events.on(engineRef.current, "collisionEnd", liftSlopeEnd);
+      // Events.on(engineRef.current, "beforeUpdate", updateVelocityAll);
+
+      return () => {
+        if (engineRef.current) {
+          Composite.remove(engineRef.current.world, leftArmTerrain, true);
+          Composite.remove(engineRef.current.world, rightArmTerrain, true);
+        }
+        Runner.stop(runner);
+      };
+    }
+  }, [isSimStarted]);
 };
 
 export default useSimulation;

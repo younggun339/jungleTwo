@@ -22,8 +22,6 @@ export function clearStage1Objects(
   setCountdown,
 ) {
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef } = refs;
-  Events.off(engineRef.current);
-
   Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
   Body.setPosition(mouseRef.current, { x: 220, y: canvasSize.y - 480 });
   Body.setStatic(mouseRef.current, true);
