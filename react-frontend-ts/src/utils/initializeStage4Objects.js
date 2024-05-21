@@ -92,7 +92,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/SuperJump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x * 4, y: -velocity.y * 3 });
+          Body.setVelocity(ball, { x: velocity.x * 4.8, y: -velocity.y * 3 });
         }
       });
     };
@@ -399,7 +399,7 @@ export const initializeStage4Objects = (
     //------------------------------region 쥐---------------------------------
     // 쥐 생성
     mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
-      restitution: 0.2, // 반발 계수
+      restitution: 0, // 반발 계수
       friction: 0.8, // 마찰 계수
       frictionAir: Number.MIN_VALUE,
       render: {
@@ -598,7 +598,7 @@ export const initializeStage4Objects = (
     // });
 
     // cheese
-    const cheese = Bodies.rectangle(1500, 333, 50, 50, {
+    const cheese = Bodies.rectangle(1300, 303, 50, 50, {
       isStatic: true,
       render: {
         sprite: {

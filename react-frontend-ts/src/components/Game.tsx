@@ -120,7 +120,32 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     releaseAudioRef.current = new Audio("/sound/band_release.wav");
   }, []);
   //--------------play sound---------------
-
+  //--------------음성 인식 여부------------
+  // const YourComponent = () => {
+  //   useEffect(() => {
+  //     const detectAudioInput = async (): Promise<boolean> => {
+  //       try {
+  //         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  //         stream.getTracks().forEach(track => track.stop());
+  //         return true;
+  //       } catch (error) {
+  //         return false;
+  //       }
+  //     };
+  
+  //     const checkAudioInput = async () => {
+  //       const hasAudioInput = await detectAudioInput();
+  //       if (hasAudioInput) {
+  //         const videoContainer = document.getElementById("video-container-1");
+  //         if (videoContainer) {
+  //           videoContainer.style.border = "2px solid red"; // 붉은 색 테두리로 변경
+  //         }
+  //       }
+  //     };
+  
+  //     checkAudioInput();
+  //   }, []);
+  //---------------------------------------
   //--------------get coordinates---------------
   const handleMouseDown = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>

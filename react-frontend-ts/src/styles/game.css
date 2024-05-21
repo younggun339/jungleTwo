@@ -73,7 +73,7 @@ body {
   height: 600px; /* 높이 설정 */
   z-index: 2; /* Matter.js 캔버스를 상위에 */
   display: flex; /* 자식 요소를 가로로 배치 */
-  background-image: url("./bg3.png");
+  background-image: url("./bg3_gray.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -81,6 +81,7 @@ body {
 }
 
 #video-container-1 {
+  background-color: #000;
   position: absolute; /* 부모 기준 위치 */
   width: 50%; /* 전체 너비의 50% */
   height: 100%;
