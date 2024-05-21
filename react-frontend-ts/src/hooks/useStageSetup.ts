@@ -51,7 +51,7 @@ const useStage1Setup = (
       return;
     }
 
-    initializeStage1Objects(
+    initializeStage4Objects(
       engine,
       {
         render,
@@ -212,7 +212,7 @@ const useStage3Setup = (
       return;
     }
 
-    initializeStage3Objects(
+    initializeStage1Objects(
       engine,
       {
         render,

@@ -10,8 +10,8 @@ const createBoxLeft = (x, y, xs, ys) => {
     render: {
       sprite: {
         texture: "/assets/Left_Pointer_0.png",
-        xScale: 2,
-        yScale: 1.8,
+        xScale: 4,
+        yScale: 3.8,
         yOffset: yOffset,
       },
     },

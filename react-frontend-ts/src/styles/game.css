@@ -475,7 +475,7 @@ textarea {
   left: 50%;
   transform: translate(-50%, -50%);
   font-fmily: "myFont";
-  font-size: 16px;
+  font-size: 30px;
   font-weight: bold;
   color: #4a434a; /* 적당한 색상으로 조정 */
 }
@@ -503,9 +503,9 @@ textarea {
     left: 0;
   }
 }
-.speaking{
+.speaking {
   color: red;
 }
-.not-speaking{
+.not-speaking {
   color: blue;
 }

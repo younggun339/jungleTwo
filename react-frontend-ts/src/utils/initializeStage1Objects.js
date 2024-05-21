@@ -150,21 +150,21 @@ export const initializeStage1Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.31 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.31 },
         },
       }),
       Bodies.rectangle(635, canvasSize.y - 300, 100, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.09 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.09 },
         },
       }),
       Bodies.rectangle(1200, canvasSize.y - 400, 700, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.6 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.6 },
         },
       }),
       // Bodies.rectangle(1180, canvasSize.y - 140, 100, 25, {
@@ -199,9 +199,9 @@ export const initializeStage1Objects = (
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/Ground4.png",
-          xScale: 3,
-          yScale: 3.5,
+          texture: "/sprite/Ground4.png",
+          xScale: 0.9,
+          yScale: 1,
         },
       },
     });
@@ -224,8 +224,8 @@ export const initializeStage1Objects = (
       render: {
         sprite: {
           texture: "/assets/Bomb_0.png",
-          xScale: 2,
-          yScale: 2,
+          xScale: 2.5,
+          yScale: 2.5,
         },
       },
     });
@@ -244,7 +244,7 @@ export const initializeStage1Objects = (
       isStatic: true,
       angle: -Math.PI / 6, // 45도를 라디안으로 변환
       render: {
-        sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.85 },
+        sprite: { texture: "/sprite/Ground4.png", yScale: 0.9, xScale: 1 },
       },
     });
 
@@ -311,8 +311,8 @@ export const initializeStage1Objects = (
       render: {
         sprite: {
           texture: "/assets/Fire_0.png",
-          xScale: 1.2,
-          yScale: 1.2,
+          xScale: 1.8,
+          yScale: 1.8,
         },
       },
     });
@@ -430,8 +430,10 @@ export const initializeStage1Objects = (
     }, 400);
 
     // 너비를 조정할 스케일 팩터
-    const widthScaleFactor = 1.7; // 너비를 170%로 조정
-    // 커스텀 렌더링 함수    // 커스텀 렌더링 함수
+    const widthScaleFactor = 3; // 너비를 조정하는 스케일 팩터
+    const heightScaleFactor = 2; // 높이를 조정하는 스케일 팩터, 원하는 값으로 설정하세요.
+
+    // 커스텀 렌더링 함수
     function handleMouseRender(event) {
       const context = render.context;
       const bodies = Matter.Composite.allBodies(engine.world);
@@ -440,9 +442,9 @@ export const initializeStage1Objects = (
         if (body.circleRadius) {
           const { x, y } = body.position;
           const img = new Image();
+
           // bombRef.current 예외 처리
           if (body === bombRef.current) {
-            // 폭탄 객체에 대해서는 다른 텍스처 또는 렌더링을 스킵
             continue; // 이 라인은 폭탄 객체에 대해 아무 작업도 하지 않음
           }
 
@@ -454,30 +456,26 @@ export const initializeStage1Objects = (
           } else {
             mouseImages = mouseImagesDead;
           }
-          // if (!isSimStarted) {
-          //   mouseImages =
-          //     body.velocity.x >= 0 ? mouseImagesRight : mouseImagesLeft;
-          // }
 
           img.src = mouseImages[currentImageIndex];
 
+          // 너비와 높이를 스케일 팩터로 조정
           const scaledWidth = body.circleRadius * 2 * widthScaleFactor;
-          const originalHeight = body.circleRadius * 2;
+          const scaledHeight = body.circleRadius * 2 * heightScaleFactor;
 
           context.save();
           context.translate(x, y);
           context.drawImage(
             img,
             -scaledWidth / 2,
-            -originalHeight / 2,
+            -scaledHeight / 2,
             scaledWidth,
-            originalHeight
+            scaledHeight
           );
           context.restore();
         }
       }
     }
-
     // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
     Events.on(render, "afterRender", handleMouseRender);
 
@@ -588,7 +586,6 @@ export const initializeStage1Objects = (
 
     World.add(engine.world, [
       ...walls, // 지우지마라
-      cheese,
       mouseRef.current,
       leftArmLeftRef.current,
       rightArmRightRef.current,
@@ -600,6 +597,7 @@ export const initializeStage1Objects = (
       // weight,
       // floor,
       fallFloor,
+      cheese,
     ]);
 
     // 충돌 감지
@@ -764,7 +762,7 @@ export const initializeStage1Objects = (
           (bodyA === mouseRef.current && bodyB === box4) ||
           (bodyA === box4 && bodyB === mouseRef.current)
         ) {
-          playSound("/sound/Pointer.wav");
+          playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box4]); //box제거
           setIsRightPointer(!isRightPointer);
           // console.log("사라지는 바닥의 좌표:", mouse.position);

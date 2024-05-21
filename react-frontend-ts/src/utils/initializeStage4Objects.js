@@ -135,7 +135,7 @@ export const initializeStage4Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.26 },
         },
       }),
       Bodies.rectangle(600, canvasSize.y - 450, 100, 25, {
@@ -144,7 +144,7 @@ export const initializeStage4Objects = (
         render: {
           sprite: {
             texture: "/sprite/Ground4.png",
-            yScale: 0.35,
+            yScale: 0.9,
             xScale: 0.41,
           },
         },
@@ -155,7 +155,7 @@ export const initializeStage4Objects = (
         render: {
           sprite: {
             texture: "/sprite/Ground4.png",
-            yScale: 0.35,
+            yScale: 0.9,
             xScale: 0.41,
           },
         },
@@ -165,14 +165,14 @@ export const initializeStage4Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.26 },
         },
       }),
       Bodies.rectangle(700, canvasSize.y - 280, 300, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.26 },
         },
       }),
 
@@ -180,14 +180,14 @@ export const initializeStage4Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.26 },
         },
       }),
       Bodies.rectangle(700, canvasSize.y - 110, 300, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.26 },
         },
       }),
 
@@ -195,14 +195,14 @@ export const initializeStage4Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.26 },
         },
       }),
       Bodies.rectangle(1100, canvasSize.y - 400, 200, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.18 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.18 },
         },
       }),
     ];
@@ -223,7 +223,7 @@ export const initializeStage4Objects = (
         sprite: {
           texture: "/assets/BrokenGround_0.png",
           xScale: 3,
-          yScale: 3.5,
+          yScale: 6.2,
         },
       },
     });
@@ -236,7 +236,7 @@ export const initializeStage4Objects = (
         sprite: {
           texture: "/assets/BrokenGround_0.png",
           xScale: 3,
-          yScale: 3.5,
+          yScale: 6.2,
         },
       },
     });
@@ -250,6 +250,8 @@ export const initializeStage4Objects = (
       render: {
         sprite: {
           texture: "/assets/Bomb_0.png",
+          xScale: 2.5,
+          yScale: 2.5,
         },
       },
     });
@@ -304,6 +306,8 @@ export const initializeStage4Objects = (
       render: {
         sprite: {
           texture: "/assets/Portal_0.png",
+          xScale: 0.35,
+          yScale: 0.35,
         },
       },
     });
@@ -314,6 +318,8 @@ export const initializeStage4Objects = (
       render: {
         sprite: {
           texture: "/assets/Portal_0.png",
+          xScale: 0.35,
+          yScale: 0.35,
         },
       },
     });
@@ -438,29 +444,28 @@ export const initializeStage4Objects = (
         mask: 0xffff, // 다른 모든 그룹과 충돌하도록 설정
       },
     });
-
     const mouseImagesRight = [
       "/assets/RatWalkRight_0.png",
-      "/assets/RatWalkRight_1.png",
-      "/assets/RatWalkRight_2.png",
+      // "/assets/RatWalkRight_1.png",
+      // "/assets/RatWalkRight_2.png",
       "/assets/RatWalkRight_3.png",
-      "/assets/RatWalkRight_4.png",
-      "/assets/RatWalkRight_5.png",
+      // "/assets/RatWalkRight_4.png",
+      // "/assets/RatWalkRight_5.png",
       "/assets/RatWalkRight_6.png",
-      "/assets/RatWalkRight_7.png",
-      "/assets/RatWalkRight_8.png",
+      // "/assets/RatWalkRight_7.png",
+      // "/assets/RatWalkRight_8.png",
     ];
 
     const mouseImagesLeft = [
       "/assets/RatWalkLeft_0.png",
-      "/assets/RatWalkLeft_1.png",
-      "/assets/RatWalkLeft_2.png",
+      // "/assets/RatWalkLeft_1.png",
+      // "/assets/RatWalkLeft_2.png",
       "/assets/RatWalkLeft_3.png",
-      "/assets/RatWalkLeft_4.png",
-      "/assets/RatWalkLeft_5.png",
+      // "/assets/RatWalkLeft_4.png",
+      // "/assets/RatWalkLeft_5.png",
       "/assets/RatWalkLeft_6.png",
-      "/assets/RatWalkLeft_7.png",
-      "/assets/RatWalkLeft_8.png",
+      // "/assets/RatWalkLeft_7.png",
+      // "/assets/RatWalkLeft_8.png",
     ];
 
     // 죽은 쥐 이미지 배열
@@ -484,11 +489,13 @@ export const initializeStage4Objects = (
           currentImageIndex++;
         }
       }
-    }, 100);
+    }, 400);
 
     // 너비를 조정할 스케일 팩터
-    const widthScaleFactor = 1.7; // 너비를 170%로 조정
-    // 커스텀 렌더링 함수    // 커스텀 렌더링 함수
+    const widthScaleFactor = 3; // 너비를 조정하는 스케일 팩터
+    const heightScaleFactor = 2; // 높이를 조정하는 스케일 팩터, 원하는 값으로 설정하세요.
+
+    // 커스텀 렌더링 함수
     function handleMouseRender(event) {
       const context = render.context;
       const bodies = Matter.Composite.allBodies(engine.world);
@@ -497,9 +504,9 @@ export const initializeStage4Objects = (
         if (body.circleRadius) {
           const { x, y } = body.position;
           const img = new Image();
+
           // bombRef.current 예외 처리
           if (body === bombRef.current) {
-            // 폭탄 객체에 대해서는 다른 텍스처 또는 렌더링을 스킵
             continue; // 이 라인은 폭탄 객체에 대해 아무 작업도 하지 않음
           }
 
@@ -514,23 +521,23 @@ export const initializeStage4Objects = (
 
           img.src = mouseImages[currentImageIndex];
 
+          // 너비와 높이를 스케일 팩터로 조정
           const scaledWidth = body.circleRadius * 2 * widthScaleFactor;
-          const originalHeight = body.circleRadius * 2;
+          const scaledHeight = body.circleRadius * 2 * heightScaleFactor;
 
           context.save();
           context.translate(x, y);
           context.drawImage(
             img,
             -scaledWidth / 2,
-            -originalHeight / 2,
+            -scaledHeight / 2,
             scaledWidth,
-            originalHeight
+            scaledHeight
           );
           context.restore();
         }
       }
     }
-
     // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
     Events.on(render, "afterRender", handleMouseRender);
 
@@ -1204,7 +1211,7 @@ export const initializeStage4Objects = (
     setTimeout(() => {
       Body.setStatic(bombRef.current, false);
     }, 3000);
-    
+
     setTimeout(() => {
       Body.setStatic(weight, false);
       Body.applyForce(

@@ -72,7 +72,7 @@ export const initializeStage2Objects = (
     }
     Events.off(engine);
     setIsRightPointer(false);
-    
+
     console.log("!isTutorialImage2End", isTutorialImage2End);
     let teleportLock = false;
     let onPanel = false;
@@ -145,28 +145,28 @@ export const initializeStage2Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.66 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.66 },
         },
       }),
       Bodies.rectangle(1090, canvasSize.y - 350, 330, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.29 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.29 },
         },
       }),
       Bodies.rectangle(1473, canvasSize.y - 370, 140, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 0.5 },
+          sprite: { texture: "/sprite/Ground4.png", yScale: 1, xScale: 0.5 },
         },
       }),
       Bodies.rectangle(800, canvasSize.y - 110, 1450, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 1.26 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 1.26 },
         },
       }),
     ];
@@ -195,7 +195,7 @@ export const initializeStage2Objects = (
         sprite: {
           texture: "/assets/BrokenGround_0.png",
           xScale: 3,
-          yScale: 3.5,
+          yScale: 6.2,
         },
       },
     });
@@ -296,31 +296,31 @@ export const initializeStage2Objects = (
       Bodies.rectangle(230, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1, xScale: 1.5 },
+          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
         },
       }),
       Bodies.rectangle(280, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
         },
       }),
       Bodies.rectangle(330, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
         },
       }),
       Bodies.rectangle(380, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
         },
       }),
       Bodies.rectangle(430, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", yScale: 1.2, xScale: 1.5 },
+          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
         },
       }),
       // Bodies.rectangle(480, 210, 50, 50, {
@@ -417,29 +417,28 @@ export const initializeStage2Objects = (
         mask: 0xffff, // 다른 모든 그룹과 충돌하도록 설정
       },
     });
-
     const mouseImagesRight = [
       "/assets/RatWalkRight_0.png",
-      "/assets/RatWalkRight_1.png",
-      "/assets/RatWalkRight_2.png",
+      // "/assets/RatWalkRight_1.png",
+      // "/assets/RatWalkRight_2.png",
       "/assets/RatWalkRight_3.png",
-      "/assets/RatWalkRight_4.png",
-      "/assets/RatWalkRight_5.png",
+      // "/assets/RatWalkRight_4.png",
+      // "/assets/RatWalkRight_5.png",
       "/assets/RatWalkRight_6.png",
-      "/assets/RatWalkRight_7.png",
-      "/assets/RatWalkRight_8.png",
+      // "/assets/RatWalkRight_7.png",
+      // "/assets/RatWalkRight_8.png",
     ];
 
     const mouseImagesLeft = [
       "/assets/RatWalkLeft_0.png",
-      "/assets/RatWalkLeft_1.png",
-      "/assets/RatWalkLeft_2.png",
+      // "/assets/RatWalkLeft_1.png",
+      // "/assets/RatWalkLeft_2.png",
       "/assets/RatWalkLeft_3.png",
-      "/assets/RatWalkLeft_4.png",
-      "/assets/RatWalkLeft_5.png",
+      // "/assets/RatWalkLeft_4.png",
+      // "/assets/RatWalkLeft_5.png",
       "/assets/RatWalkLeft_6.png",
-      "/assets/RatWalkLeft_7.png",
-      "/assets/RatWalkLeft_8.png",
+      // "/assets/RatWalkLeft_7.png",
+      // "/assets/RatWalkLeft_8.png",
     ];
 
     // 죽은 쥐 이미지 배열
@@ -463,11 +462,13 @@ export const initializeStage2Objects = (
           currentImageIndex++;
         }
       }
-    }, 100);
+    }, 400);
 
     // 너비를 조정할 스케일 팩터
-    const widthScaleFactor = 1.7; // 너비를 170%로 조정
-    // 커스텀 렌더링 함수    // 커스텀 렌더링 함수
+    const widthScaleFactor = 3; // 너비를 조정하는 스케일 팩터
+    const heightScaleFactor = 2; // 높이를 조정하는 스케일 팩터, 원하는 값으로 설정하세요.
+
+    // 커스텀 렌더링 함수
     function handleMouseRender(event) {
       const context = render.context;
       const bodies = Matter.Composite.allBodies(engine.world);
@@ -476,9 +477,9 @@ export const initializeStage2Objects = (
         if (body.circleRadius) {
           const { x, y } = body.position;
           const img = new Image();
+
           // bombRef.current 예외 처리
           if (body === bombRef.current) {
-            // 폭탄 객체에 대해서는 다른 텍스처 또는 렌더링을 스킵
             continue; // 이 라인은 폭탄 객체에 대해 아무 작업도 하지 않음
           }
 
@@ -493,22 +494,25 @@ export const initializeStage2Objects = (
 
           img.src = mouseImages[currentImageIndex];
 
+          // 너비와 높이를 스케일 팩터로 조정
           const scaledWidth = body.circleRadius * 2 * widthScaleFactor;
-          const originalHeight = body.circleRadius * 2;
+          const scaledHeight = body.circleRadius * 2 * heightScaleFactor;
 
           context.save();
           context.translate(x, y);
           context.drawImage(
             img,
             -scaledWidth / 2,
-            -originalHeight / 2,
+            -scaledHeight / 2,
             scaledWidth,
-            originalHeight
+            scaledHeight
           );
           context.restore();
         }
       }
     }
+    // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
+    Events.on(render, "afterRender", handleMouseRender);
 
     // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
     Events.on(render, "afterRender", handleMouseRender);
@@ -658,10 +662,10 @@ export const initializeStage2Objects = (
 
     // // 창을 월드에 추가
     World.add(engine.world, [
-      ...fire,
       ...walls,
       mouseRef.current,
       ...floors,
+      ...fire,
       ground,
       jumpPad,
       jumpPad2,
@@ -1088,8 +1092,6 @@ export const initializeStage2Objects = (
     const originalSpeedX = 0.9;
     //----------leftArm---------
     Events.on(engine, "beforeUpdate", () => {
-
-
       //---------rightArm---------
       if (onSlopeRight) {
         // 경사면에서 공이 움직이는 로직
@@ -1244,6 +1246,6 @@ export const initializeStage2Objects = (
     //       }
     //     });
     //   });
-  return isRightPointer;
-}
+    return isRightPointer;
+  }
 };
