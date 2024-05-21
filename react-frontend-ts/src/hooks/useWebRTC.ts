@@ -336,6 +336,7 @@ export interface WebRTCResult {
   indexRef: MutableRefObject<number>;
   sendLeftHandJoint: (joint1Start: any, joint1End: any) => void;
   sendRightHandJoint: (joint1Start: any, joint1End: any) => void;
+  // receiveVoiceData: (callback: (() => void) | null) => void;
 }
 
 export default useWebRTC;

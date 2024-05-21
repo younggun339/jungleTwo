@@ -92,7 +92,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/SuperJump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x * 4.8, y: -velocity.y * 3 });
+          Body.setVelocity(ball, { x: velocity.x * 4, y: -velocity.y * 3 });
         }
       });
     };
@@ -131,43 +131,80 @@ export const initializeStage4Objects = (
     );
 
     const floors = [
-      Bodies.rectangle(410, canvasSize.y - 450, 400, 25, {
+      Bodies.rectangle(200, canvasSize.y - 450, 300, 25, {
         label: "load",
         isStatic: true,
         render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
         },
       }),
-
-      Bodies.rectangle(1200, canvasSize.y - 450, 400, 25, {
+      Bodies.rectangle(600, canvasSize.y - 450, 100, 25, {
         label: "load",
         isStatic: true,
         render: {
+          sprite: {
+            texture: "/sprite/Ground4.png",
+            yScale: 0.35,
+            xScale: 0.41,
+          },
         },
       }),
-
-      Bodies.rectangle(220, 360, 350, 25, {
+      Bodies.rectangle(800, canvasSize.y - 450, 100, 25, {
         label: "load",
         isStatic: true,
         render: {
+          sprite: {
+            texture: "/sprite/Ground4.png",
+            yScale: 0.35,
+            xScale: 0.41,
+          },
         },
       }),
 
-      Bodies.rectangle(680, 360, 350, 25, {
+      Bodies.rectangle(200, canvasSize.y - 280, 300, 25, {
         label: "load",
         isStatic: true,
         render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
         },
       }),
-
-      Bodies.rectangle(1180, 360, 350, 25, {
+      Bodies.rectangle(700, canvasSize.y - 280, 300, 25, {
         label: "load",
         isStatic: true,
         render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
         },
       }),
 
+      Bodies.rectangle(200, canvasSize.y - 110, 300, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+        },
+      }),
+      Bodies.rectangle(700, canvasSize.y - 110, 300, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+        },
+      }),
 
-
+      Bodies.rectangle(1350, canvasSize.y - 110, 300, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
+        },
+      }),
+      Bodies.rectangle(1100, canvasSize.y - 400, 200, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.18 },
+        },
+      }),
     ];
 
     const floor = Bodies.rectangle(510, canvasSize.y - 280, 870, 25, {
@@ -207,7 +244,7 @@ export const initializeStage4Objects = (
 
     //----------------------------region 아이템----------------------------
     //폭탄
-    bombRef.current = Bodies.circle(500, 250, 20, {
+    bombRef.current = Bodies.circle(1255, 40, 20, {
       frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
@@ -218,10 +255,10 @@ export const initializeStage4Objects = (
     });
 
     //좌우반전 아이템 위에서부터 차례대로
-    const box1 = createBoxLeft(50, 310, 50, 50);
-    const box2 = createBox(1300, 100, 50, 50);
+    const box1 = createBoxLeft(840, canvasSize.y - 487, 50, 50);
+    const box2 = createBox(600, canvasSize.y - 317, 50, 50);
     const box3 = createBox(200, canvasSize.y - 317, 50, 50);
-    const box4 = createBoxLeft(1400, 100, 50, 50);
+    const box4 = createBoxLeft(840, canvasSize.y - 147, 50, 50);
 
     const box5 = createBox(1115, canvasSize.y - 207, 50, 50);
 
@@ -251,17 +288,7 @@ export const initializeStage4Objects = (
       },
     });
     //슈퍼점프대-1
-    const superJumppad = Bodies.rectangle(430, 380, 20, 20, {
-      isStatic: true,
-      render: {
-        sprite: {
-          texture: "/assets/JumpPad2_0.png",
-        },
-      },
-    });
-
-    //슈퍼점프대-2
-    const superJumppad2 = Bodies.rectangle(920, 380, 20, 20, {
+    const superJumppad = Bodies.rectangle(940, canvasSize.y - 30, 20, 20, {
       isStatic: true,
       render: {
         sprite: {
@@ -272,7 +299,7 @@ export const initializeStage4Objects = (
 
     //-------------------------------------------------------------
     // portal 생성
-    const portal1 = Bodies.rectangle(600, 100, 25, 25, {
+    const portal1 = Bodies.rectangle(1450, 450, 25, 25, {
       isStatic: true,
       render: {
         sprite: {
@@ -282,7 +309,7 @@ export const initializeStage4Objects = (
     });
 
     // portal 생성
-    const portal2 = Bodies.rectangle(1000, 100, 25, 25, {
+    const portal2 = Bodies.rectangle(1000, 55, 25, 25, {
       isStatic: true,
       render: {
         sprite: {
@@ -314,7 +341,7 @@ export const initializeStage4Objects = (
     //----------------------------------------------------------------
 
     // 불
-    const fire = Bodies.rectangle(505, 183, 300, 50, {
+    const fire = Bodies.rectangle(1355, 453, 50, 50, {
       isStatic: true,
       render: {
         fillStyle: "red",
@@ -322,7 +349,7 @@ export const initializeStage4Objects = (
     });
 
     //불1
-    const fire1 = Bodies.rectangle(1105, 183, 300, 50, {
+    const fire1 = Bodies.rectangle(1250, 405, 50, 50, {
       isStatic: true,
       render: {
         fillStyle: "red",
@@ -598,7 +625,7 @@ export const initializeStage4Objects = (
     // });
 
     // cheese
-    const cheese = Bodies.rectangle(1300, 303, 50, 50, {
+    const cheese = Bodies.rectangle(1400, 353, 50, 50, {
       isStatic: true,
       render: {
         sprite: {
@@ -613,19 +640,25 @@ export const initializeStage4Objects = (
 
     // // 창을 월드에 추가
     World.add(engine.world, [
+      catButton,
       ...floors,
+      cat,
+      cheese,
       bombRef.current,
-      superJumppad,
-      superJumppad2,
+      bombGround,
       portal1,
       portal2,
-      box1, box4,
       mouseRef.current,
-      leftArmLeftRef.current,
       rightArmRightRef.current,
-      fire,
-      fire1,
-      cheese,
+      leftArmLeftRef.current,
+      superJumppad,
+      jumpPad,
+      box1,
+      box2,
+      box3,
+      box4,
+      ground,
+
       ...walls /*    fire1, fire2,    jumpPad2,      fire, panel, portal3, portal4, catButton2,     box5,    weight, floor, mouse,*/,
     ]);
 
@@ -770,7 +803,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
-          setIsRightPointer(false);
+          setIsRightPointer(true);
           //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
@@ -814,7 +847,6 @@ export const initializeStage4Objects = (
         jumping(event, engine, mouseRef.current, jumpPad);
         jumping(event, engine, mouseRef.current, jumpPad2);
         superJumping(event, engine, mouseRef.current, superJumppad);
-        superJumping(event, engine, mouseRef.current, superJumppad2);
         //--------------점프대----------------
       });
       //불
@@ -879,15 +911,15 @@ export const initializeStage4Objects = (
             });
             //console.log(portal2.position.y - portal2.circleRadius - mouse.circleRadius);
             teleportLock = true; // 포탈 사용 후 잠금
-            // portal1.collisionFilter = {
-            //   group: 0,
-            // };
+            portal1.collisionFilter = {
+              group: 0,
+            };
             // console.log(teleportLock);
             setTimeout(() => {
               teleportLock = false;
-              // portal1.collisionFilter = {
-              //   group: 1,
-              // };
+              portal1.collisionFilter = {
+                group: 1,
+              };
               //console.log("teleportLock after 5 sec", teleportLock);
             }, 100); // 1초 후 잠금 해제
           }
@@ -917,15 +949,15 @@ export const initializeStage4Objects = (
             });
             //console.log(portal2.position.y - portal2.circleRadius - mouse.circleRadius);
             teleportLock = true; // 포탈 사용 후 잠금
-            // portal2.collisionFilter = {
-            //   group: 0,
-            // };
+            portal2.collisionFilter = {
+              group: 0,
+            };
             // console.log(teleportLock);
             setTimeout(() => {
               teleportLock = false;
-              // portal2.collisionFilter = {
-              //   group: 1,
-              // };
+              portal2.collisionFilter = {
+                group: 1,
+              };
               //console.log("teleportLock after 5 sec", teleportLock);
             }, 100); // 1초 후 잠금 해제
           }

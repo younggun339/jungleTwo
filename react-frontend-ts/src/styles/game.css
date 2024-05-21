@@ -503,3 +503,9 @@ textarea {
     left: 0;
   }
 }
+.speaking{
+  color: red;
+}
+.not-speaking{
+  color: blue;
+}

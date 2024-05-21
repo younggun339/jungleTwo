@@ -120,32 +120,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     releaseAudioRef.current = new Audio("/sound/band_release.wav");
   }, []);
   //--------------play sound---------------
-  //--------------음성 인식 여부------------
-  // const YourComponent = () => {
-  //   useEffect(() => {
-  //     const detectAudioInput = async (): Promise<boolean> => {
-  //       try {
-  //         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  //         stream.getTracks().forEach(track => track.stop());
-  //         return true;
-  //       } catch (error) {
-  //         return false;
-  //       }
-  //     };
-  
-  //     const checkAudioInput = async () => {
-  //       const hasAudioInput = await detectAudioInput();
-  //       if (hasAudioInput) {
-  //         const videoContainer = document.getElementById("video-container-1");
-  //         if (videoContainer) {
-  //           videoContainer.style.border = "2px solid red"; // 붉은 색 테두리로 변경
-  //         }
-  //       }
-  //     };
-  
-  //     checkAudioInput();
-  //   }, []);
-  //---------------------------------------
   //--------------get coordinates---------------
   const handleMouseDown = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
@@ -281,7 +255,38 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     joint1Start: { x: typeof startCx; y: typeof startCy };
     joint1End: { x: typeof endCx; y: typeof endCy };
   }
+  //--------------음성 인식 여부------------
+  // const [isSpeaking, setIsSpeaking] = useState(false);
+  // const { receiveVoiceData } = useWebRTC(
+  //   nestjsSocketRef,
+  //   flaskSocketRef,
+  //   gameRoomID,
+  //   leftArmLeftRef,
+  //   rightArmRightRef,
+  //   canvasSize,
+  //   canvasRef,
+  //   userName,
+  //   isTutorialImage2End,
+  //   isSimStarted
+  // );
 
+  // useEffect(() => {
+  //   // 음성 데이터 수신 시 실행되는 함수
+  //   const handleVoiceData = () => {
+  //     setIsSpeaking(true); // 사용자의 음성이 감지되면 상태 변경
+  //   };
+
+  //   // 음성 데이터 수신 시 실행되는 콜백 등록
+  //   receiveVoiceData(handleVoiceData);
+
+  //   // Clean-up 함수
+  //   return () => {
+  //     // 이벤트 리스너 등록 해제
+  //     receiveVoiceData(null);
+  //   };
+  // }, [receiveVoiceData]);
+
+  //---------------------------------------
   useEffect(() => {
     //-------------좌표넘겨주는 코드----------------
     const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
@@ -351,17 +356,17 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
     }
-    // clearStageObjects[currentStage - 1](
-    //   canvasSize,
-    //   { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
-    //   setIsTutorialImage1End,
-    //   setIsTutorialImage2End,
-    //   setIsSimStarted,
-    //   setShowModal,
-    //   setResultState,
-    //   setCountdown
-    // );
-    // play();
+    clearStageObjects[currentStage - 1](
+      canvasSize,
+      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+      setIsTutorialImage1End,
+      setIsTutorialImage2End,
+      setIsSimStarted,
+      setShowModal,
+      setResultState,
+      setCountdown
+    );
+    play();
   };
 
   const handleAcceptRetry = () => {
@@ -650,7 +655,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             </label>
           </div>
         )}
-
+        {/* <div className={isSpeaking ? 'speaking' : 'not-speaking'}>
+          나는 바보야...
+        </div> */}
         <footer className="footer">
           <span id="player0">WAITING</span>
           <span id="ready0">X</span>
