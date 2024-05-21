@@ -140,17 +140,12 @@ const useWebRTC = (
           nestjsSocketRef.current.on("user", (data: string[]) => {
             const element0 = document.getElementById("player0");
             const element1 = document.getElementById("player1");
-            const name0 = document.getElementById("player0-name");
-            const name1 = document.getElementById("player1-name");
 
             element0!.textContent = data[0][1];
-            name0!.textContent = data[0][1];
             if (data.length == 2) {
               element1!.textContent = data[1][1];
-              name1!.textContent = data[1][1];
             } else {
               element1!.textContent = "WAITING";
-              name1!.textContent = "WAITING";
             }
           });
 

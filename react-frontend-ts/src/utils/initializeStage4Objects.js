@@ -11,6 +11,7 @@ import Matter, {
 import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
 import createBoxLeft from "../Items/PlotTwistBoxLeft";
+
 export const initializeStage4Objects = (
   engine,
   refs,
@@ -36,25 +37,36 @@ export const initializeStage4Objects = (
       render: {
         sprite: { texture: "/sprite/Wall.png", yScale: 0.85, xScale: 0.1 },
       },
-    }), //좌
-    //Bodies.rectangle(canvas.width / 2, canvas.height, canvas.width, 50, { isStatic: true, render: { fillStyle: 'red' } }), //하
-    Bodies.rectangle(1600, canvasSize.y / 2, 50, canvasSize.y, {
+    }),
+    Bodies.rectangle(canvasSize.x, canvasSize.y / 2, 50, canvasSize.y, {
       isStatic: true,
       render: {
         sprite: { texture: "/sprite/Wall.png", yScale: 0.85, xScale: 0.1 },
       },
-    }), //우
-    //Bodies.rectangle(canvas.width / 2, canvas.height - 600, canvas.width, 50, { isStatic: true, render: { fillStyle: 'red' } }), //상
-
-    //가벽
-    //Bodies.rectangle(800, canvas.height / 2, 10, canvas.height, { isStatic: true, render: { fillStyle: 'red' } }), //좌
+    }),
   ];
 
-  let teleportLock = false;
-  let onPanel = false;
-  let onSlope = false;
-  let onSlopeRight = false;
+  if (!isTutorialImage2End) {
+    if (engine) {
+      Engine.clear(engine);
+    }
+    Events.off(engine);
+    setIsRightPointer(false);
 
+    World.add(engine.world, walls);
+    console.log("isTutorialImage2End", isTutorialImage2End);
+  } else {
+    if (engine) {
+      Engine.clear(engine);
+    }
+    Events.off(engine);
+    setIsRightPointer(false);
+
+    console.log("!isTutorialImage2End", isTutorialImage2End);
+    let teleportLock = false;
+    let onPanel = false;
+    let onSlope = false;
+    let onSlopeRight = false;
     //점프
     const jumping = (event, engine, ball, jumpPad) => {
       event.pairs.forEach((pair) => {
@@ -85,94 +97,25 @@ export const initializeStage4Objects = (
       });
     };
 
-  // 충돌 시 호출될 burnMouse 함수
-  function burnMouse() {
-    playSound("/sound/Burn.wav");
-    playSound("/sound/GameOver.wav");
-    Body.setStatic(mouseRef.current, true);
-  }
-
-  // //사라지는 벽
-  // const collapsesGround = (engine, mouseRef, ground) => {
-  //   if (
-  //     (1049 <= mouseRef.current.position.x &&
-  //       mouseRef.current.position.x <= 1069 &&
-  //       287 === Math.floor(mouseRef.current.position.y) &&
-  //       mouseRef.current.velocity.x >= 0) ||
-  //     (930 <= mouseRef.current.position.x &&
-  //       mouseRef.current.position.x <= 940 &&
-  //       287 === Math.floor(mouseRef.current.position.y) &&
-  //       mouseRef.current.velocity.x <= 0)
-  //   ) {
-  //     Composite.remove(engine.world, ground);
-  //   } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
-  // };
-
-  if (!isTutorialImage2End) {
-    if (engine) {
-      Engine.clear(engine);
+    // 충돌 시 호출될 burnMouse 함수
+    function burnMouse() {
+      playSound("/sound/Burn.wav");
+      playSound("/sound/GameOver.wav");
+      Body.setStatic(mouseRef.current, true);
     }
-    Events.off(engine);
-    setIsRightPointer(false);
 
-    World.add(engine.world, walls);
-  } else {
-    if (engine) {
-      Engine.clear(engine);
-    }
-    Events.off(engine);
-    setIsRightPointer(false);
-    
-    const floors = [
-      Bodies.rectangle(800, canvasSize.y - 450, 1450, 25, {
-        label: "load",
-        isStatic: true,
-        render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 1.26 },
-        },
-      }),
-      Bodies.rectangle(1210, canvasSize.y - 280, 340, 25, {
-        label: "load",
-        isStatic: true,
-        render: {
-          sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 1.3 },
-        },
-      }),
-      Bodies.rectangle(800, canvasSize.y - 110, 1450, 25, {
-        label: "load",
-        isStatic: true,
-        render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 1.26 },
-        },
-      }),
+    //사라지는 바닥
+    const collapsesGround = () => {
+      if (
+        740 <= mouseRef.current.position.x &&
+        mouseRef.current.position.x <= 755 &&
+        117 === Math.floor(mouseRef.current.position.y)
+      ) {
+        playSound("/sound/BrokenGround.wav");
+        Composite.remove(engine.world, ground);
+      } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
+    };
 
-      //고양이버튼바닥
-      Bodies.rectangle(1350, canvasSize.y - 185, 100, 5, {
-        label: "load",
-        isStatic: true,
-        render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.02, xScale: 0.089 },
-        },
-      }),
-      Bodies.rectangle(1050, canvasSize.y - 360, 100, 5, {
-        label: "load",
-        isStatic: true,
-        render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.02, xScale: 0.089 },
-        },
-      }),
-    ];
-    const floor = Bodies.rectangle(510, canvasSize.y - 280, 870, 25, {
-      label: "load",
-      isStatic: true,
-      render: {
-        sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.76 },
-      },
-      collisionFilter: {
-        category: 0x0004, // category 4
-        mask: 0xffff, // 모든 category와 충돌
-      },
-    });
     // 쥐가 낙사 시 죽는 이벤트를 걸기 위한 바닥 생성
     const fallFloor = Bodies.rectangle(
       canvasSize.x / 2,
@@ -186,14 +129,70 @@ export const initializeStage4Objects = (
         },
       }
     );
-    // bombGround
-    const bombGround = Bodies.rectangle(1090, canvasSize.y - 500, 100, 25, {
+
+    const floors = [
+      Bodies.rectangle(410, canvasSize.y - 450, 400, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+        },
+      }),
+
+      Bodies.rectangle(1200, canvasSize.y - 450, 400, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+        },
+      }),
+
+      Bodies.rectangle(220, 360, 350, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+        },
+      }),
+
+      Bodies.rectangle(620, 360, 350, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+        },
+      }),
+
+      Bodies.rectangle(1020, 360, 350, 25, {
+        label: "load",
+        isStatic: true,
+        render: {
+        },
+      }),
+
+
+
+    ];
+
+    const floor = Bodies.rectangle(510, canvasSize.y - 280, 870, 25, {
       isStatic: true,
-      render: { fillStyle: "purple" },
+      render: { fillStyle: "blue" },
+      collisionFilter: {
+        category: 0x0004, // category 4
+        mask: 0xffff, // 모든 category와 충돌
+      },
+    });
+
+    // bombGround
+    const bombGround = Bodies.rectangle(1250, canvasSize.y - 400, 100, 25, {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "/assets/BrokenGround_0.png",
+          xScale: 3,
+          yScale: 3.5,
+        },
+      },
     });
 
     //사라지는바닥
-    const ground = Bodies.rectangle(995, 320, 100, 25, {
+    const ground = Bodies.rectangle(700, 150, 100, 25, {
       label: "load",
       isStatic: true,
       render: {
@@ -205,49 +204,54 @@ export const initializeStage4Objects = (
       },
     });
     //--------------------------벽 및 바닥--------------------------
-    //----------------------------region 아이템----------------------------
 
-    bombRef.current = Bodies.circle(1085, 40, 20, {
+    //----------------------------region 아이템----------------------------
+    //폭탄
+    bombRef.current = Bodies.circle(1255, 40, 20, {
       frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
-        fillStyle: "indigo",
+        sprite: {
+          texture: "/assets/Bomb_0.png",
+        },
       },
     });
 
     //좌우반전 아이템 위에서부터 차례대로
-    const box1 = createBoxLeft(1250, canvasSize.y - 317, 50, 50);
-    const box2 = createBox(995, canvasSize.y - 180, 50, 50);
-    const box3 = createBoxLeft(1500, canvasSize.y - 207, 50, 50);
-    const box4 = createBox(1295, canvasSize.y - 147, 50, 50);
+    const box1 = createBoxLeft(50, 310, 50, 50);
+    const box2 = createBox(1300, 100, 50, 50);
+    const box3 = createBox(200, canvasSize.y - 317, 50, 50);
+    const box4 = createBoxLeft(1400, 100, 50, 50);
 
     const box5 = createBox(1115, canvasSize.y - 207, 50, 50);
+
     //기울어진땅..?
     const panel = Bodies.rectangle(1290, canvasSize.y - 320, 140, 25, {
-      label: "load",
       isStatic: true,
       angle: Math.PI / 5, // 45도를 라디안으로 변환
-      render: {
-        sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 0.7 },
-      },
+      render: { fillStyle: "blue" },
     });
 
     //점프대-1
-    const jumpPad = Bodies.rectangle(1270, canvasSize.y - 0, 20, 20, {
+    const jumpPad = Bodies.rectangle(900, canvasSize.y - 220, 20, 20, {
       isStatic: true,
       render: {
-        fillStyle: "yellow",
+        sprite: {
+          texture: "/assets/JumpPad_0.png",
+        },
       },
     });
     //점프대-2
     const jumpPad2 = Bodies.rectangle(1353, canvasSize.y - 100, 20, 20, {
       isStatic: true,
       render: {
-        fillStyle: "yellow",
+        sprite: {
+          texture: "/assets/JumpPad_0.png",
+        },
       },
     });
     //슈퍼점프대-1
-    const superJumppad = Bodies.rectangle(1420, canvasSize.y - 120, 20, 20, {
+    const superJumppad = Bodies.rectangle(450, 380, 20, 20, {
       isStatic: true,
       render: {
         sprite: {
@@ -258,21 +262,21 @@ export const initializeStage4Objects = (
 
     //-------------------------------------------------------------
     // portal 생성
-    const portal1 = Bodies.rectangle(100, 295, 25, 25, {
+    const portal1 = Bodies.rectangle(600, 100, 25, 25, {
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/Portal2_0.png",
+          texture: "/assets/Portal_0.png",
         },
       },
     });
 
     // portal 생성
-    const portal2 = Bodies.rectangle(1500, 125, 25, 25, {
+    const portal2 = Bodies.rectangle(1000, 100, 25, 25, {
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/Portal2_0.png",
+          texture: "/assets/Portal_0.png",
         },
       },
     });
@@ -283,7 +287,7 @@ export const initializeStage4Objects = (
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/Portal_0.png",
+          texture: "/assets/Portal2_0.png",
         },
       },
     });
@@ -293,14 +297,14 @@ export const initializeStage4Objects = (
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/Portal_0.png",
+          texture: "/assets/Portal2_0.png",
         },
       },
     });
     //----------------------------------------------------------------
 
     // 불
-    const fire = Bodies.rectangle(1355, 453, 50, 50, {
+    const fire = Bodies.rectangle(505, 203, 250, 50, {
       isStatic: true,
       render: {
         fillStyle: "red",
@@ -308,7 +312,7 @@ export const initializeStage4Objects = (
     });
 
     //불1
-    const fire1 = Bodies.rectangle(1250, 405, 50, 50, {
+    const fire1 = Bodies.rectangle(1250, 205, 50, 50, {
       isStatic: true,
       render: {
         fillStyle: "red",
@@ -337,9 +341,7 @@ export const initializeStage4Objects = (
     const weight = Bodies.rectangle(550, 210, 40, 40, {
       isStatic: true,
       render: {
-        sprite: {
-          texture: "/assets/Weight_0.png",
-        },
+        fillStyle: "yellow",
       },
       collisionFilter: {
         category: 0x0002, // category 2
@@ -349,7 +351,7 @@ export const initializeStage4Objects = (
     //Body.setVelocity(weight,{x: -0.35, y:-0.3})
 
     //고양이버튼-1
-    const catButton = Bodies.rectangle(1350, canvasSize.y - 193, 40, 10, {
+    const catButton = Bodies.rectangle(330, canvasSize.y - 467, 40, 10, {
       isStatic: true,
       render: {
         sprite: {
@@ -372,7 +374,7 @@ export const initializeStage4Objects = (
     });
 
     // 고양이 생성
-    const cat = Bodies.rectangle(300, canvasSize.y - 168, 200, 90, {
+    const cat = Bodies.rectangle(200, canvasSize.y - 168, 200, 90, {
       isStatic: true,
       render: {
         sprite: {
@@ -391,8 +393,8 @@ export const initializeStage4Objects = (
       friction: 0.8, // 마찰 계수
       frictionAir: Number.MIN_VALUE,
       render: {
-        fillStyle: "blue",
-        strokeStyle: "black",
+        fillStyle: "transparent",
+        strokeStyle: "transparent",
       },
       collisionFilter: {
         category: 0x0004, // 충돌 그룹 설정
@@ -400,140 +402,114 @@ export const initializeStage4Objects = (
       },
     });
 
-    // const mouseImages = [
-    //   "/assets/MouseWalk_0.png",
-    //   "/assets/MouseWalk_1.png",
-    //   "/assets/MouseWalk_2.png",
-    //   "/assets/MouseWalk_3.png",
-    // ];
-    // let currentImageIndex = 0;
+    const mouseImagesRight = [
+      "/assets/RatWalkRight_0.png",
+      "/assets/RatWalkRight_1.png",
+      "/assets/RatWalkRight_2.png",
+      "/assets/RatWalkRight_3.png",
+      "/assets/RatWalkRight_4.png",
+      "/assets/RatWalkRight_5.png",
+      "/assets/RatWalkRight_6.png",
+      "/assets/RatWalkRight_7.png",
+      "/assets/RatWalkRight_8.png",
+    ];
 
-    // // 매초마다 이미지를 변경하는 로직
-    // setInterval(() => {
-    //   currentImageIndex = (currentImageIndex + 1) % mouseImages.length;
-    // }, 100);
-    // const scaleMultiplier = 2;
-    // // 커스텀 렌더링 함수
-    // function handleMouseRender(event) {
-    //   const context = Render.context;
-    //   const bodies = Matter.Composite.allBodies(engine.world);
+    const mouseImagesLeft = [
+      "/assets/RatWalkLeft_0.png",
+      "/assets/RatWalkLeft_1.png",
+      "/assets/RatWalkLeft_2.png",
+      "/assets/RatWalkLeft_3.png",
+      "/assets/RatWalkLeft_4.png",
+      "/assets/RatWalkLeft_5.png",
+      "/assets/RatWalkLeft_6.png",
+      "/assets/RatWalkLeft_7.png",
+      "/assets/RatWalkLeft_8.png",
+    ];
 
-    //   for (let body of bodies) {
-    //     if (body.circleRadius) {
-    //       const { x, y } = body.position;
-    //       const img = new Image();
-    //       img.src = mouseImages[currentImageIndex];
-    //       const yOffset = img.height / 2; // 이미지의 높이의 절반
+    // 죽은 쥐 이미지 배열
+    const mouseImagesDead = [
+      "/assets/RatDead_0.png",
+      "/assets/RatDead_1.png",
+      "/assets/RatDead_2.png",
+      "/assets/RatDead_3.png",
+    ];
 
-    //       const scale = (body.circleRadius * 2 * scaleMultiplier) / img.width; // 스케일을 조절합니다.
-    //       context.save();
-    //       context.translate(x, y - yOffset);
-    //       context.drawImage(
-    //         img,
-    //         -body.circleRadius * scaleMultiplier,
-    //         -body.circleRadius * scaleMultiplier,
-    //         body.circleRadius * 2 * scaleMultiplier,
-    //         body.circleRadius * 2 * scaleMultiplier
-    //       );
-    //       context.restore();
-    //     }
-    //   }
-    // }
-    // // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
-    // Events.on(Render, "afterRender", handleMouseRender);
+    let currentImageIndex = 0;
+    let mouseIsDead = false; // 쥐의 상태를 추적하는 변수
+
+    // 매초마다 이미지를 변경하는 로직
+    const intervalId = setInterval(() => {
+      if (!mouseIsDead) {
+        currentImageIndex = (currentImageIndex + 1) % mouseImagesRight.length; // 살아있는 쥐 이미지 순환
+      } else {
+        // 죽은 쥐 이미지가 한 번만 순환하도록 처리
+        if (currentImageIndex < mouseImagesDead.length - 1) {
+          currentImageIndex++;
+        }
+      }
+    }, 100);
+
+    // 너비를 조정할 스케일 팩터
+    const widthScaleFactor = 1.7; // 너비를 170%로 조정
+    // 커스텀 렌더링 함수    // 커스텀 렌더링 함수
+    function handleMouseRender(event) {
+      const context = render.context;
+      const bodies = Matter.Composite.allBodies(engine.world);
+
+      for (let body of bodies) {
+        if (body.circleRadius) {
+          const { x, y } = body.position;
+          const img = new Image();
+          // bombRef.current 예외 처리
+          if (body === bombRef.current) {
+            // 폭탄 객체에 대해서는 다른 텍스처 또는 렌더링을 스킵
+            continue; // 이 라인은 폭탄 객체에 대해 아무 작업도 하지 않음
+          }
+
+          // 쥐의 상태에 따라 이미지 배열 선택
+          let mouseImages;
+          if (!mouseIsDead) {
+            mouseImages =
+              body.velocity.x >= 0 ? mouseImagesRight : mouseImagesLeft;
+          } else {
+            mouseImages = mouseImagesDead;
+          }
+
+          img.src = mouseImages[currentImageIndex];
+
+          const scaledWidth = body.circleRadius * 2 * widthScaleFactor;
+          const originalHeight = body.circleRadius * 2;
+
+          context.save();
+          context.translate(x, y);
+          context.drawImage(
+            img,
+            -scaledWidth / 2,
+            -originalHeight / 2,
+            scaledWidth,
+            originalHeight
+          );
+          context.restore();
+        }
+      }
+    }
+
+    // Matter.js의 렌더링 이벤트에 커스텀 렌더링 함수를 연결합니다.
+    Events.on(render, "afterRender", handleMouseRender);
+
     //----------------------------end region 쥐-------------------------------
+
     //----------------내가만든기물------------------
-    //   //정답
-    //   const leftArm = Bodies.rectangle(505, canvas.height - 310, 150, 25, {
+    //정답
+    //   const leftArm = Bodies.rectangle(375, canvasSize.y - 430, 330, 25, {
     //     collisionFilter: {
     //         category: 0x0001, // category 2
     //         mask: 0xFFFF ^ 0x0002 // 모든 category와 충돌하되 category 1과는 충돌하지 않음
     //     },
     //     isStatic: true,
-    //     angle: -Math.PI / 7,
-    //     render: {sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:0.5} }
+    //     angle: Math.PI,
+    //     render: {sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:1.1} }
     // })
-
-    //예상오답1
-    // const leftArm = Bodies.rectangle(480, canvas.height - 390, 200, 25,
-    //     {
-    //         collisionFilter: {
-    //             category: 0x0001, // category 2
-    //             mask: 0xFFFF ^ 0x0002 // 모든 category와 충돌하되 category 1과는 충돌하지 않음
-    //         },
-    //         isStatic: true,
-    //         angle: -Math.PI / 7,
-    //         render: { fillStyle: 'orange' }
-    //     })
-    //----------------내가만든기물------------------
-
-    //---------------피어가만든기물-----------------
-    //   //정답
-    //   const rightArm = Bodies.rectangle(1200, canvas.height - 150, 180, 25, {
-    //     isStatic: true,
-    //     angle: -Math.PI / 5, // 45도를 라디안으로 변환
-    //     render: {sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:0.56}}
-    // })
-    // const rightArm2 = Bodies.rectangle(1200, canvas.height - 150, 180, 25, {
-    //     isStatic: true,
-    //     angle: -Math.PI / 5, // 45도를 라디안으로 변환
-    //     render: {fillStyle:'red'}
-    // })
-
-    //예상오답
-    //  const rightArm = Bodies.rectangle(880, canvas.height - 320, 200, 25, {
-    //     isStatic: true,
-    //     angle: -Math.PI / 6, // 45도를 라디안으로 변환
-    //     render: { fillStyle: 'orange' }
-    // })
-    //---------------피어가만든기물-----------------
-
-    //------------ 이미지를 순환시키기 위한 로직
-    // let lastUpdateTime = 0;
-    // let currentFrame = 0;
-    // Events.on(engine, "beforeUpdate", function (event) {
-    //     const currentTime = event.timestamp;
-    //     let frameDuration = 200; // 매 초마다 이미지 변경
-
-    //     if (currentTime - lastUpdateTime > frameDuration) {
-    //         lastUpdateTime = currentTime;
-    //         currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
-
-    //         box1.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
-    //         box2.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
-    //         box3.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
-    //         box4.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
-    //         box5.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
-    //         // jumpPad.render.sprite.texture = `/assets/jumpPad_${currentFrame}.png`;
-    //         // jumpPad2.render.sprite.texture = `/assets/jumpPad_${currentFrame}.png`;
-    //         fire.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //         fire1.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //         fire2.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //         portal1.render.sprite.texture = `/assets/portal_${currentFrame}.png`;
-    //         portal2.render.sprite.texture = `/assets/portal_${currentFrame}.png`;
-    //         portal3.render.sprite.texture = `/assets/portal2_${currentFrame}.png`;
-    //         portal4.render.sprite.texture = `/assets/portal2_${currentFrame}.png`;
-    //         superJumppad.render.sprite.texture = `/assets/jumpPad2_${currentFrame}.png`;
-    //         ground.render.sprite.texture = `/assets/BrokenGround_${currentFrame}.png`;
-    //         bombGround.render.sprite.texture = `/assets/BrokenGround_${currentFrame}.png`;
-    //         Bomb.render.sprite.texture = `/assets/Bomb_${currentFrame}.png`;
-    //     }
-    // });
-    //------------ 이미지를 순환시키기 위한 로직
-
-    // cheese
-    const cheese = Bodies.rectangle(300, 453, 50, 50, {
-      isStatic: true,
-      render: {
-        sprite: {
-          texture: "/sprite/Cheese.png",
-          xScale: 2,
-          yScale: 2,
-        },
-      },
-    });
-    cat.render.zIndex = 5;
-    //--------
     leftArmLeftRef.current = Bodies.rectangle(
       canvasSize.x / 4,
       canvasSize.y / 2,
@@ -550,6 +526,17 @@ export const initializeStage4Objects = (
         },
       }
     );
+
+    //----------------내가만든기물------------------
+
+    //---------------피어가만든기물-----------------
+
+    //정답
+    //  const rightArm = Bodies.rectangle(1200, canvas.y - 120, 200, 25, {
+    //     isStatic: true,
+    //     angle: -Math.PI / 5, // 45도를 라디안으로 변환
+    //     render: { sprite:{texture:'/sprite/Ground.png', yScale:0.2,xScale:0.7} }
+    // })
     rightArmRightRef.current = Bodies.rectangle(
       (canvasSize.x * 3) / 4,
       canvasSize.y / 2,
@@ -566,38 +553,72 @@ export const initializeStage4Objects = (
         },
       }
     );
+    //---------------피어가만든기물-----------------
 
+    // // 이미지를 순환시키기 위한 로직
+    // let lastUpdateTime = 0;
+    // let currentFrame = 0;
+    // Events.on(engine, "beforeUpdate", function (event) {
+    //   const currentTime = event.timestamp;
+    //   let frameDuration = 200; // 매 초마다 이미지 변경
+
+    //   if (currentTime - lastUpdateTime > frameDuration) {
+    //     lastUpdateTime = currentTime;
+    //     currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
+
+    //     box1.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
+    //     box2.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
+    //     jumpPad.render.sprite.texture = `/assets/jumpPad_${currentFrame}.png`;
+    //     jumpPad2.render.sprite.texture = `/assets/jumpPad_${currentFrame}.png`;
+    //     fire.forEach((body) => {
+    //       body.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
+    //     });
+    //     // fire.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
+    //     // fire1.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
+    //     // fire2.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
+    //     portal1.render.sprite.texture = `/assets/portal_${currentFrame}.png`;
+    //     portal2.render.sprite.texture = `/assets/portal_${currentFrame}.png`;
+    //     portal3.render.sprite.texture = `/assets/portal2_${currentFrame}.png`;
+    //     portal4.render.sprite.texture = `/assets/portal2_${currentFrame}.png`;
+    //     superJumppad.render.sprite.texture = `/assets/jumpPad2_${currentFrame}.png`;
+    //     ground.render.sprite.texture = `/assets/BrokenGround_${currentFrame}.png`;
+    //     bombGround.render.sprite.texture = `/assets/BrokenGround_${currentFrame}.png`;
+    //     bombRef.current.render.sprite.texture = `/assets/Bomb_${currentFrame}.png`;
+    //   }
+    // });
+
+    // cheese
+    const cheese = Bodies.rectangle(1400, 353, 50, 50, {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "/sprite/Cheese.png",
+          xScale: 2,
+          yScale: 2,
+        },
+      },
+    });
+
+    cat.render.zIndex = 5;
+
+    // // 창을 월드에 추가
     World.add(engine.world, [
-      floor,
       ...floors,
-      ...walls,
-      fire,
-      panel,
-      catButton2,
       superJumppad,
-      catButton,
-      cat,
-      cheese,
-      box1,
-      box2,
-      box3,
-      box4,
-      box5,
-      ground,
-      portal3,
-      portal4,
       portal1,
       portal2,
-      weight,
-      rightArmRightRef.current,
-      leftArmLeftRef.current,
+      box1, box4,
       mouseRef.current,
+      leftArmLeftRef.current,
+      rightArmRightRef.current,
+      fire,
+      ...walls /*    fire1, fire2,    jumpPad2,      fire, panel, portal3, portal4, catButton2,     box5,    weight, floor, mouse,*/,
     ]);
-    //-----------충돌 이벤트
 
+    // 충돌 감지
     Events.on(engine, "collisionStart", (event) => {
       handleCrasheweight(event);
-      handleBurnMouse(event);
+      //handleBurnMouse(event);
       handleTeleport(event);
       //-------------텔레포트---------
       event.pairs.forEach((pair) => {
@@ -617,12 +638,12 @@ export const initializeStage4Objects = (
           }; // catButton의 충돌 필터 변경
           cat.render.sprite.texture = "/assets/CatClose.png";
           cat.render.sprite.xScale = 0.17;
-          cat.render.sprite.yScale = 0.17;
+          cat.render.sprite.yScale = 0.17; // cat의 색상을 빨간색으로 변경
         }
         // mouse과 catButton2이 충돌했을 때
         if (
           (bodyA === mouseRef.current && bodyB === catButton2) ||
-          (bodyA === catButton2 && bodyB === mouseRef)
+          (bodyA === catButton2 && bodyB === mouseRef.current)
         ) {
           //console.log("공이 고양이 버튼에 닿았습니다.");
           catButton2.render.sprite.texture = "/assets/CatButtonPush.png";
@@ -633,14 +654,13 @@ export const initializeStage4Objects = (
           }; // catButton의 충돌 필터 변경
           cat.render.sprite.texture = "/assets/CatClose.png";
           cat.render.sprite.xScale = 0.17;
-          cat.render.sprite.yScale = 0.17;
+          cat.render.sprite.yScale = 0.17; // cat의 색상을 빨간색으로 변경
         }
         // mouse과 fallFloor가 충돌했을 때
         if (
           (bodyA === mouseRef.current && bodyB === fallFloor) ||
           (bodyA === fallFloor && bodyB === mouseRef.current)
         ) {
-          playSound("/sound/BrokenGround.wav");
           setResultState(5);
         }
         // mouse과 cat이 충돌했을 때
@@ -649,8 +669,10 @@ export const initializeStage4Objects = (
           (bodyA === cat && bodyB === mouseRef.current)
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
-          if (!(cat.render.fillStyle === "red")) {
+          if (!(cat.render.sprite.texture === "/assets/CatClose.png")) {
             setResultState(4);
+            playSound("/sound/CatMeow.wav");
+            playSound("/sound/GameOver.wav");
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {
             cat.collisionFilter = {
@@ -666,8 +688,7 @@ export const initializeStage4Objects = (
         ) {
           // mouse를 멈추고 게임 클리어를 알립니다.
           playSound("/sound/GameClear.wav");
-          mouseRef.currentf.isStatic = true;
-          // 게임 클리어
+          mouseRef.current.isStatic = true;
           setResultState(0);
         }
         //------------cheese--------------
@@ -735,7 +756,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
-          setIsRightPointer(true);
+          setIsRightPointer(false);
           //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
@@ -753,7 +774,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box3]); //box제거
-          setIsRightPointer(true);
+          setIsRightPointer(false);
           console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         if (
@@ -762,7 +783,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/Pointer.wav");
           World.remove(engine.world, [box4]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(true);
           // console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
@@ -782,20 +803,21 @@ export const initializeStage4Objects = (
         //--------------점프대----------------
       });
       //불
-      function handleBurnMouse(event) {
-        event.pairs.forEach((pair) => {
-          const { bodyA, bodyB } = pair;
-          if (
-            ((bodyA === fire || bodyA === fire1 || bodyA === fire2) &&
-              bodyB === mouseRef.current) ||
-            (bodyA === mouseRef.current &&
-              (bodyB === fire || bodyB === fire1 || bodyB === fire2))
-          ) {
-            alert("game over");
-            burnMouse(); // 충돌 시 burnMouse 함수 호출
-          }
-        });
-      }
+      // function handleBurnMouse(event) {
+      //   event.pairs.forEach((pair) => {
+      //     const { bodyA, bodyB } = pair;
+      //     // fire 배열의 각 요소에 대해 충돌을 감지하여 게임 오버 처리
+      //     fire.forEach((fireBody) => {
+      //       if (
+      //         (bodyA === fireBody && bodyB === mouseRef.current) ||
+      //         (bodyA === mouseRef.current && bodyB === fireBody)
+      //       ) {
+      //         setResultState(2);
+      //         burnMouse(); // 충돌 시 burnMouse 함수 호출
+      //       }
+      //     });
+      //   });
+      // }
 
       //추
       function handleCrasheweight(event) {
@@ -807,13 +829,12 @@ export const initializeStage4Objects = (
           ) {
             // 충돌 시 crashMouse 함수 호출
             crashMouse();
-            setResultState(3);
+            setResultState(2);
           }
         });
       }
       //마우스추에충돌시
       function crashMouse() {
-        playSound("/sound/Weight.wav");
         playSound("/sound/GameOver.wav");
         Body.setStatic(mouseRef.current, true);
       }
@@ -843,15 +864,15 @@ export const initializeStage4Objects = (
             });
             //console.log(portal2.position.y - portal2.circleRadius - mouse.circleRadius);
             teleportLock = true; // 포탈 사용 후 잠금
-            portal1.collisionFilter = {
-              group: 0,
-            };
+            // portal1.collisionFilter = {
+            //   group: 0,
+            // };
             // console.log(teleportLock);
             setTimeout(() => {
               teleportLock = false;
-              portal1.collisionFilter = {
-                group: 1,
-              };
+              // portal1.collisionFilter = {
+              //   group: 1,
+              // };
               //console.log("teleportLock after 5 sec", teleportLock);
             }, 100); // 1초 후 잠금 해제
           }
@@ -881,15 +902,15 @@ export const initializeStage4Objects = (
             });
             //console.log(portal2.position.y - portal2.circleRadius - mouse.circleRadius);
             teleportLock = true; // 포탈 사용 후 잠금
-            portal2.collisionFilter = {
-              group: 0,
-            };
+            // portal2.collisionFilter = {
+            //   group: 0,
+            // };
             // console.log(teleportLock);
             setTimeout(() => {
               teleportLock = false;
-              portal2.collisionFilter = {
-                group: 1,
-              };
+              // portal2.collisionFilter = {
+              //   group: 1,
+              // };
               //console.log("teleportLock after 5 sec", teleportLock);
             }, 100); // 1초 후 잠금 해제
           }
@@ -1007,14 +1028,27 @@ export const initializeStage4Objects = (
       });
     });
 
+    // ------------사라지는 바닥------------
+    Events.on(engine, "collisionActive", (event) => {
+      const pairs = event.pairs;
+
+      pairs.forEach((pair) => {
+        const bodyA = pair.bodyA;
+        const bodyB = pair.bodyB;
+        if (
+          (bodyA === mouseRef.current && bodyB === ground) ||
+          (bodyA === ground && bodyB === mouseRef.current)
+        ) {
+          collapsesGround();
+        }
+      });
+    });
+    // ------------사라지는 바닥------------
+
     //----------leftArm---------
     const originalSpeedX = 0.9;
     //----------leftArm---------
     Events.on(engine, "beforeUpdate", () => {
-      // ------------사라지는 바닥------------
-      // collapsesGround(engine, mouseRef.current);
-      //------------사라지는 바닥------------
-
       //---------rightArm---------
       if (onSlopeRight) {
         // 경사면에서 공이 움직이는 로직
@@ -1122,7 +1156,8 @@ export const initializeStage4Objects = (
     //-------bomb------
     setTimeout(() => {
       Body.setStatic(bombRef.current, false);
-    }, 1000);
+    }, 3000);
+    
     setTimeout(() => {
       Body.setStatic(weight, false);
       Body.applyForce(
@@ -1132,6 +1167,43 @@ export const initializeStage4Objects = (
       );
     }, 1000);
     //-------bomb------
+
+    // Event handling for game goal and game over scenarios
+    //   Events.on(engine, "collisionStart", (event) => {
+    //     event.pairs.forEach((pair) => {
+    //       if (
+    //         (pair.bodyA === mouseRef.current && pair.bodyB === goal) ||
+    //         (pair.bodyB === mouseRef.current && pair.bodyA === goal)
+    //       ) {
+    //         // 게임 클리어
+    //         setResultState(0);
+    //       }
+    //     });
+    //   });
+
+    //   Events.on(engine, "collisionStart", (event) => {
+    //     event.pairs.forEach((pair) => {
+    //       if (
+    //         (pair.bodyA === mouseRef.current && pair.bodyB === walls[1]) ||
+    //         (pair.bodyB === mouseRef.current && pair.bodyA === walls[1])
+    //       ) {
+    //         // 바닥에 떨어짐
+    //         setResultState(2);
+    //       }
+    //     });
+    //   });
+
+    //   Events.on(engine, "collisionStart", (event) => {
+    //     event.pairs.forEach((pair) => {
+    //       if (
+    //         (pair.bodyA === mouseRef.current && pair.bodyB === bombRef.current) ||
+    //         (pair.bodyB === mouseRef.current && pair.bodyA === bombRef.current)
+    //       ) {
+    //         // 폭탄에 닿음
+    //         setResultState(3);
+    //       }
+    //     });
+    //   });
     return isRightPointer;
   }
 };

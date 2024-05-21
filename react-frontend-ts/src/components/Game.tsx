@@ -103,7 +103,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   useEffect(() => {
     setLoop(true);
     play();
-    setVolume(0.5);
+    setVolume(0.1);
   }, [play, setLoop]);
 
   useEffect(() => {
@@ -401,6 +401,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
   // 다음 스테이지 버튼 클릭 시 처리 로직
   const handleNextStage = () => {
+    setIsMenuOpen(false);
     resetStageObjects[currentStage - 1](
       canvasSize,
       { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef },
@@ -413,7 +414,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       setCountdown,
       setIsPlayerReady
     );
-    setCurrentStage((prevStage) => Math.min(prevStage + 1, 5)); // 최대 5스테이지
+    setCurrentStage((prevStage) => Math.min(prevStage + 1, 4)); // 최대 5스테이지
     setShowModal(false);
 
     if (nestjsSocketRef.current) {
@@ -462,7 +463,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
               value={placeholder}
               readOnly
             /> */}
-            <button className="roomSearch" onClick={handleOpenModal}>
+            <button className="if" onClick={handleOpenModal}>
               친구초대
             </button>
             {/* <button className="roomSearch" onClick={handleCopyClick}>
@@ -482,11 +483,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             </div>
           </div>
         )}
-
-        <div className="player-name">
-          <span id="player0-name">player1</span>
-          <span id="player1-name">player2</span>
-        </div>
         <div id="matter-container" ref={sceneRef}>
           {peers.slice(indexRef.current).map(
             (peer, index) =>
@@ -500,10 +496,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   }
                   key={index}
                 >
-                  <div className="corner tl"></div>
-                  <div className="corner tr"></div>
-                  <div className="corner bl"></div>
-                  <div className="corner br"></div>
                 </div>
               )
           )}
@@ -515,10 +507,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   : "video-container-2"
               }
             >
-              <div className="corner tl"></div>
-              <div className="corner tr"></div>
-              <div className="corner bl"></div>
-              <div className="corner br"></div>
             </div>
           )}
           {peers.slice(indexRef.current).map(
@@ -533,10 +521,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   }
                   key={index}
                 >
-                  <div className="corner tl"></div>
-                  <div className="corner tr"></div>
-                  <div className="corner bl"></div>
-                  <div className="corner br"></div>
                 </div>
               )
           )}
@@ -615,7 +599,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
         {isMenuOpen && (
           <div className="menu-popup">
-            <button onClick={handleRetry}>RE-TRY</button>
+            <button onClick={handleNextStage}>RE-TRY</button>
             <button onClick={() => setIsMenuOpen(false)}>닫기</button>
             <label>
               Volume:

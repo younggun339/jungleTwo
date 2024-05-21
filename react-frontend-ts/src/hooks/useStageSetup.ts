@@ -51,7 +51,7 @@ const useStage1Setup = (
       return;
     }
 
-    initializeStage1Objects(
+    initializeStage4Objects(
       engine,
       {
         render,
@@ -86,7 +86,8 @@ const useStage1Setup = (
     mouseRef,
     bombRef,
     engineRef,
-    isRightPointer
+    isRightPointer,
+    playSound
   );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
@@ -131,7 +132,7 @@ const useStage2Setup = (
       return;
     }
 
-    initializeStage2Objects(
+    initializeStage1Objects(
       engine,
       {
         render,
@@ -166,7 +167,8 @@ const useStage2Setup = (
     mouseRef,
     bombRef,
     engineRef,
-    isRightPointer
+    isRightPointer,
+    playSound
   );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
@@ -245,7 +247,8 @@ const useStage3Setup = (
     mouseRef,
     bombRef,
     engineRef,
-    isRightPointer
+    isRightPointer,
+    playSound
   );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
@@ -325,7 +328,8 @@ const useStage4Setup = (
     mouseRef,
     bombRef,
     engineRef,
-    isRightPointer
+    isRightPointer,
+    playSound
   );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
@@ -405,7 +409,8 @@ const useStage5Setup = (
     mouseRef,
     bombRef,
     engineRef,
-    isRightPointer
+    isRightPointer,
+    playSound
   );
 
   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };

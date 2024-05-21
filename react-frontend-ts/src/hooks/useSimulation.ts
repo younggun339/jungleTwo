@@ -13,6 +13,7 @@ import {
   Vector,
 } from "matter-js";
 import { on } from "events";
+import { engine } from "@tensorflow/tfjs";
 
 const useSimulation = (
   isSimStarted: boolean,
@@ -22,6 +23,7 @@ const useSimulation = (
   bombRef: MutableRefObject<Body | null>,
   engineRef: MutableRefObject<Engine | null>,
   isRightPointer: boolean,
+  playSound: (path: string) => void
 ) => {
   // 쥐의 x 방향 속도를 0.85로 설정하는 beforeUpdate Events
   useEffect(() => {
@@ -73,92 +75,23 @@ const useSimulation = (
     const runner = Runner.create();
     let leftArmTerrain = Bodies.rectangle(0, 0, 0, 0);
     let rightArmTerrain = Bodies.rectangle(0, 0, 0, 0);
-    let onSlope = false;
-    let onSlopeRight = false;
 
-    const liftSlopeStart = (event: IEventCollision<Matter.Engine>) => {
-      event.pairs.forEach((pair) => {
-        const { bodyA, bodyB } = pair;
-        if (
-          (bodyA === mouseRef?.current && bodyB === leftArmTerrain) ||
-          (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
-        ) {
-          console.log("왼쪽 쥐 속도: ", mouseRef.current.velocity);
-          onSlope = true;
-        }
-
-        if (
-          (bodyA === mouseRef?.current && bodyB === rightArmTerrain) ||
-          (bodyA === rightArmTerrain && bodyB === mouseRef?.current)
-        ) {
-          console.log("오른쪽 쥐 속도: ", mouseRef.current.velocity);
-          onSlopeRight = true;
-        }
-      });
-    }
-    const liftSlopeEnd = (event: IEventCollision<Matter.Engine>) => {
-      event.pairs.forEach((pair) => {
-        const { bodyA, bodyB } = pair;
-        if (
-          (bodyA === mouseRef?.current && bodyB === leftArmTerrain) ||
-          (bodyA === leftArmTerrain && bodyB === mouseRef?.current)
-        ) {
-          onSlope = false;
-        }
-
-        if (
-          (bodyA === mouseRef?.current && bodyB === rightArmTerrain) ||
-          (bodyA === rightArmTerrain && bodyB === mouseRef?.current)
-        ) {
-          onSlopeRight = false;
-        }
-      });
-    }
-    const updateVelocityAll = () => {
-      if (onSlope && mouseRef.current) {
-        updateVelocity(mouseRef.current, leftArmTerrain.angle);
-      }
-
-      if (onSlopeRight && mouseRef.current) {
-        updateVelocity(mouseRef.current, rightArmTerrain.angle);
+    function explosionLeft() {
+      // Bomb가 없어지고 bombGround가 없어진다.
+      if (engineRef.current && bombRef.current && leftArmTerrain) {
+        playSound("/sound/Bomb.wav");
+        World.remove(engineRef.current.world, bombRef.current);
+        World.remove(engineRef.current.world, leftArmTerrain);
       }
     }
-
-    const updateVelocity = (mouse: Body, angle: number): void => {
-      // normalVectoy 선언
-      let normalVector = { x: 0, y: 0 };
-      if (angle === Math.PI) {
-        // Keep current velocity if angle is flat
-        Body.setVelocity(mouse, mouse.velocity);
-      } else {
-        let modifiedAngle = angle;
-        // 공이 오른쪽에서 왼쪽으로 가는 경우
-        if (mouse.velocity.x < 0) {
-            if (angle > 0) {
-                modifiedAngle *= -3;
-            } else {
-                modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
-            }
-        } else {
-            if (angle > 0) {
-                modifiedAngle *= 3;
-            } else {
-                modifiedAngle *= -3; // Math.sin(angle) 값에 -3을 곱합니다.
-            }
-        }
-        
-        normalVector = {
-          x: Math.sin(modifiedAngle), // Assuming the angle is in radians
-          y: 0  // This will provide a downward component for descending
-        };
-        // Adjust speed based on angle
-        const speed = 0.9; // Example speed multiplier, can be adjusted
-        const parallelComponent = Vector.mult(normalVector, speed);
-        
-        // Set the new velocity to the mouse
-        Body.setVelocity(mouse, parallelComponent);
+    function explosionRight() {
+      // Bomb가 없어지고 bombGround가 없어진다.
+      if (engineRef.current && bombRef.current && rightArmTerrain) {
+        playSound("/sound/Bomb.wav");
+        World.remove(engineRef.current.world, bombRef.current);
+        World.remove(engineRef.current.world, rightArmTerrain);
       }
-    };
+    }
 
     if (
       isSimStarted &&
@@ -255,18 +188,40 @@ const useSimulation = (
 
       Runner.run(runner, engineRef.current);
 
-      // Events.on(engineRef.current, "collisionStart", liftSlopeStart);
-      // Events.on(engineRef.current, "collisionEnd", liftSlopeEnd);
-      // Events.on(engineRef.current, "beforeUpdate", updateVelocityAll);
+      Events.on(engineRef.current, "collisionStart", (event) => {
+        const pairs = event.pairs;
 
-      return () => {
-        if (engineRef.current) {
-          Composite.remove(engineRef.current.world, leftArmTerrain, true);
-          Composite.remove(engineRef.current.world, rightArmTerrain, true);
-        }
-        Runner.stop(runner);
-      };
+        pairs.forEach((pair) => {
+          const bodyA = pair.bodyA;
+          const bodyB = pair.bodyB;
+          if (
+            (bodyA === leftArmTerrain && bodyB === bombRef.current) ||
+            (bodyA === bombRef.current && bodyB === leftArmTerrain)
+          ) {
+            explosionLeft();
+          }
+        });
+
+        pairs.forEach((pair) => {
+          const bodyA = pair.bodyA;
+          const bodyB = pair.bodyB;
+          if (
+            (bodyA === rightArmTerrain && bodyB === bombRef.current) ||
+            (bodyA === bombRef.current && bodyB === rightArmTerrain)
+          ) {
+            explosionRight();
+          }
+        });
+      });
     }
+    
+    return () => {
+      if (engineRef.current) {
+        Composite.remove(engineRef.current.world, leftArmTerrain, true);
+        Composite.remove(engineRef.current.world, rightArmTerrain, true);
+      }
+      Runner.stop(runner);
+    };
   }, [isSimStarted]);
 };
 

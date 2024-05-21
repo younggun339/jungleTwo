@@ -654,7 +654,7 @@ export const initializeStage5Objects = (
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
           if (!(cat.render.fillStyle === "/assets/CatClose.png")) {
-            alert("게임오버");
+            setResultState(4);
             playSound("/sound/CatMeow.wav");
             playSound("/sound/GameOver.wav");
             Engine.events = {}; // 엔진 이벤트 모두 제거

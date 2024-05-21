@@ -32,7 +32,7 @@ export const useStage1Start = (
     countdown,
     2, // firstImageTime
     2, // secondImageTime
-    3, // chatTime
+    10, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,
@@ -75,7 +75,7 @@ export const useStage2Start = (
     countdown,
     2, // firstImageTime
     2, // secondImageTime
-    3, // chatTime
+    12, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,
@@ -118,7 +118,7 @@ export const useStage3Start = (
     countdown,
     2, // firstImageTime
     2, // secondImageTime
-    5, // chatTime
+    15, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,
@@ -161,7 +161,7 @@ export const useStage4Start = (
     countdown,
     2, // firstImageTime
     2, // secondImageTime
-    10, // chatTime
+    25, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,
@@ -263,7 +263,7 @@ const useStageStart = (
             }
           }
           /////////////////////////////////////////////////////////////////////////////////////////////// 레디 인원수 조절
-          if (readyPlayers.length === 2) {
+          if (readyPlayers.length === 1) {
             setIsGameStarted(true);
             setResultState(null);
           }

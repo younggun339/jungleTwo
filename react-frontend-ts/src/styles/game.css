@@ -66,31 +66,47 @@ body {
 }
 #matter-container {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1600px;
-  height: 600px;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  background-image: url("./bg4.png");
+  top: 50%; /* 중앙 정렬 */
+  left: 50%; /* 중앙 정렬 */
+  transform: translate(-50%, -50%); /* 정확한 중앙 위치 */
+  width: 1600px; /* 너비 설정 */
+  height: 600px; /* 높이 설정 */
+  z-index: 2; /* Matter.js 캔버스를 상위에 */
+  display: flex; /* 자식 요소를 가로로 배치 */
+  background-image: url("./test.png");
   background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
-  background-color: black;
+  background-position: center;
+  justify-content: space-between; /* 공간을 고르게 분배 */
 }
 
-#video-container-1,
-#video-container-2 {
-  position: absolute;
-  width: 800px;
-  height: 600px;
-  z-index: 3;
-  background-color: transparent;
+#video-container-1 {
+  position: absolute; /* 부모 기준 위치 */
+  width: 50%; /* 전체 너비의 50% */
+  height: 100%;
+  z-index: 0;
+  opacity: 0.3;
+  transform: scaleX(-1);
 }
+#video-container-1::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0,0.8); /* 투명도 조절 가능 */
+  z-index: -1; /* #video-container-1의 뒤에 위치 */
+}
+
 #video-container-2 {
-  right: 0;
+  position: absolute; /* 부모 기준 위치 */
+  right: 0; /* 오른쪽 정렬 */
+  width: 50%; /* 전체 너비의 50% */
+  height: 100%;
+  z-index: 0;
+  opacity: 0.3;
+  transform: scaleX(-1);
 }
 
 .corner {
@@ -140,7 +156,7 @@ canvas {
   border-radius: 10px;
   border-color: #f8b9ca;
   cursor: pointer;
-  font-size: 50px;
+  font-size: 80px;
   color: #000;
 }
 
@@ -203,24 +219,23 @@ canvas {
   left: 5%;
   z-index: 5; /* 맨 위에 표시 */
   font-family: "myFont";
-  font-size: 50px;
+  font-size: 70px;
   margin-bottom: 100px;
   border-radius: 10px;
   background-color: aliceblue;
-  padding: 10px;
+  padding: 20px;
 }
 
 #ready0 {
   position: absolute;
-
-  left: calc(5% - 50px); /* player0의 우측으로부터 60px 만큼 이동 */
+  left: calc(5% - 100px); /* player0의 우측으로부터 60px 만큼 이동 */
   z-index: 4; /* 맨 위에 표시 */
   font-family: "myFont";
-  font-size: 50px;
+  font-size: 70px;
   background-color: rgb(136, 209, 136);
   margin-bottom: 100px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
 }
 
 #player1 {
@@ -228,24 +243,42 @@ canvas {
   left: 70%;
   z-index: 5; /* 맨 위에 표시 */
   font-family: "myFont";
-  font-size: 50px;
+  font-size: 70px;
   margin-bottom: 100px;
   border-radius: 10px;
   background-color: aliceblue;
-  padding: 10px;
+  padding: 20px;
+}
+.if {
+  margin-top: 1rem;
+  padding: 1.25em 2em;
+  font-family: "MyFont";
+  color: #ede7f6;
+  text-transform: uppercase;
+  background: #362210;
+  border: 2px solid #362210;
+  border-radius: 0.75em;
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 3.2rem;
+  width: 21rem;
+  height: 9rem;
 }
 
 #ready1 {
   position: absolute;
-
-  left: calc(70% - 50px); /* player0의 우측으로부터 60px 만큼 이동 */
+  left: calc(70% - 100px); /* player0의 우측으로부터 60px 만큼 이동 */
   z-index: 4; /* 맨 위에 표시 */
   font-family: "myFont";
-  font-size: 50px;
+  font-size: 70px;
   background-color: rgb(136, 209, 136);
   margin-bottom: 100px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
 }
 
 .footer {
@@ -325,9 +358,9 @@ textarea {
   justify-content: center;
   align-items: center;
   margin-right: 1rem;
-  font-size: 2rem;
-  width: 13rem;
-  height: 5rem;
+  font-size: 3.2rem;
+  width: 21rem;
+  height: 9rem;
 }
 
 .menu-popup {
@@ -507,20 +540,4 @@ textarea {
   to {
     left: 0;
   }
-}
-
-#player0-name {
-  color: #ffffff;
-  font-size: 90px;
-  margin-right: 20%;
-}
-#player1-name {
-  border: #000;
-  color: #ffffff;
-  font-size: 90px;
-}
-.player-name {
-  position: relative;
-  margin-top: 70px;
-  z-index: 99;
 }

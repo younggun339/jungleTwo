@@ -195,11 +195,11 @@ export const initializeStage1Objects = (
     });
 
     // bombGround
-    const bombGround = Bodies.rectangle(1280, canvasSize.y - 140, 100, 25, {
+    const bombGround = Bodies.rectangle(505, canvasSize.y - 300, 160, 25, {
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/BrokenGround_0.png",
+          texture: "/assets/Ground4.png",
           xScale: 3,
           yScale: 3.5,
         },
@@ -218,7 +218,7 @@ export const initializeStage1Objects = (
 
     //----------------------------region 아이템----------------------------
     //폭탄
-    bombRef.current = Bodies.circle(1285, 300, 20, {
+    bombRef.current = Bodies.circle(505, canvasSize.y - 480, 20, {
       frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
@@ -311,6 +311,8 @@ export const initializeStage1Objects = (
       render: {
         sprite: {
           texture: "/assets/Fire_0.png",
+          xScale: 1.2,
+          yScale: 1.2,
         },
       },
     });
@@ -593,8 +595,8 @@ export const initializeStage1Objects = (
       ...floors,
       panel,
       fire,
-      // bombRef.current,
-      // bombGround,
+      bombRef.current,
+      bombGround,
       // weight,
       // floor,
       fallFloor,
@@ -710,12 +712,12 @@ export const initializeStage1Objects = (
         ) {
           //console.log("Collision detected between Bomb and BombGround");
           // 충돌 시 crashMouse 함수 호출
-          playSound("/sound/Bomb.wav");
           explosion();
         }
 
         function explosion() {
           // Bomb가 없어지고 bombGround가 없어진다.
+          playSound("/sound/Bomb.wav");
           World.remove(engine.world, bombRef.current);
           World.remove(engine.world, bombGround);
         }
@@ -1064,37 +1066,37 @@ export const initializeStage1Objects = (
       // }
       //----------leftArm---------
       //----------panel---------
-    //   if (onPanel) {
-    //     // 경사면에서 공이 움직이는 로직
-    //     const angle = panel.angle;
-    //     if (angle === Math.PI) {
-    //       Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
-    //     } else {
-    //       let modifiedAngle = angle;
-    //       // 공이 오른쪽에서 왼쪽으로 가는 경우
-    //       if (mouseRef.current.velocity.x < 0) {
-    //         if (mouseRef.current.angle > 0) {
-    //           modifiedAngle *= -3;
-    //         } else {
-    //           modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
-    //         }
-    //       } else {
-    //         if (mouseRef.current.angle > 0) {
-    //           modifiedAngle *= -3;
-    //         } else {
-    //           modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
-    //         }
-    //       }
-    //       // 경사면의 법선 벡터 계산
-    //       const normalVector = {
-    //         x: Math.sin(modifiedAngle),
-    //         y: Math.cos(angle) * 0,
-    //       };
-    //       // 경사면 방향으로 속도 설정
-    //       const parallelComponent = Vector.mult(normalVector, originalSpeedX);
-    //       Body.setVelocity(mouseRef.current, parallelComponent);
-    //     }
-    //   }
+      //   if (onPanel) {
+      //     // 경사면에서 공이 움직이는 로직
+      //     const angle = panel.angle;
+      //     if (angle === Math.PI) {
+      //       Body.setVelocity(mouseRef.current, mouseRef.current.velocity);
+      //     } else {
+      //       let modifiedAngle = angle;
+      //       // 공이 오른쪽에서 왼쪽으로 가는 경우
+      //       if (mouseRef.current.velocity.x < 0) {
+      //         if (mouseRef.current.angle > 0) {
+      //           modifiedAngle *= -3;
+      //         } else {
+      //           modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
+      //         }
+      //       } else {
+      //         if (mouseRef.current.angle > 0) {
+      //           modifiedAngle *= -3;
+      //         } else {
+      //           modifiedAngle *= 3; // Math.sin(angle) 값에 -3을 곱합니다.
+      //         }
+      //       }
+      //       // 경사면의 법선 벡터 계산
+      //       const normalVector = {
+      //         x: Math.sin(modifiedAngle),
+      //         y: Math.cos(angle) * 0,
+      //       };
+      //       // 경사면 방향으로 속도 설정
+      //       const parallelComponent = Vector.mult(normalVector, originalSpeedX);
+      //       Body.setVelocity(mouseRef.current, parallelComponent);
+      //     }
+      //   }
     });
 
     //-------bomb------

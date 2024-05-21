@@ -61,7 +61,7 @@ export const initializeStage3Objects = (
     }
     Events.off(engine);
     setIsRightPointer(false);
-    
+
     console.log("!isTutorialImage2End", isTutorialImage2End);
     let teleportLock = false;
     let onPanel = false;
@@ -109,7 +109,8 @@ export const initializeStage3Objects = (
       if (
         740 <= mouseRef.current.position.x &&
         mouseRef.current.position.x <= 755 &&
-        117 === Math.floor(mouseRef.current.position.y)) {
+        117 === Math.floor(mouseRef.current.position.y)
+      ) {
         playSound("/sound/BrokenGround.wav");
         Composite.remove(engine.world, ground);
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
@@ -780,7 +781,6 @@ export const initializeStage3Objects = (
         function explosion() {
           // Bomb가 없어지고 bombGround가 없어진다.
           playSound("/sound/Bomb.wav");
-          playSound("/sound/GameOver.wav");
           World.remove(engine.world, bombRef.current);
           World.remove(engine.world, bombGround);
         }
@@ -1096,7 +1096,6 @@ export const initializeStage3Objects = (
     const originalSpeedX = 0.9;
     //----------leftArm---------
     Events.on(engine, "beforeUpdate", () => {
-
       //---------rightArm---------
       if (onSlopeRight) {
         // 경사면에서 공이 움직이는 로직
@@ -1204,7 +1203,8 @@ export const initializeStage3Objects = (
     //-------bomb------
     setTimeout(() => {
       Body.setStatic(bombRef.current, false);
-    }, 1000);
+    }, 3000);
+    
     setTimeout(() => {
       Body.setStatic(weight, false);
       Body.applyForce(
@@ -1251,6 +1251,6 @@ export const initializeStage3Objects = (
     //       }
     //     });
     //   });
-  return isRightPointer;
-}
+    return isRightPointer;
+  }
 };
