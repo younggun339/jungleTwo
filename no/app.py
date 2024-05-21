@@ -1,24 +1,26 @@
-from PIL import Image
+import cv2
+import numpy as np
 
-# 이미지 파일 로드
-sprite_sheet_path = './sprite/Pointer.png'
-sprite_sheet = Image.open(sprite_sheet_path)
-print(sprite_sheet.size)  # (96, 32
+def remove_black_background(input_image_path, output_image_path):
+    # 이미지를 읽어온다
+    image = cv2.imread(input_image_path, cv2.IMREAD_UNCHANGED)
+    
+    # 이미지가 RGBA 포맷이 아니라면 변환한다
+    if image.shape[2] < 4:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
+    
+    # 검은 배경을 찾기 위한 임계값 설정 (0, 0, 0, 255)
+    lower = np.array([0, 0, 0, 0], dtype="uint8")
+    upper = np.array([50, 50, 50, 255], dtype="uint8")
 
-# 프레임 크기 설정
-frame_width = 32
-frame_height = 32
+    # 검은색 영역에 해당하는 마스크 생성
+    black_mask = cv2.inRange(image, lower, upper)
 
-# 분할하여 각 프레임 저장
-frames = []
-for i in range(sprite_sheet.width // frame_width):
-    left = i * frame_width
-    upper = 0
-    right = left + frame_width
-    lower = upper + frame_height
-    frame = sprite_sheet.crop((left, upper, right, lower))
-    frame_path = f'./assets/Pointer_{i}.png'
-    frame.save(frame_path)
-    frames.append(frame_path)
+    # 마스크에서 검은색 영역은 0으로, 그 외는 255로 설정
+    image[black_mask == 255] = (0, 0, 0, 0)
+    
+    # 결과 이미지 저장
+    cv2.imwrite(output_image_path, image)
 
-frames  # 각 프레임 파일의 경로 반환
+# 사용 예시
+remove_black_background('./Pointer_0.png', './Pointer_0.png')
