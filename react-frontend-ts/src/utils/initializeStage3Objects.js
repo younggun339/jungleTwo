@@ -281,8 +281,8 @@ export const initializeStage3Objects = (
       render: {
         sprite: {
           texture: "/assets/Portal_0.png",
-          xScale: 2,
-          yScale: 2,
+          xScale: 0.35,
+          yScale: 0.35,
         },
       },
     });
@@ -293,8 +293,8 @@ export const initializeStage3Objects = (
       render: {
         sprite: {
           texture: "/assets/Portal_0.png",
-          xScale: 2,
-          yScale: 2,
+          xScale: 0.35,
+          yScale: 0.35,
         },
       },
     });
@@ -325,7 +325,11 @@ export const initializeStage3Objects = (
     const fire = Bodies.rectangle(505, 183, 300, 50, {
       isStatic: true,
       render: {
-        fillStyle: "red",
+        sprite: {
+          texture: "/sprite/Spike8.png",
+          xScale: 0.4,
+          yScale: 0.6,
+        },
       },
     });
 
@@ -333,7 +337,11 @@ export const initializeStage3Objects = (
     const fire1 = Bodies.rectangle(1105, 183, 300, 50, {
       isStatic: true,
       render: {
-        fillStyle: "red",
+        sprite: {
+          texture: "/sprite/Spike8.png",
+          xScale: 0.4,
+          yScale: 0.6,
+        },
       },
     });
 
@@ -622,6 +630,8 @@ export const initializeStage3Objects = (
 
     // // 창을 월드에 추가
     World.add(engine.world, [
+      fire,
+      fire1,
       ...floors,
       bombRef.current,
       superJumppad,
@@ -633,8 +643,6 @@ export const initializeStage3Objects = (
       mouseRef.current,
       leftArmLeftRef.current,
       rightArmRightRef.current,
-      fire,
-      fire1,
       cheese,
       ...walls /*    fire1, fire2,    jumpPad2,      fire, panel, portal3, portal4, catButton2,     box5,    weight, floor, mouse,*/,
     ]);

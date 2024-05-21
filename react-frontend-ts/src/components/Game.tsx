@@ -514,21 +514,22 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           </div>
         )}
         <div id="matter-container" ref={sceneRef}>
-          {peers.slice(indexRef.current).map(
-            (peer, index) =>
-              isTutorialImage2End &&
-              !isSimStarted && (
-                <div
-                  id={
-                    indexRef.current === 0
-                      ? "video-container-1"
-                      : "video-container-2"
-                  }
-                  key={index}
-                >
-                </div>
-              )
-          )}
+          {peers
+            .slice(indexRef.current)
+            .map(
+              (peer, index) =>
+                isTutorialImage2End &&
+                !isSimStarted && (
+                  <div
+                    id={
+                      indexRef.current === 0
+                        ? "video-container-1"
+                        : "video-container-2"
+                    }
+                    key={index}
+                  ></div>
+                )
+            )}
           {isTutorialImage2End && !isSimStarted && (
             <div
               id={
@@ -536,24 +537,29 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   ? "video-container-1"
                   : "video-container-2"
               }
-            >
-            </div>
+              // style={{
+              //   backgroundColor: !isSimStarted
+              //     ? "rgba(255, 255, 0, 0.15)"
+              //     : "transparent",
+              // }}
+            ></div>
           )}
-          {peers.slice(indexRef.current).map(
-            (peer, index) =>
-              isTutorialImage2End &&
-              !isSimStarted && (
-                <div
-                  id={
-                    indexRef.current === 0
-                      ? "video-container-1"
-                      : "video-container-2"
-                  }
-                  key={index}
-                >
-                </div>
-              )
-          )}
+          {peers
+            .slice(indexRef.current)
+            .map(
+              (peer, index) =>
+                isTutorialImage2End &&
+                !isSimStarted && (
+                  <div
+                    id={
+                      indexRef.current === 0
+                        ? "video-container-1"
+                        : "video-container-2"
+                    }
+                    key={index}
+                  ></div>
+                )
+            )}
 
           {peers.slice(0, indexRef.current).map((peer, index) => (
             <Video
@@ -615,7 +621,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             <div id="countdown-bar">
               <div id="countdown-stripes"></div>
             </div>
-            <div id="loading-text">드래그로 지형을 설치해주세요: {countdown}</div>
+            <div id="loading-text">
+              드래그로 지형을 설치해주세요: {countdown}
+            </div>
           </div>
         )}
 

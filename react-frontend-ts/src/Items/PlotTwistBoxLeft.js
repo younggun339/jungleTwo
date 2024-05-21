@@ -9,9 +9,9 @@ const createBoxLeft = (x, y, xs, ys) => {
     isStatic: true,
     render: {
       sprite: {
-        texture: "/assets/Left_Pointer_0.png",
-        xScale: 4,
-        yScale: 3.8,
+        texture: "/assets/speed11.png",
+        xScale: 3,
+        yScale: 3.2,
         yOffset: yOffset,
       },
     },

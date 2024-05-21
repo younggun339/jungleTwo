@@ -81,7 +81,6 @@ body {
 }
 
 #video-container-1 {
-  background-color: #000;
   position: absolute; /* 부모 기준 위치 */
   width: 50%; /* 전체 너비의 50% */
   height: 100%;

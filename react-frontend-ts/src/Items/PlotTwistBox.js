@@ -9,9 +9,9 @@ const createBox = (x, y, xs, ys) => {
     isStatic: true,
     render: {
       sprite: {
-        texture: "/assets/Pointer_0.png",
-        xScale: 4,
-        yScale: 3.8,
+        texture: "/assets/speed.png",
+        xScale: 3,
+        yScale: 3.2,
         yOffset: yOffset,
       },
     },
