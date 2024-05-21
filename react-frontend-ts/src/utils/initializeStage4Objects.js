@@ -10,6 +10,7 @@ import Matter, {
 } from "matter-js";
 import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
+import createBoxLeft from "../Items/PlotTwistBoxLeft";
 export const initializeStage4Objects = (
   engine,
   refs,
@@ -54,35 +55,35 @@ export const initializeStage4Objects = (
   let onSlope = false;
   let onSlopeRight = false;
 
-  //점프
-  const jumping = (event, engine, ball, jumpPad) => {
-    event.pairs.forEach((pair) => {
-      const { bodyA, bodyB } = pair;
-      if (
-        (bodyA === ball && bodyB === jumpPad) ||
-        (bodyA === jumpPad && bodyB === ball)
-      ) {
-        playSound("/sound/Jump.wav");
-        const velocity = ball.velocity;
-        Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2 });
-      }
-    });
-  };
+    //점프
+    const jumping = (event, engine, ball, jumpPad) => {
+      event.pairs.forEach((pair) => {
+        const { bodyA, bodyB } = pair;
+        if (
+          (bodyA === ball && bodyB === jumpPad) ||
+          (bodyA === jumpPad && bodyB === ball)
+        ) {
+          playSound("/sound/Jump.wav");
+          const velocity = ball.velocity;
+          Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2.2 });
+        }
+      });
+    };
 
-  //슈퍼점프
-  const superJumping = (event, engine, ball, jumpPad) => {
-    event.pairs.forEach((pair) => {
-      const { bodyA, bodyB } = pair;
-      if (
-        (bodyA === ball && bodyB === jumpPad) ||
-        (bodyA === jumpPad && bodyB === ball)
-      ) {
-        playSound("/sound/SuperJump.wav");
-        const velocity = ball.velocity;
-        Body.setVelocity(ball, { x: velocity.x * 6, y: -velocity.y * 3 });
-      }
-    });
-  };
+    //슈퍼점프
+    const superJumping = (event, engine, ball, jumpPad) => {
+      event.pairs.forEach((pair) => {
+        const { bodyA, bodyB } = pair;
+        if (
+          (bodyA === ball && bodyB === jumpPad) ||
+          (bodyA === jumpPad && bodyB === ball)
+        ) {
+          playSound("/sound/SuperJump.wav");
+          const velocity = ball.velocity;
+          Body.setVelocity(ball, { x: velocity.x * 4, y: -velocity.y * 3 });
+        }
+      });
+    };
 
   // 충돌 시 호출될 burnMouse 함수
   function burnMouse() {
@@ -124,18 +125,21 @@ export const initializeStage4Objects = (
     
     const floors = [
       Bodies.rectangle(800, canvasSize.y - 450, 1450, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 1.26 },
         },
       }),
       Bodies.rectangle(1210, canvasSize.y - 280, 340, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 1.3 },
         },
       }),
       Bodies.rectangle(800, canvasSize.y - 110, 1450, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 1.26 },
@@ -144,12 +148,14 @@ export const initializeStage4Objects = (
 
       //고양이버튼바닥
       Bodies.rectangle(1350, canvasSize.y - 185, 100, 5, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.02, xScale: 0.089 },
         },
       }),
       Bodies.rectangle(1050, canvasSize.y - 360, 100, 5, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.02, xScale: 0.089 },
@@ -157,6 +163,7 @@ export const initializeStage4Objects = (
       }),
     ];
     const floor = Bodies.rectangle(510, canvasSize.y - 280, 870, 25, {
+      label: "load",
       isStatic: true,
       render: {
         sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.76 },
@@ -187,6 +194,7 @@ export const initializeStage4Objects = (
 
     //사라지는바닥
     const ground = Bodies.rectangle(995, 320, 100, 25, {
+      label: "load",
       isStatic: true,
       render: {
         sprite: {
@@ -208,14 +216,15 @@ export const initializeStage4Objects = (
     });
 
     //좌우반전 아이템 위에서부터 차례대로
-    const box1 = createBox(1250, canvasSize.y - 317, 50, 50);
+    const box1 = createBoxLeft(1250, canvasSize.y - 317, 50, 50);
     const box2 = createBox(995, canvasSize.y - 180, 50, 50);
-    const box3 = createBox(1500, canvasSize.y - 207, 50, 50);
+    const box3 = createBoxLeft(1500, canvasSize.y - 207, 50, 50);
     const box4 = createBox(1295, canvasSize.y - 147, 50, 50);
 
     const box5 = createBox(1115, canvasSize.y - 207, 50, 50);
     //기울어진땅..?
     const panel = Bodies.rectangle(1290, canvasSize.y - 320, 140, 25, {
+      label: "load",
       isStatic: true,
       angle: Math.PI / 5, // 45도를 라디안으로 변환
       render: {
@@ -241,7 +250,9 @@ export const initializeStage4Objects = (
     const superJumppad = Bodies.rectangle(1420, canvasSize.y - 120, 20, 20, {
       isStatic: true,
       render: {
-        fillStyle: "red",
+        sprite: {
+          texture: "/assets/JumpPad2_0.png",
+        },
       },
     });
 
@@ -250,7 +261,9 @@ export const initializeStage4Objects = (
     const portal1 = Bodies.rectangle(100, 295, 25, 25, {
       isStatic: true,
       render: {
-        fillStyle: "aqua",
+        sprite: {
+          texture: "/assets/Portal2_0.png",
+        },
       },
     });
 
@@ -258,7 +271,9 @@ export const initializeStage4Objects = (
     const portal2 = Bodies.rectangle(1500, 125, 25, 25, {
       isStatic: true,
       render: {
-        fillStyle: "aqua",
+        sprite: {
+          texture: "/assets/Portal2_0.png",
+        },
       },
     });
     //----------------------------------------------------------------
@@ -267,7 +282,9 @@ export const initializeStage4Objects = (
     const portal3 = Bodies.rectangle(905, 300, 25, 25, {
       isStatic: true,
       render: {
-        fillStyle: "white",
+        sprite: {
+          texture: "/assets/Portal_0.png",
+        },
       },
     });
 
@@ -275,7 +292,9 @@ export const initializeStage4Objects = (
     const portal4 = Bodies.rectangle(1110, 350, 25, 25, {
       isStatic: true,
       render: {
-        fillStyle: "white",
+        sprite: {
+          texture: "/assets/Portal_0.png",
+        },
       },
     });
     //----------------------------------------------------------------
@@ -631,7 +650,7 @@ export const initializeStage4Objects = (
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
           if (!(cat.render.fillStyle === "red")) {
-            alert("게임오버");
+            setResultState(4);
             Engine.events = {}; // 엔진 이벤트 모두 제거
           } else {
             cat.collisionFilter = {
@@ -716,7 +735,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box1]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(true);
           //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
@@ -725,7 +744,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box2]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(false);
           //console.log("사라지는 바닥의 좌표:", mouse.position);
         }
         if (
@@ -734,7 +753,7 @@ export const initializeStage4Objects = (
         ) {
           playSound("/sound/Pointer.mp3");
           World.remove(engine.world, [box3]); //box제거
-          setIsRightPointer(!isRightPointer);
+          setIsRightPointer(true);
           console.log("사라지는 바닥의 좌표:", mouseRef.current.position);
         }
         if (
@@ -788,7 +807,7 @@ export const initializeStage4Objects = (
           ) {
             // 충돌 시 crashMouse 함수 호출
             crashMouse();
-            alert("game over");
+            setResultState(3);
           }
         });
       }

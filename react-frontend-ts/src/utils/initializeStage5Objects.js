@@ -10,6 +10,7 @@ import Matter, {
 } from "matter-js";
 import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
+import createBoxLeft from "../Items/PlotTwistBoxLeft";
 
 export const initializeStage5Objects = (
   engine,
@@ -77,7 +78,7 @@ export const initializeStage5Objects = (
         ) {
           playSound("/sound/Jump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2 });
+          Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2.2 });
         }
       });
     };
@@ -92,7 +93,7 @@ export const initializeStage5Objects = (
         ) {
           playSound("/sound/SuperJump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x * 6, y: -velocity.y * 3 });
+          Body.setVelocity(ball, { x: velocity.x * 4, y: -velocity.y * 3 });
         }
       });
     };
@@ -112,11 +113,11 @@ export const initializeStage5Objects = (
     }
 
     //사라지는 벽
-    const collapsesGround = (engine, mouseRef) => {
+    const collapsesGround = () => {
       if (
-        239 <= mouseRef.position.x &&
-        mouseRef.position.x <= 249 &&
-        377 === Math.floor(mouseRef.position.y)
+        229 <= mouseRef.current.position.x &&
+        mouseRef.current.position.x <= 249 &&
+        377 === Math.floor(mouseRef.current.position.y)
       ) {
         playSound("/sound/BrokenGround.wav");
         Composite.remove(engine.world, ground);
@@ -126,18 +127,21 @@ export const initializeStage5Objects = (
     const floors = [
       //col0
       Bodies.rectangle(200, canvasSize.y - 500, 300, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 1.2 },
         },
       }), //위왼-1-row0
       Bodies.rectangle(770, canvasSize.y - 500, 540, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.5 },
         },
       }), //위중-2-row1
       Bodies.rectangle(1340, canvasSize.y - 500, 410, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 1.5 },
@@ -152,6 +156,7 @@ export const initializeStage5Objects = (
         },
       }), //상중오-5-row1
       Bodies.rectangle(835, canvasSize.y - 360, 50, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.11, xScale: 0.04 },
@@ -159,6 +164,7 @@ export const initializeStage5Objects = (
       }), //상중오-5-row1
       //col2
       Bodies.rectangle(150, canvasSize.y - 190, 200, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 0.8 },
@@ -171,6 +177,7 @@ export const initializeStage5Objects = (
         },
       }), //하중중-7-row1
       Bodies.rectangle(1475, canvasSize.y - 170, 150, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 0.7 },
@@ -186,6 +193,7 @@ export const initializeStage5Objects = (
 
       //ground 4 cat button
       Bodies.rectangle(770, canvasSize.y - 260, 100, 10, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.04, xScale: 0.08 },
@@ -209,6 +217,7 @@ export const initializeStage5Objects = (
 
     //상중왼-4-row0
     const floor = Bodies.rectangle(390, canvasSize.y - 360, 690, 25, {
+      label: "load",
       isStatic: true,
       render: {
         sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.6 },
@@ -233,6 +242,7 @@ export const initializeStage5Objects = (
 
     //사라지는바닥
     const ground = Bodies.rectangle(300, 410, 100, 25, {
+      label: "load",
       isStatic: true,
       render: {
         sprite: {
@@ -994,13 +1004,27 @@ export const initializeStage5Objects = (
       });
     });
 
+    // ------------사라지는 바닥------------
+    Events.on(engine, "collisionActive", (event) => {
+      const pairs = event.pairs;
+
+      pairs.forEach((pair) => {
+        const bodyA = pair.bodyA;
+        const bodyB = pair.bodyB;
+        if (
+          (bodyA === mouseRef.current && bodyB === ground) ||
+          (bodyA === ground && bodyB === mouseRef.current)
+        ) {
+          collapsesGround();
+        }
+      });
+    });
+    // ------------사라지는 바닥------------
+
     //----------leftArm---------
     const originalSpeedX = 0.9;
     //----------leftArm---------
     Events.on(engine, "beforeUpdate", () => {
-      // ------------사라지는 바닥------------
-      collapsesGround(engine, mouseRef.current);
-      //------------사라지는 바닥------------
 
       //---------rightArm---------
       if (onSlopeRight) {

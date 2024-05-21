@@ -86,10 +86,9 @@ export const initializeStage2Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
-          console.log("점프대 밟음.");
           playSound("/sound/Jump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x * 0.8, y: -velocity.y * 2 });
+          Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2.2 });
         }
       });
     };
@@ -102,10 +101,9 @@ export const initializeStage2Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
-          console.log("슈퍼 점프대 밟음.");
           playSound("/sound/SuperJump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x * 6, y: -velocity.y * 3 });
+          Body.setVelocity(ball, { x: velocity.x * 4, y: -velocity.y * 3 });
         }
       });
     };
@@ -125,7 +123,6 @@ export const initializeStage2Objects = (
       ) {
         playSound("/sound/BrokenGround.wav");
         Composite.remove(engine.world, ground);
-        Events.off(engine, "collisionActive", collapsesGround);
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
     };
 
@@ -145,24 +142,28 @@ export const initializeStage2Objects = (
 
     const floors = [
       Bodies.rectangle(450, canvasSize.y - 350, 750, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.66 },
         },
       }),
       Bodies.rectangle(1090, canvasSize.y - 350, 330, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.29 },
         },
       }),
       Bodies.rectangle(1473, canvasSize.y - 370, 140, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 0.5 },
         },
       }),
       Bodies.rectangle(800, canvasSize.y - 110, 1450, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 1.26 },
@@ -171,6 +172,7 @@ export const initializeStage2Objects = (
     ];
 
     const floor = Bodies.rectangle(510, canvasSize.y - 280, 870, 25, {
+      label: "load",
       isStatic: true,
       render: { fillStyle: "blue" },
       collisionFilter: {
@@ -187,6 +189,7 @@ export const initializeStage2Objects = (
 
     //사라지는바닥
     const ground = Bodies.rectangle(875, 250, 100, 25, {
+      label: "load",
       isStatic: true,
       render: {
         sprite: {
@@ -218,6 +221,7 @@ export const initializeStage2Objects = (
 
     //기울어진땅..?
     const panel = Bodies.rectangle(1290, canvasSize.y - 320, 140, 25, {
+      label: "load",
       isStatic: true,
       angle: Math.PI / 5, // 45도를 라디안으로 변환
       render: { fillStyle: "blue" },
@@ -580,7 +584,7 @@ export const initializeStage2Objects = (
 
         // 각 이미지를 로드한 후에만 이미지 변경
         loadImage(`/assets/Pointer_${currentFrame}.png`, function () {
-          box1.render.sprite.texture = `/assets/Pointer_${currentFrame}.png`;
+          box1.render.sprite.texture = `/assets/Left_Pointer_${currentFrame}.png`;
           box2.render.sprite.texture = `/assets/Pointer_${currentFrame}.png`;
         });
         // 각 이미지를 로드한 후에만 이미지 변경
@@ -1027,7 +1031,20 @@ export const initializeStage2Objects = (
     });
 
     // ------------사라지는 바닥------------
-    Events.on(engine, "collisionActive", collapsesGround);
+    Events.on(engine, "collisionActive", (event) => {
+      const pairs = event.pairs;
+
+      pairs.forEach((pair) => {
+        const bodyA = pair.bodyA;
+        const bodyB = pair.bodyB;
+        if (
+          (bodyA === mouseRef.current && bodyB === ground) ||
+          (bodyA === ground && bodyB === mouseRef.current)
+        ) {
+          collapsesGround();
+        }
+      });
+    });
     // ------------사라지는 바닥------------
 
     Events.on(engine, "collisionEnd", (event) => {

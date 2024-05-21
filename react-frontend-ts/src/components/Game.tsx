@@ -326,6 +326,17 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
     }
+    // clearStageObjects[currentStage - 1](
+    //   canvasSize,
+    //   { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
+    //   setIsTutorialImage1End,
+    //   setIsTutorialImage2End,
+    //   setIsSimStarted,
+    //   setShowModal,
+    //   setResultState,
+    //   setCountdown
+    // );
+    // play();
   };
 
   const handleAcceptRetry = () => {

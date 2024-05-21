@@ -27,7 +27,7 @@ const useSimulation = (
   useEffect(() => {
     console.log("useSimulation called", isSimStarted);
     const setVelocityAlways = () => {
-      if (mouseRef.current && mouseRef.current.velocity.y < 0.1) {
+      if (mouseRef.current) {
         if (!isRightPointer) {
           Body.setVelocity(mouseRef.current, {
             x: 1.8,
@@ -51,7 +51,20 @@ const useSimulation = (
       engineRef.current
     ) {
       // leftArmLeftRef.current 및 rightArmRightRef.current의 width 정의
-      Events.on(engineRef.current, "beforeUpdate", setVelocityAlways);
+      Events.on(engineRef.current, "collisionActive", (event) => {
+        const pairs = event.pairs;
+  
+        pairs.forEach((pair) => {
+          const bodyA = pair.bodyA;
+          const bodyB = pair.bodyB;
+          if (
+            (bodyA === mouseRef.current && bodyB.label === "load") ||
+            (bodyA.label === "load" && bodyB === mouseRef.current)
+          ) {
+            setVelocityAlways();
+          }
+        });
+      });
     }
   }, [isSimStarted, isRightPointer]);
 
@@ -186,6 +199,7 @@ const useSimulation = (
         leftArmWidth,
         5,
         {
+          label: "load",
           isStatic: true,
           angle: leftArmLeftRef.current.angle,
           render: {
@@ -204,6 +218,7 @@ const useSimulation = (
         rightArmWidth,
         5,
         {
+          label: "load",
           isStatic: true,
           angle: rightArmRightRef.current.angle,
           render: {

@@ -10,6 +10,7 @@ import Matter, {
 } from "matter-js";
 import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
+import createBoxLeft from "../Items/PlotTwistBoxLeft";
 
 export const initializeStage3Objects = (
   engine,
@@ -76,7 +77,7 @@ export const initializeStage3Objects = (
         ) {
           playSound("/sound/Jump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2 });
+          Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2.2 });
         }
       });
     };
@@ -91,7 +92,7 @@ export const initializeStage3Objects = (
         ) {
           playSound("/sound/SuperJump.wav");
           const velocity = ball.velocity;
-          Body.setVelocity(ball, { x: velocity.x * 6, y: -velocity.y * 3 });
+          Body.setVelocity(ball, { x: velocity.x * 4, y: -velocity.y * 3 });
         }
       });
     };
@@ -103,14 +104,12 @@ export const initializeStage3Objects = (
       Body.setStatic(mouseRef.current, true);
     }
 
-    //사라지는 벽
-    const collapsesGround = (engine, mouse) => {
+    //사라지는 바닥
+    const collapsesGround = () => {
       if (
-        750 <= mouse.position.x &&
-        mouse.position.x <= 755 &&
-        117 === Math.floor(mouse.position.y) &&
-        mouse.velocity.x >= 0
-      ) {
+        740 <= mouseRef.current.position.x &&
+        mouseRef.current.position.x <= 755 &&
+        117 === Math.floor(mouseRef.current.position.y)) {
         playSound("/sound/BrokenGround.wav");
         Composite.remove(engine.world, ground);
       } // x와 y 좌표를 둘 다 적어줘서 사라지게 해야함
@@ -132,12 +131,14 @@ export const initializeStage3Objects = (
 
     const floors = [
       Bodies.rectangle(200, canvasSize.y - 450, 300, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
         },
       }),
       Bodies.rectangle(600, canvasSize.y - 450, 100, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: {
@@ -148,6 +149,7 @@ export const initializeStage3Objects = (
         },
       }),
       Bodies.rectangle(800, canvasSize.y - 450, 100, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: {
@@ -159,12 +161,14 @@ export const initializeStage3Objects = (
       }),
 
       Bodies.rectangle(200, canvasSize.y - 280, 300, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
         },
       }),
       Bodies.rectangle(700, canvasSize.y - 280, 300, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
@@ -172,12 +176,14 @@ export const initializeStage3Objects = (
       }),
 
       Bodies.rectangle(200, canvasSize.y - 110, 300, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
         },
       }),
       Bodies.rectangle(700, canvasSize.y - 110, 300, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
@@ -185,12 +191,14 @@ export const initializeStage3Objects = (
       }),
 
       Bodies.rectangle(1350, canvasSize.y - 110, 300, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.26 },
         },
       }),
       Bodies.rectangle(1100, canvasSize.y - 400, 200, 25, {
+        label: "load",
         isStatic: true,
         render: {
           sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.18 },
@@ -221,6 +229,7 @@ export const initializeStage3Objects = (
 
     //사라지는바닥
     const ground = Bodies.rectangle(700, 150, 100, 25, {
+      label: "load",
       isStatic: true,
       render: {
         sprite: {
@@ -245,18 +254,10 @@ export const initializeStage3Objects = (
     });
 
     //좌우반전 아이템 위에서부터 차례대로
-    const box1 = createBox(840, canvasSize.y - 487, 50, 50, {
-      render: { sprite: "/assets/Pointer_0.png" },
-    });
-    const box2 = createBox(600, canvasSize.y - 317, 50, 50, {
-      render: { sprite: "/assets/Pointer_0.png" },
-    });
-    const box3 = createBox(200, canvasSize.y - 317, 50, 50, {
-      render: { sprite: "/assets/Pointer_0.png" },
-    });
-    const box4 = createBox(840, canvasSize.y - 147, 50, 50, {
-      render: { sprite: "/assets/Pointer_0.png" },
-    });
+    const box1 = createBoxLeft(840, canvasSize.y - 487, 50, 50);
+    const box2 = createBox(600, canvasSize.y - 317, 50, 50);
+    const box3 = createBox(200, canvasSize.y - 317, 50, 50);
+    const box4 = createBoxLeft(840, canvasSize.y - 147, 50, 50);
 
     const box5 = createBox(1115, canvasSize.y - 207, 50, 50);
 
@@ -286,7 +287,7 @@ export const initializeStage3Objects = (
       },
     });
     //슈퍼점프대-1
-    const superJumppad = Bodies.rectangle(900, canvasSize.y - 50, 20, 20, {
+    const superJumppad = Bodies.rectangle(940, canvasSize.y - 30, 20, 20, {
       isStatic: true,
       render: {
         sprite: {
@@ -715,7 +716,7 @@ export const initializeStage3Objects = (
         ) {
           // cat의 기분이 false이면 엔진을 멈추고, true이면 cat의 충돌 필터를 변경
           if (!(cat.render.sprite.texture === "/assets/CatClose.png")) {
-            alert("게임오버");
+            setResultState(4);
             playSound("/sound/CatMeow.wav");
             playSound("/sound/GameOver.wav");
             Engine.events = {}; // 엔진 이벤트 모두 제거
@@ -1074,13 +1075,27 @@ export const initializeStage3Objects = (
       });
     });
 
+    // ------------사라지는 바닥------------
+    Events.on(engine, "collisionActive", (event) => {
+      const pairs = event.pairs;
+
+      pairs.forEach((pair) => {
+        const bodyA = pair.bodyA;
+        const bodyB = pair.bodyB;
+        if (
+          (bodyA === mouseRef.current && bodyB === ground) ||
+          (bodyA === ground && bodyB === mouseRef.current)
+        ) {
+          collapsesGround();
+        }
+      });
+    });
+    // ------------사라지는 바닥------------
+
     //----------leftArm---------
     const originalSpeedX = 0.9;
     //----------leftArm---------
     Events.on(engine, "beforeUpdate", () => {
-      // ------------사라지는 바닥------------
-      collapsesGround(engine, mouseRef.current);
-      //------------사라지는 바닥------------
 
       //---------rightArm---------
       if (onSlopeRight) {
