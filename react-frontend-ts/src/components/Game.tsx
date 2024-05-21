@@ -585,7 +585,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             <div id="countdown-bar">
               <div id="countdown-stripes"></div>
             </div>
-            <div id="loading-text">드래그로 지형을 설치해주세요</div>
+            <div id="loading-text">드래그로 지형을 설치해주세요: {countdown}</div>
           </div>
         )}
 
@@ -599,7 +599,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
         {isMenuOpen && (
           <div className="menu-popup">
-            <button onClick={handleNextStage}>RE-TRY</button>
+            <button onClick={handleRetry}>RE-TRY</button>
             <button onClick={() => setIsMenuOpen(false)}>닫기</button>
             <label>
               Volume:

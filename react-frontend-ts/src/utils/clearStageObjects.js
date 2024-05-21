@@ -27,7 +27,7 @@ export function clearStage1Objects(
   Body.setStatic(mouseRef.current, true);
 
   // bomb 객체를 리셋
-  Body.setPosition(bombRef.current, { x: 1000, y: 100 });
+  Body.setPosition(bombRef.current, { x: 505, y: canvasSize.y - 480 });
   Body.setStatic(bombRef.current, true);
   Body.setAngle(bombRef.current, 0);
 

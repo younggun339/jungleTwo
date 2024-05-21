@@ -152,14 +152,14 @@ export const initializeStage4Objects = (
         },
       }),
 
-      Bodies.rectangle(620, 360, 350, 25, {
+      Bodies.rectangle(680, 360, 350, 25, {
         label: "load",
         isStatic: true,
         render: {
         },
       }),
 
-      Bodies.rectangle(1020, 360, 350, 25, {
+      Bodies.rectangle(1180, 360, 350, 25, {
         label: "load",
         isStatic: true,
         render: {
@@ -207,7 +207,7 @@ export const initializeStage4Objects = (
 
     //----------------------------region 아이템----------------------------
     //폭탄
-    bombRef.current = Bodies.circle(1255, 40, 20, {
+    bombRef.current = Bodies.circle(500, 250, 20, {
       frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
@@ -251,7 +251,17 @@ export const initializeStage4Objects = (
       },
     });
     //슈퍼점프대-1
-    const superJumppad = Bodies.rectangle(450, 380, 20, 20, {
+    const superJumppad = Bodies.rectangle(430, 380, 20, 20, {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "/assets/JumpPad2_0.png",
+        },
+      },
+    });
+
+    //슈퍼점프대-2
+    const superJumppad2 = Bodies.rectangle(920, 380, 20, 20, {
       isStatic: true,
       render: {
         sprite: {
@@ -304,7 +314,7 @@ export const initializeStage4Objects = (
     //----------------------------------------------------------------
 
     // 불
-    const fire = Bodies.rectangle(505, 203, 250, 50, {
+    const fire = Bodies.rectangle(505, 183, 300, 50, {
       isStatic: true,
       render: {
         fillStyle: "red",
@@ -312,7 +322,7 @@ export const initializeStage4Objects = (
     });
 
     //불1
-    const fire1 = Bodies.rectangle(1250, 205, 50, 50, {
+    const fire1 = Bodies.rectangle(1105, 183, 300, 50, {
       isStatic: true,
       render: {
         fillStyle: "red",
@@ -389,7 +399,7 @@ export const initializeStage4Objects = (
     //------------------------------region 쥐---------------------------------
     // 쥐 생성
     mouseRef.current = Bodies.circle(200, canvasSize.y - 480, 20, {
-      restitution: 0, // 반발 계수
+      restitution: 0.2, // 반발 계수
       friction: 0.8, // 마찰 계수
       frictionAir: Number.MIN_VALUE,
       render: {
@@ -588,7 +598,7 @@ export const initializeStage4Objects = (
     // });
 
     // cheese
-    const cheese = Bodies.rectangle(1400, 353, 50, 50, {
+    const cheese = Bodies.rectangle(1500, 333, 50, 50, {
       isStatic: true,
       render: {
         sprite: {
@@ -604,7 +614,9 @@ export const initializeStage4Objects = (
     // // 창을 월드에 추가
     World.add(engine.world, [
       ...floors,
+      bombRef.current,
       superJumppad,
+      superJumppad2,
       portal1,
       portal2,
       box1, box4,
@@ -612,6 +624,8 @@ export const initializeStage4Objects = (
       leftArmLeftRef.current,
       rightArmRightRef.current,
       fire,
+      fire1,
+      cheese,
       ...walls /*    fire1, fire2,    jumpPad2,      fire, panel, portal3, portal4, catButton2,     box5,    weight, floor, mouse,*/,
     ]);
 
@@ -800,6 +814,7 @@ export const initializeStage4Objects = (
         jumping(event, engine, mouseRef.current, jumpPad);
         jumping(event, engine, mouseRef.current, jumpPad2);
         superJumping(event, engine, mouseRef.current, superJumppad);
+        superJumping(event, engine, mouseRef.current, superJumppad2);
         //--------------점프대----------------
       });
       //불

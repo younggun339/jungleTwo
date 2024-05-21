@@ -9,16 +9,6 @@ function MainImage() {
     "/images/info4.gif",
     "/images/info5.gif",
     "/images/info6.gif",
-    "/images/info7.gif",
-    "/images/info8.gif",
-    "/images/info9.gif",
-    "/images/info10.gif",
-    "/images/info11.gif",
-    "/images/info12.gif",
-    "/images/info13.gif",
-    "/images/info14.gif",
-    "/images/info15.gif",
-    "/images/info16.gif",
   ];
   const [currentImage, setCurrentImage] = useState(images[0]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
