@@ -12,6 +12,33 @@ import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
 import createBoxLeft from "../Items/PlotTwistBoxLeft";
 
+class SoundManager {
+  constructor() {
+    this.sounds = {};
+  }
+
+  loadSound(name, filePath) {
+    const audio = new Audio(filePath);
+    audio.load();
+    this.sounds[name] = audio;
+  }
+
+  playSound(name) {
+    const audio = this.sounds[name];
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play();
+    } else {
+      console.error(`Sound ${name} not found`);
+    }
+  }
+}
+
+const soundManager = new SoundManager();
+
+soundManager.loadSound('superJump', '/sound/SuperJump.wav');
+soundManager.loadSound('jump', '/sound/Jump.wav');
+
 export const initializeStage4Objects = (
   engine,
   refs,
@@ -68,6 +95,8 @@ export const initializeStage4Objects = (
     let onSlope = false;
     let onSlopeRight = false;
     //점프
+
+
     const jumping = (event, engine, ball, jumpPad) => {
       event.pairs.forEach((pair) => {
         const { bodyA, bodyB } = pair;
@@ -75,7 +104,7 @@ export const initializeStage4Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
-          playSound("/sound/Jump.wav");
+          soundManager.playSound('jump');
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2.2 });
         }
@@ -90,7 +119,7 @@ export const initializeStage4Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
-          playSound("/sound/SuperJump.wav");
+          soundManager.playSound('superJump');
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x * 4, y: -velocity.y * 3 });
         }
@@ -298,6 +327,15 @@ export const initializeStage4Objects = (
         },
       },
     });
+    //슈퍼점프대-1
+    // const superJumppad2 = Bodies.rectangle(1353, canvasSize.y - 30, 20, 20, {
+    //   isStatic: true,
+    //   render: {
+    //     sprite: {
+    //       texture: "/assets/JumpPad2_4.png",
+    //     },
+    //   },
+    // });
 
     //-------------------------------------------------------------
     // portal 생성
@@ -618,7 +656,7 @@ export const initializeStage4Objects = (
         // 이하 동일
         loadImage(`/assets/JumpPad2_${currentFrame}.png`, function () {
           superJumppad.render.sprite.texture = `/assets/JumpPad2_${currentFrame}.png`;
-          superJumppad2.render.sprite.texture = `/assets/JumpPad2_${currentFrame}.png`;
+          // superJumppad2.render.sprite.texture = `/assets/JumpPad2_${currentFrame}.png`;
         });
       }
     });
@@ -658,6 +696,7 @@ export const initializeStage4Objects = (
       rightArmRightRef.current,
       leftArmLeftRef.current,
       superJumppad,
+      // superJumppad2,
       jumpPad,
       box1,
       box2,

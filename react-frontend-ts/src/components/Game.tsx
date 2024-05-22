@@ -1,4 +1,4 @@
-// Game.tsx
+// react-frontend-ts/src/components/Game.tsx
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
@@ -50,7 +50,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   if (!gameRoomID) {
     throw new Error("gameRoomID is required but was not provided");
   }
-  const canvasSize = { x: 1600, y: 600 };
+  const canvasSize = { x: 2400, y: 900 };
 
   const nestjsSocketRef = useRef<Socket | null>(null);
   const flaskSocketRef = useRef<Socket | null>(null);
@@ -220,7 +220,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
 
   const { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef } =
     stageSetups[currentStage - 1](
-      canvasSize,
+      { x: 1600, y: 600 },
       sceneRef,
       isSimStarted,
       isTutorialImage2End,
@@ -234,7 +234,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       gameRoomID,
       leftArmLeftRef,
       rightArmRightRef,
-      canvasSize,
+      { x: 1600, y: 600 },
       canvasRef,
       userName,
       isTutorialImage2End,
@@ -357,7 +357,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
     }
     clearStageObjects[currentStage - 1](
-      canvasSize,
+      { x: 1600, y: 600 },
       { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       setIsTutorialImage1End,
       setIsTutorialImage2End,
@@ -379,7 +379,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       });
     }
     clearStageObjects[currentStage - 1](
-      canvasSize,
+      { x: 1600, y: 600 },
       { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
       setIsTutorialImage1End,
       setIsTutorialImage2End,
@@ -414,7 +414,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         setShowWaitingPopup(false);
         if (accepted) {
           clearStageObjects[currentStage - 1](
-            canvasSize,
+            { x: 1600, y: 600 },
             { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
             setIsTutorialImage1End,
             setIsTutorialImage2End,
@@ -433,7 +433,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   const handleNextStage = () => {
     setIsMenuOpen(false);
     resetStageObjects[currentStage - 1](
-      canvasSize,
+      { x: 1600, y: 600 },
       { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef },
       setIsGameStarted,
       setIsSimStarted,
@@ -480,27 +480,16 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       <div className="animated-background"></div>
 
       <div className="App">
-        <div className="header">
+        <div className="header-ingame">
           <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
             메뉴
           </button>
-          <img src="/images/Rattus.webp" className="logo"></img>
-          <div className="leftheader">
-            {/* <textarea
-              ref={textareaRef} // ref 연결
-              className="searchInput"
-              id="search"
-              value={placeholder}
-              readOnly
-            /> */}
-            <button className="if" onClick={handleOpenModal}>
-              친구초대
-            </button>
-            {/* <button className="roomSearch" onClick={handleCopyClick}>
-              친구초대
-            </button> */}
-          </div>
+          {/* <img src="/images/Rattus.webp" className="logo"></img> */}
+          <button className="if" onClick={handleOpenModal}>
+            친구초대
+          </button>
         </div>
+        
         {isModalOpen && (
           <div className="modal">
             <div className="modal-content">
@@ -513,6 +502,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             </div>
           </div>
         )}
+
         <div id="matter-container" ref={sceneRef}>
           {peers
             .slice(indexRef.current)
@@ -667,10 +657,10 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           나는 바보야...
         </div> */}
         <footer className="footer">
+          <div>
           <span id="player0">WAITING</span>
-          <span id="ready0">X</span>
           <span id="player1">WAITING</span>
-          <span id="ready1">X</span>
+          </div>
         </footer>
 
         {showRetryRequest && (

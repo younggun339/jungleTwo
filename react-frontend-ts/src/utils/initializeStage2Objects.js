@@ -12,6 +12,33 @@ import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
 import createBoxLeft from "../Items/PlotTwistBoxLeft";
 
+class SoundManager {
+  constructor() {
+    this.sounds = {};
+  }
+
+  loadSound(name, filePath) {
+    const audio = new Audio(filePath);
+    audio.load();
+    this.sounds[name] = audio;
+  }
+
+  playSound(name) {
+    const audio = this.sounds[name];
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play();
+    } else {
+      console.error(`Sound ${name} not found`);
+    }
+  }
+}
+
+const soundManager = new SoundManager();
+
+soundManager.loadSound('superJump', '/sound/SuperJump.wav');
+soundManager.loadSound('jump', '/sound/Jump.wav');
+
 export const initializeStage2Objects = (
   engine,
   refs,
@@ -87,7 +114,7 @@ export const initializeStage2Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
-          playSound("/sound/Jump.wav");
+          soundManager.playSound('jump');
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x, y: -velocity.y * 2.2 });
         }
@@ -102,7 +129,7 @@ export const initializeStage2Objects = (
           (bodyA === ball && bodyB === jumpPad) ||
           (bodyA === jumpPad && bodyB === ball)
         ) {
-          playSound("/sound/SuperJump.wav");
+          soundManager.playSound('superJump');
           const velocity = ball.velocity;
           Body.setVelocity(ball, { x: velocity.x * 4, y: -velocity.y * 3 });
         }
@@ -160,7 +187,7 @@ export const initializeStage2Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Ground4.png", yScale: 0.3, xScale: 0.5 },
+          sprite: { texture: "/sprite/Ground4.png", yScale: 0.35, xScale: 0.5 },
         },
       }),
       Bodies.rectangle(800, canvasSize.y - 110, 1450, 25, {

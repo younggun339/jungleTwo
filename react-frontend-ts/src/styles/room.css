@@ -25,7 +25,7 @@
 }
 
 body {
-  background-image: url("./bg3.png");
+  background-image: url("./bg7.png");
   font-family: "MyFont", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -41,7 +41,7 @@ body {
 
 .mainImg {
   border-radius: 20px;
-  border: 2px #e38e44 solid;
+  border: 2px #eb4545 solid;
   margin-top: 1rem;
 }
 
@@ -77,7 +77,7 @@ body {
   padding: 1.2rem; /* Increased padding */
   font-size: 24px; /* Increased font size for header */
   height: 10rem;
-  background-image: url("./header2.webp");
+  background-image: url("./Top4.png");
   z-index: 2;
   position: relative;
 }
@@ -146,7 +146,7 @@ body {
 .searchInput {
   padding: 12px;
   margin-right: 12px;
-  border: 2px solid #362210;
+  border: 2px solid #903749;
   border-radius: 5px;
   font-size: 18px;
   outline: none;
@@ -156,7 +156,7 @@ body {
 }
 
 .searchInput:focus {
-  border-color: #362210;
+  border-color: #eb4545;
 }
 
 .roomSearch {
@@ -170,7 +170,8 @@ body {
 }
 
 .roomSearch:hover {
-  background-color: #764a27;
+  cursor: pointer;
+  background-color: #903749;
 }
 
 .contain {
@@ -194,7 +195,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgba(72, 53, 34, 0.8);
+  background-color: rgba(43, 46, 74, 0.8);
   border-radius: 1rem;
   padding: 1rem;
   box-sizing: border-box;
@@ -203,7 +204,7 @@ body {
 .roomListContain {
   flex: 3; /* Takes up more space than createRoomContain */
   margin-top: 2rem;
-  background-color: rgba(72, 53, 34, 0.8);
+  background-color: rgba(43, 46, 74, 0.8);
   border-radius: 1rem;
   padding: 1rem;
   box-sizing: border-box;
@@ -236,7 +237,7 @@ body {
   height: 10rem;
   margin-top: 1rem;
   margin-bottom: 4rem;
-  background-image: url("./blockback_2.png");
+  background-image: url("./blockback_5.png");
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -260,7 +261,7 @@ body {
   flex: 3; /* Increased width */
   padding: 0.5rem;
   border-radius: 1rem;
-  background-color: #362210;
+  background-color: #53354a;
   margin-top: 4rem;
   margin-left: 10px;
   margin-right: 10px;
@@ -272,7 +273,7 @@ body {
   flex: 2; /* Increased width less than roomName */
   padding: 0.5rem;
   border-radius: 1rem;
-  background-color: #362210;
+  background-color: #53354a;
   margin-top: 4rem;
   margin-right: 10px;
   color: white;
@@ -438,7 +439,7 @@ input[type="checkbox"] {
 }
 
 .createButton {
-  background-color: #603613;
+  background-color: #eb4545;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -514,8 +515,8 @@ button {
   color: #ede7f6;
   text-transform: uppercase;
   padding: 1.25em 2em;
-  background: #362210;
-  border: 2px solid #362210;
+  background: #eb4545;
+  border: 2px solid #eb4545;
   border-radius: 0.75em;
   transform-style: preserve-3d;
   transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
@@ -527,8 +528,10 @@ button::before {
 }
 
 button:hover {
-  background: #764a27;
+  background: #903749;
+  border: 2px solid #903749;
   transform: translate(0, 0.25em);
+  cursor: pointer;
 }
 
 button:hover::before {
@@ -537,7 +540,8 @@ button:hover::before {
 }
 
 button:active {
-  background: #764a27;
+  background: #903749;
+  border: 2px solid #903749;
   transform: translate(0em, 0.75em);
 }
 

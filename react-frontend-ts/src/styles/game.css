@@ -69,8 +69,8 @@ body {
   top: 50%; /* 중앙 정렬 */
   left: 50%; /* 중앙 정렬 */
   transform: translate(-50%, -50%); /* 정확한 중앙 위치 */
-  width: 1600px; /* 너비 설정 */
-  height: 600px; /* 높이 설정 */
+  width: 2400px; /* 너비 설정 */
+  height: 900px; /* 높이 설정 */
   z-index: 2; /* Matter.js 캔버스를 상위에 */
   display: flex; /* 자식 요소를 가로로 배치 */
   background-image: url("./bg7.png");
@@ -125,13 +125,6 @@ canvas {
   background-color: #ffa1ba;
 }
 
-#ready0 {
-  font-size: 50px;
-}
-#ready1 {
-  font-size: 50px;
-}
-
 #countdown {
   position: absolute;
   top: 50%;
@@ -175,50 +168,44 @@ canvas {
   z-index: 5; /* 맨 위에 표시 */
 }
 
-#player0 {
-  position: absolute;
-  left: 0%;
-  z-index: 5; /* 맨 위에 표시 */
-  font-family: "myFont";
-  font-size: 70px;
-  margin-bottom: 100px;
-  border-radius: 10px;
-  background-color: aliceblue;
-  padding: 20px;
+.header-ingame {
+  margin-top: -1%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(72, 53, 34, 0.8);
+  padding: 1.2rem; /* Increased padding */
+  font-size: 24px; /* Increased font size for header */
+  height: 7.5rem;
+  background-image: url("./Top4.png");
+  z-index: 2;
+  position: relative;
 }
-
-#ready0 {
-  position: absolute;
-  left: calc(0% - 100px); /* player0의 우측으로부터 60px 만큼 이동 */
-  z-index: 4; /* 맨 위에 표시 */
-  font-family: "myFont";
-  font-size: 70px;
-  background-color: rgb(136, 209, 136);
-  margin-bottom: 100px;
-  border-radius: 10px;
-  padding: 20px;
-}
-
-#player1 {
-  position: absolute;
-  left: 75%;
-  z-index: 5; /* 맨 위에 표시 */
-  font-family: "myFont";
-  font-size: 70px;
-  margin-bottom: 100px;
-  border-radius: 10px;
-  background-color: aliceblue;
-  padding: 20px;
+.menu-button {
+  margin-top: 1rem;
+  padding: 0.4em 1em; /* 패딩 조정 */
+  font-family: "MyFont";
+  color: #ede7f6;
+  background: #e84545;
+  border: 1px solid #e84545;
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: center;
+  margin-left: 2rem;
+  font-size: 3.2rem;
+  width: 13rem;
+  height: 5.5rem;
 }
 .if {
   margin-top: 1rem;
-  padding: 1.25em 2em;
+  right: 5%;
+  padding: 0.4em 1em;
   font-family: "MyFont";
   color: #ede7f6;
   text-transform: uppercase;
-  background: #362210;
-  border: 2px solid #362210;
-  border-radius: 0.75em;
+  background:#e84545;
+  border: 2px solid #e84545;
+  border-radius: 0.25em;
   transform-style: preserve-3d;
   transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
   display: flex;
@@ -227,28 +214,15 @@ canvas {
   margin-right: 1rem;
   font-size: 3.2rem;
   width: 21rem;
-  height: 9rem;
-}
-
-#ready1 {
-  position: absolute;
-  left: calc(75% - 100px); /* player0의 우측으로부터 60px 만큼 이동 */
-  z-index: 4; /* 맨 위에 표시 */
-  font-family: "myFont";
-  font-size: 70px;
-  background-color: rgb(136, 209, 136);
-  margin-bottom: 100px;
-  border-radius: 10px;
-  padding: 20px;
+  height: 5.5rem;
 }
 
 .footer {
-  z-index: 5; /* 맨 위에 표시 */
+  z-index: 5;
   position: fixed;
   bottom: 0;
-  left: 55%; /* 화면 가로 중앙에서부터 시작 */
-  transform: translateX(-50%); /* 가운데 정렬을 위해 왼쪽으로 50% 이동 */
-  width: 60%;
+  left: 0;
+  width: 100%;
   background-color: transparent;
   color: black;
   padding: 20px 0;
@@ -258,6 +232,27 @@ canvas {
   justify-content: space-between;
   align-items: center;
 }
+.footer div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  }
+  #player0 {
+  font-family: "myFont";
+  font-size: 70px;
+  border-radius: 10px;
+  background-color: aliceblue;
+  padding: 20px;
+  margin-left: 12.5%; /* footer의 1/4 위치 */
+  }
+  #player1 {
+  font-family: "myFont";
+  font-size: 70px;
+  border-radius: 10px;
+  background-color: aliceblue;
+  padding: 20px;
+  margin-right: 12.5%; /* footer의 3/4 위치 */
+  }
 
 .modal {
   position: absolute;
@@ -303,25 +298,6 @@ textarea {
   height: 100%;
   background-color: transparent; /* 투명 배경 */
   z-index: 10; /* 필요에 따라 z-index를 조절 */
-}
-.menu-button {
-  margin-top: 1rem;
-  padding: 1.25em 2em;
-  font-family: "MyFont";
-  color: #ede7f6;
-  text-transform: uppercase;
-  background: #362210;
-  border: 2px solid #362210;
-  border-radius: 0.75em;
-  transform-style: preserve-3d;
-  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 1rem;
-  font-size: 3.2rem;
-  width: 21rem;
-  height: 9rem;
 }
 
 .menu-popup {
@@ -414,7 +390,7 @@ textarea {
 }
 
 .waiting-popup h1 {
-  font-size: 24px;
+  font-size: 45px;
   margin-bottom: 20px;
   font-family: "myFont"; /* 기존의 글꼴 사용 */
 }

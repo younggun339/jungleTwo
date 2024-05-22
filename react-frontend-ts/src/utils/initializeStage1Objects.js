@@ -186,7 +186,7 @@ export const initializeStage1Objects = (
       label: "load",
       isStatic: true,
       render: {
-        sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.8 },
+        sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 3.5 },
       },
       collisionFilter: {
         category: 0x0004, // category 4
@@ -200,8 +200,8 @@ export const initializeStage1Objects = (
       render: {
         sprite: {
           texture: "/sprite/Ground4.png",
-          xScale: 0.7,
-          yScale: 0.3,
+          xScale: 0.9,
+          yScale: 0.4,
         },
       },
     });
@@ -505,7 +505,7 @@ export const initializeStage1Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "yellow",
+          fillStyle: "red",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -532,7 +532,7 @@ export const initializeStage1Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "yellow",
+          fillStyle: "blue",
           strokeStyle: "black",
           lineWidth: 1,
         },

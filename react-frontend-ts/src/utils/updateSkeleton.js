@@ -10,12 +10,12 @@ import { Body, Bodies } from 'matter-js';
 export function updateSkeleton(skeletonRef, jointStart, jointEnd) {
 
   // width 최대 길이 제한 100
-  const width = Math.min(Math.sqrt(Math.pow((jointStart.x - jointEnd.x), 2) + Math.pow((jointStart.y - jointEnd.y), 2)), 300);
+  const width = Math.min(Math.sqrt(Math.pow((jointStart.x - jointEnd.x), 2) + Math.pow((jointStart.y - jointEnd.y), 2)), 450) * 2/3;
   const angle = Math.atan2(jointEnd.y - jointStart.y, jointEnd.x - jointStart.x);
 
   // Adjust the X coordinate for right-to-left mirroring
-  const centerX = ((jointStart.x + jointEnd.x) / 2);
-  const centerY = (jointStart.y + jointEnd.y) / 2;
+  const centerX = ((jointStart.x + jointEnd.x) / 2) * 2/3;
+  const centerY = (jointStart.y + jointEnd.y) / 3;
 
   // Set the position and angle of the rectangle that represents the finger
   if (skeletonRef.current) {

@@ -247,23 +247,26 @@ const useStageStart = (
           const readyPlayers = players.filter(
             (player: [string, string, boolean]) => player[2] === true
           );
-          const element0 = document.getElementById("ready0");
-          const element1 = document.getElementById("ready1");
+
+          const element0 = document.getElementById("player0");
+          const element1 = document.getElementById("player1");
 
           if (players[0][2] === true) {
-            element0!.textContent = "O";
-          } else {
-            element0!.textContent = "X";
-          }
+            element0!.textContent = "준비 완료";
+            element0!.style.backgroundColor = 'rgb(136, 209, 136)';
+          } 
           if (players.length === 2) {
             if (players[1][2] === true) {
-              element1!.textContent = "O";
-            } else {
-              element1!.textContent = "X";
+              element1!.textContent = "준비 완료";
+              element1!.style.backgroundColor = 'rgb(136, 209, 136)';
             }
           }
           /////////////////////////////////////////////////////////////////////////////////////////////// 레디 인원수 조절
           if (readyPlayers.length === 2) {
+            element0!.textContent = players[0][1]
+            element1!.textContent = players[1][1]
+            element0!.style.backgroundColor = 'rgb(255,255,255)';
+            element1!.style.backgroundColor = 'rgb(255,255,255)';
             setIsGameStarted(true);
             setResultState(null);
           }

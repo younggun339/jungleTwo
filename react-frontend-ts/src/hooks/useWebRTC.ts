@@ -8,16 +8,16 @@ import html2canvas from "html2canvas";
 import "process/browser";
 
 const pcConfig = {
-  // iceServers: [
-  //   {
-  //     urls: ["turn:43.203.29.69:3478?transport=tcp"],
-  //     username: "team2",
-  //     credential: "team2",
-  //   },
-  // ],
+  iceServers: [
+    {
+      urls: ["turn:3.34.140.103:3478"],//turn:43.203.29.69:3478
+      username: "team2",
+      credential: "team2",
+    },
+  ],
 };
 
-const retryFetch = async (url: any, options: any, retries = 10) => {
+const retryFetch = async (url: any, options: any, retries = 5) => {
   for (let i = 0; i < retries; i++) {
     try {
       const response = await fetch(url, options);
@@ -47,9 +47,6 @@ const useWebRTC = (
   const [peers, setPeers] = useState<PeerObject[]>([]);
   const indexRef = useRef(0);
   const userVideo = useRef<HTMLVideoElement | null>(null);
-  // 새로운 State 추가
-  const [isVoiceDetected, setIsVoiceDetected] = useState(false);
-
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
@@ -159,29 +156,22 @@ const useWebRTC = (
       trickle: false,
       stream,
       config: pcConfig,
+      channelConfig: {
+        ordered: false, // UDP-like behavior
+        maxRetransmits: 0,
+      },
     });
 
-    const sendSignal = (signal: any, retryCount = 0) => {
-      nestjsSocketRef.current?.emit(
-        "sending-signal",
-        {
-          userToSignal,
-          callerID,
-          signal,
-        },
-        (err: any) => {
-          if (err) {
-            console.error(`Failed to send signal to ${userToSignal}:`, err);
-            if (retryCount >= 10) {
-              console.warn("Failed to send signal, retrying...", err);
-              setTimeout(() => sendSignal(signal, retryCount + 1), 1000);
-            }
-          }
-        }
-      );
-    };
+    console.log("stream created: ", stream);
 
-    peer.on("signal", sendSignal);
+    peer.on("signal", (signal) => {
+      console.log("signal 받음 in create");
+      nestjsSocketRef.current?.emit("sending-signal", {
+        userToSignal,
+        callerID,
+        signal,
+      });
+    });
 
     return peer;
   };
@@ -196,22 +186,16 @@ const useWebRTC = (
       trickle: false,
       stream,
       config: pcConfig,
+      channelConfig: {
+        ordered: false, // UDP-like behavior
+        maxRetransmits: 0,
+      },
     });
 
-    const sendReturnSignal = (signal: any, retryCount = 0) => {
-      nestjsSocketRef.current?.emit(
-        "returning-signal",
-        { signal, callerID },
-        (err: any) => {
-          if (err && retryCount < 10) {
-            console.warn("Failed to send return signal, retrying...", err);
-            setTimeout(() => sendReturnSignal(signal, retryCount + 1), 1000);
-          }
-        }
-      );
-    };
-
-    peer.on("signal", sendReturnSignal);
+    peer.on("signal", (signal) => {
+      console.log("signal 받음 in add");
+      nestjsSocketRef.current?.emit("returning-signal", { signal, callerID });
+    });
 
     peer.signal(incomingSignal);
     return peer;
@@ -231,23 +215,27 @@ const useWebRTC = (
 
   const sendLeftHandJoint = (joint1Start: any, joint1End: any) => {
     peersRef.current.forEach((peerObj) => {
-      peerObj.peer.send(
-        JSON.stringify({
-          type: "left-hand-joint",
-          data: { joint1Start, joint1End },
-        })
-      );
+      if (peerObj.peer.connected) { // peer가 연결된 상태인지 체크
+        peerObj.peer.send(
+          JSON.stringify({
+            type: "left-hand-joint",
+            data: { joint1Start, joint1End },
+          })
+        );  
+      }
     });
   };
-
+  
   const sendRightHandJoint = (joint1Start: any, joint1End: any) => {
     peersRef.current.forEach((peerObj) => {
-      peerObj.peer.send(
-        JSON.stringify({
-          type: "right-hand-joint",
-          data: { joint1Start, joint1End },
-        })
-      );
+      if (peerObj.peer.connected) { // peer가 연결된 상태인지 체크  
+        peerObj.peer.send(
+          JSON.stringify({
+            type: "right-hand-joint",
+            data: { joint1Start, joint1End },
+          })
+        );
+      }
     });
   };
 

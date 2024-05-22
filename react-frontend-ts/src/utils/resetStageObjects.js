@@ -42,9 +42,6 @@ export function resetStage1Objects(
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;
 
-  document.getElementById("ready0").textContent = "X";
-  document.getElementById("ready1").textContent = "X";
-
   // 게임 상태를 리셋
   setIsPlayerReady(false);
   setIsGameStarted(false);
@@ -84,9 +81,6 @@ export function resetStage2Objects(
   // 가로 길이를 0으로 리셋
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;
-
-  document.getElementById("ready0").textContent = "X";
-  document.getElementById("ready1").textContent = "X";
 
   // 게임 상태를 리셋
   setIsPlayerReady(false);
@@ -128,9 +122,6 @@ export function resetStage3Objects(
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;
 
-  document.getElementById("ready0").textContent = "X";
-  document.getElementById("ready1").textContent = "X";
-
   // 게임 상태를 리셋
   setIsPlayerReady(false);
   setIsGameStarted(false);
@@ -171,9 +162,6 @@ export function resetStage4Objects(
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;
 
-  document.getElementById("ready0").textContent = "X";
-  document.getElementById("ready1").textContent = "X";
-
   // 게임 상태를 리셋
   setIsPlayerReady(false);
   setIsGameStarted(false);
@@ -213,9 +201,6 @@ export function resetStage5Objects(
   // 가로 길이를 0으로 리셋
   leftArmLeftRef.current.vertices[1].x = 0;
   rightArmRightRef.current.vertices[1].x = 0;
-
-  document.getElementById("ready0").textContent = "X";
-  document.getElementById("ready1").textContent = "X";
 
   // 게임 상태를 리셋
   setIsPlayerReady(false);
