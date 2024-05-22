@@ -17,7 +17,7 @@ const pcConfig = {
   // ],
 };
 
-const retryFetch = async (url: any, options: any, retries = 50) => {
+const retryFetch = async (url: any, options: any, retries = 10) => {
   for (let i = 0; i < retries; i++) {
     try {
       const response = await fetch(url, options);
@@ -47,6 +47,9 @@ const useWebRTC = (
   const [peers, setPeers] = useState<PeerObject[]>([]);
   const indexRef = useRef(0);
   const userVideo = useRef<HTMLVideoElement | null>(null);
+  // 새로운 State 추가
+  const [isVoiceDetected, setIsVoiceDetected] = useState(false);
+
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })

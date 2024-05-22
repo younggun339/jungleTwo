@@ -7,7 +7,7 @@ import {
   useStage2Setup,
   useStage3Setup,
   useStage4Setup,
-  useStage5Setup,
+  // useStage5Setup,
 } from "../hooks/useStageSetup";
 import {
   useStage1Start,
@@ -191,7 +191,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     useStage2Setup,
     useStage3Setup,
     useStage4Setup,
-    useStage5Setup,
+    // useStage5Setup,
   ];
 
   const stageStarts = [
@@ -444,7 +444,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       setCountdown,
       setIsPlayerReady
     );
-    setCurrentStage((prevStage) => Math.min(prevStage + 1, 4)); // 최대 5스테이지
+    setCurrentStage((prevStage) => Math.min(prevStage + 1, 4)); // 최대 4스테이지
     setShowModal(false);
 
     if (nestjsSocketRef.current) {

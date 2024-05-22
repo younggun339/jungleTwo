@@ -489,7 +489,7 @@ export const initializeStage5Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "#b67361",
+          fillStyle: "blue",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -516,7 +516,7 @@ export const initializeStage5Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "#b67361",
+          fillStyle: "blue",
           strokeStyle: "black",
           lineWidth: 1,
         },

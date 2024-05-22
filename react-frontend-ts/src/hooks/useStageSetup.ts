@@ -336,91 +336,91 @@ const useStage4Setup = (
 };
 
 // ================================================ STAGE 5 ====================================================
-const useStage5Setup = (
-  canvasSize: CanvasSize,
-  sceneRef: MutableRefObject<HTMLDivElement | null>,
-  isSimStarted: boolean,
-  isTutorialImage2End: boolean,
-  setResultState: (value: number) => void
-) => {
-  const engineRef = useRef<Engine>(Engine.create());
+// const useStage5Setup = (
+//   canvasSize: CanvasSize,
+//   sceneRef: MutableRefObject<HTMLDivElement | null>,
+//   isSimStarted: boolean,
+//   isTutorialImage2End: boolean,
+//   setResultState: (value: number) => void
+// ) => {
+//   const engineRef = useRef<Engine>(Engine.create());
 
-  const leftArmLeftRef = useRef<Body | null>(null);
-  const rightArmRightRef = useRef<Body | null>(null);
-  const mouseRef = useRef<Body | null>(null);
-  const bombRef = useRef<Body | null>(null);
+//   const leftArmLeftRef = useRef<Body | null>(null);
+//   const rightArmRightRef = useRef<Body | null>(null);
+//   const mouseRef = useRef<Body | null>(null);
+//   const bombRef = useRef<Body | null>(null);
 
-  const renderRef = useRef<Render | null>(null);
-  const playSound = useSoundEffects();
+//   const renderRef = useRef<Render | null>(null);
+//   const playSound = useSoundEffects();
 
-  const [isRightPointer, setIsRightPointer] = useState(false);
+//   const [isRightPointer, setIsRightPointer] = useState(false);
 
-  useEffect(() => {
-    const engine = engineRef.current;
+//   useEffect(() => {
+//     const engine = engineRef.current;
 
-    const render = Render.create({
-      element: document.getElementById("matter-container") as HTMLElement,
-      engine: engine,
-      options: {
-        width: canvasSize.x,
-        height: canvasSize.y,
-        wireframes: false,
-        background: "transparent", // Set canvas background to transparent
-      },
-    });
-    renderRef.current = render;
-    if (!engine.world) {
-      console.error("World not initialized");
-      return;
-    }
+//     const render = Render.create({
+//       element: document.getElementById("matter-container") as HTMLElement,
+//       engine: engine,
+//       options: {
+//         width: canvasSize.x,
+//         height: canvasSize.y,
+//         wireframes: false,
+//         background: "transparent", // Set canvas background to transparent
+//       },
+//     });
+//     renderRef.current = render;
+//     if (!engine.world) {
+//       console.error("World not initialized");
+//       return;
+//     }
 
-    initializeStage5Objects(
-      engine,
-      {
-        render,
-        canvasSize,
-        mouseRef,
-        bombRef,
-        leftArmLeftRef,
-        rightArmRightRef,
-      },
-      isSimStarted,
-      isTutorialImage2End,
-      isRightPointer,
-      setResultState,
-      playSound,
-      setIsRightPointer
-    );
+//     initializeStage5Objects(
+//       engine,
+//       {
+//         render,
+//         canvasSize,
+//         mouseRef,
+//         bombRef,
+//         leftArmLeftRef,
+//         rightArmRightRef,
+//       },
+//       isSimStarted,
+//       isTutorialImage2End,
+//       isRightPointer,
+//       setResultState,
+//       playSound,
+//       setIsRightPointer
+//     );
 
-    Render.run(render);
+//     Render.run(render);
 
-    return () => {
-      Render.stop(render);
-      World.clear(engine.world, false);
-      Engine.clear(engine);
-      render.canvas.remove();
-    };
-  }, [isTutorialImage2End]);
+//     return () => {
+//       Render.stop(render);
+//       World.clear(engine.world, false);
+//       Engine.clear(engine);
+//       render.canvas.remove();
+//     };
+//   }, [isTutorialImage2End]);
 
-  useSimulation(
-    isSimStarted,
-    leftArmLeftRef,
-    rightArmRightRef,
-    mouseRef,
-    bombRef,
-    engineRef,
-    isRightPointer,
-    playSound
-  );
+//   useSimulation(
+//     isSimStarted,
+//     leftArmLeftRef,
+//     rightArmRightRef,
+//     mouseRef,
+//     bombRef,
+//     engineRef,
+//     isRightPointer,
+//     playSound
+//   );
 
-  return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
-};
+//   return { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef, engineRef };
+// };
 
 export {
   useStage1Setup,
   useStage2Setup,
   useStage3Setup,
   useStage4Setup,
-  useStage5Setup,
+  // useStage5Setup,
 };
 export default useStage1Setup;

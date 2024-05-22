@@ -10,6 +10,7 @@ import Matter, {
 } from "matter-js";
 import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
+import createBoxLeft from "../Items/PlotTwistBoxLeft";
 
 export const initializeStage2Objects = (
   engine,
@@ -145,28 +146,28 @@ export const initializeStage2Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.66 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.66 },
         },
       }),
       Bodies.rectangle(1090, canvasSize.y - 350, 330, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.29 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.29 },
         },
       }),
-      Bodies.rectangle(1473, canvasSize.y - 370, 140, 25, {
+      Bodies.rectangle(1473, canvasSize.y - 350, 140, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Ground4.png", yScale: 1, xScale: 0.5 },
+          sprite: { texture: "/sprite/Ground4.png", yScale: 0.3, xScale: 0.5 },
         },
       }),
       Bodies.rectangle(800, canvasSize.y - 110, 1450, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 1.26 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 1.26 },
         },
       }),
     ];
@@ -195,7 +196,7 @@ export const initializeStage2Objects = (
         sprite: {
           texture: "/assets/BrokenGround_0.png",
           xScale: 3,
-          yScale: 6.2,
+          yScale: 3.5,
         },
       },
     });
@@ -212,7 +213,7 @@ export const initializeStage2Objects = (
     });
 
     //좌우반전 아이템 위에서부터 차례대로
-    const box1 = createBox(1530, canvasSize.y - 410, 50, 50);
+    const box1 = createBoxLeft(1530, canvasSize.y - 410, 50, 50);
     const box2 = createBox(295, canvasSize.y - 150, 50, 50);
     const box3 = createBox(970, canvasSize.y - 387, 50, 50);
     const box4 = createBox(1295, canvasSize.y - 147, 50, 50);
@@ -232,17 +233,17 @@ export const initializeStage2Objects = (
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/JumpPad_0.png",
+          texture: "/assets/JumpPad_4.png",
           yScale: 2,
         },
       },
     });
     //점프대-2
-    const jumpPad2 = Bodies.rectangle(1365, canvasSize.y - 340, 20, 20, {
+    const jumpPad2 = Bodies.rectangle(1368, 265, 20, 20, {
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/JumpPad_0.png",
+          texture: "/assets/JumpPad_4.png",
           yScale: 2,
         },
       },
@@ -296,31 +297,56 @@ export const initializeStage2Objects = (
       Bodies.rectangle(230, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
+          sprite: {
+            texture: "/assets/Fire_0.png",
+            xScale: 1.8,
+            yScale: 1.8,
+            yOffset: 0.15,
+          },
         },
       }),
       Bodies.rectangle(280, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
+          sprite: {
+            texture: "/assets/Fire_0.png",
+            xScale: 1.8,
+            yScale: 1.8,
+            yOffset: 0.15,
+          },
         },
       }),
       Bodies.rectangle(330, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
+          sprite: {
+            texture: "/assets/Fire_0.png",
+            xScale: 1.8,
+            yScale: 1.8,
+            yOffset: 0.15,
+          },
         },
       }),
       Bodies.rectangle(380, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
+          sprite: {
+            texture: "/assets/Fire_0.png",
+            xScale: 1.8,
+            yScale: 1.8,
+            yOffset: 0.15,
+          },
         },
       }),
       Bodies.rectangle(430, 210, 50, 50, {
         isStatic: true,
         render: {
-          sprite: { texture: "/assets/Fire_0.png", xScale: 1.8, yScale: 1.8 },
+          sprite: {
+            texture: "/assets/Fire_0.png",
+            xScale: 1.8,
+            yScale: 1.8,
+            yOffset: 0.15,
+          },
         },
       }),
       // Bodies.rectangle(480, 210, 50, 50, {
@@ -540,7 +566,7 @@ export const initializeStage2Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "#b67361",
+          fillStyle: "yellow",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -567,7 +593,7 @@ export const initializeStage2Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "#b67361",
+          fillStyle: "yellow",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -586,11 +612,11 @@ export const initializeStage2Objects = (
         lastUpdateTime = currentTime;
         currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
 
-        // 각 이미지를 로드한 후에만 이미지 변경
-        loadImage(`/assets/Pointer_${currentFrame}.png`, function () {
-          box1.render.sprite.texture = `/assets/Left_Pointer_${currentFrame}.png`;
-          box2.render.sprite.texture = `/assets/Pointer_${currentFrame}.png`;
-        });
+        // // 각 이미지를 로드한 후에만 이미지 변경
+        // loadImage(`/assets/Pointer_${currentFrame}.png`, function () {
+        //   box1.render.sprite.texture = `/assets/Left_Pointer_${currentFrame}.png`;
+        //   box2.render.sprite.texture = `/assets/Pointer_${currentFrame}.png`;
+        // });
         // 각 이미지를 로드한 후에만 이미지 변경
         loadImage(`/assets/JumpPad_${currentFrame}.png`, function () {
           jumpPad.render.sprite.texture = `/assets/JumpPad_${currentFrame}.png`;
@@ -647,7 +673,7 @@ export const initializeStage2Objects = (
     // });
 
     // cheese
-    const cheese = Bodies.rectangle(1300, 383, 50, 50, {
+    const cheese = Bodies.rectangle(1450, 353, 50, 50, {
       isStatic: true,
       render: {
         sprite: {

@@ -73,7 +73,7 @@ body {
   height: 600px; /* 높이 설정 */
   z-index: 2; /* Matter.js 캔버스를 상위에 */
   display: flex; /* 자식 요소를 가로로 배치 */
-  background-image: url("./bg3_gray.png");
+  background-image: url("./bg7.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

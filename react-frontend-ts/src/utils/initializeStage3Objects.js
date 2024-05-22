@@ -11,6 +11,7 @@ import Matter, {
 import PlotTwistBox from "../Items/PlotTwistBox";
 import createBox from "../Items/PlotTwistBox";
 import createBoxLeft from "../Items/PlotTwistBoxLeft";
+import { load } from "@tensorflow-models/posenet";
 
 export const initializeStage3Objects = (
   engine,
@@ -135,7 +136,7 @@ export const initializeStage3Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.31 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.31 },
         },
       }),
 
@@ -143,7 +144,7 @@ export const initializeStage3Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.31 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.31 },
         },
       }),
 
@@ -151,7 +152,7 @@ export const initializeStage3Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.31 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.31 },
         },
       }),
 
@@ -159,7 +160,7 @@ export const initializeStage3Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.31 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.31 },
         },
       }),
 
@@ -167,7 +168,7 @@ export const initializeStage3Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.31 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.31 },
         },
       }),
     ];
@@ -209,7 +210,7 @@ export const initializeStage3Objects = (
 
     //----------------------------region 아이템----------------------------
     //폭탄
-    bombRef.current = Bodies.circle(500, 250, 20, {
+    bombRef.current = Bodies.circle(478, 250, 20, {
       frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
@@ -222,7 +223,7 @@ export const initializeStage3Objects = (
     });
 
     //좌우반전 아이템 위에서부터 차례대로
-    const box1 = createBoxLeft(50, 310, 50, 50);
+    const box1 = createBox(50, 310, 50, 50);
     const box2 = createBox(1300, 100, 50, 50);
     const box3 = createBox(200, canvasSize.y - 317, 50, 50);
     const box4 = createBoxLeft(1400, 100, 50, 50);
@@ -241,7 +242,7 @@ export const initializeStage3Objects = (
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/JumpPad_0.png",
+          texture: "/assets/JumpPad_4.png",
         },
       },
     });
@@ -250,7 +251,7 @@ export const initializeStage3Objects = (
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/JumpPad_0.png",
+          texture: "/assets/JumpPad_4.png",
         },
       },
     });
@@ -259,7 +260,7 @@ export const initializeStage3Objects = (
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/JumpPad2_0.png",
+          texture: "/assets/JumpPad2_4.png",
         },
       },
     });
@@ -269,7 +270,7 @@ export const initializeStage3Objects = (
       isStatic: true,
       render: {
         sprite: {
-          texture: "/assets/JumpPad2_0.png",
+          texture: "/assets/JumpPad2_4.png",
         },
       },
     });
@@ -547,7 +548,7 @@ export const initializeStage3Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "#b67361",
+          fillStyle: "blue",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -574,7 +575,7 @@ export const initializeStage3Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "#b67361",
+          fillStyle: "blue",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -582,37 +583,38 @@ export const initializeStage3Objects = (
     );
     //---------------피어가만든기물-----------------
 
-    // // 이미지를 순환시키기 위한 로직
-    // let lastUpdateTime = 0;
-    // let currentFrame = 0;
-    // Events.on(engine, "beforeUpdate", function (event) {
-    //   const currentTime = event.timestamp;
-    //   let frameDuration = 200; // 매 초마다 이미지 변경
+    // 이미지를 순환시키기 위한 로직
+    let lastUpdateTime = 0;
+    let currentFrame = 0;
+    Events.on(engine, "beforeUpdate", function (event) {
+      const currentTime = event.timestamp;
+      let frameDuration = 100; // 매 초마다 이미지 변경
 
-    //   if (currentTime - lastUpdateTime > frameDuration) {
-    //     lastUpdateTime = currentTime;
-    //     currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
+      if (currentTime - lastUpdateTime > frameDuration) {
+        lastUpdateTime = currentTime;
+        currentFrame = (currentFrame + 1) % 6; // 0, 1, 2 순환
 
-    //     box1.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
-    //     box2.render.sprite.texture = `/assets/pointer_${currentFrame}.png`;
-    //     jumpPad.render.sprite.texture = `/assets/jumpPad_${currentFrame}.png`;
-    //     jumpPad2.render.sprite.texture = `/assets/jumpPad_${currentFrame}.png`;
-    //     fire.forEach((body) => {
-    //       body.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //     });
-    //     // fire.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //     // fire1.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //     // fire2.render.sprite.texture = `/assets/fire_${currentFrame}.png`;
-    //     portal1.render.sprite.texture = `/assets/portal_${currentFrame}.png`;
-    //     portal2.render.sprite.texture = `/assets/portal_${currentFrame}.png`;
-    //     portal3.render.sprite.texture = `/assets/portal2_${currentFrame}.png`;
-    //     portal4.render.sprite.texture = `/assets/portal2_${currentFrame}.png`;
-    //     superJumppad.render.sprite.texture = `/assets/jumpPad2_${currentFrame}.png`;
-    //     ground.render.sprite.texture = `/assets/BrokenGround_${currentFrame}.png`;
-    //     bombGround.render.sprite.texture = `/assets/BrokenGround_${currentFrame}.png`;
-    //     bombRef.current.render.sprite.texture = `/assets/Bomb_${currentFrame}.png`;
-    //   }
-    // });
+        // 각 이미지를 로드한 후에만 이미지 변경
+        loadImage(`/assets/JumpPad_${currentFrame}.png`, function () {
+          jumpPad.render.sprite.texture = `/assets/JumpPad_${currentFrame}.png`;
+          jumpPad2.render.sprite.texture = `/assets/JumpPad_${currentFrame}.png`;
+        });
+        // 이하 동일
+        loadImage(`/assets/JumpPad2_${currentFrame}.png`, function () {
+          superJumppad.render.sprite.texture = `/assets/JumpPad2_${currentFrame}.png`;
+          superJumppad2.render.sprite.texture = `/assets/JumpPad2_${currentFrame}.png`;
+        });
+      }
+    });
+
+    // 이미지 로드 함수 정의
+    function loadImage(url, callback) {
+      const img = new Image();
+      img.onload = function () {
+        callback();
+      };
+      img.src = url;
+    }
 
     // cheese
     const cheese = Bodies.rectangle(1300, 303, 50, 50, {

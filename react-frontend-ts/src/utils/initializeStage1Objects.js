@@ -150,21 +150,21 @@ export const initializeStage1Objects = (
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.31 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.31 },
         },
       }),
       Bodies.rectangle(635, canvasSize.y - 300, 100, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.09 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.09 },
         },
       }),
       Bodies.rectangle(1200, canvasSize.y - 400, 700, 25, {
         label: "load",
         isStatic: true,
         render: {
-          sprite: { texture: "/sprite/Top.png", yScale: 0.26, xScale: 0.6 },
+          sprite: { texture: "/sprite/Top.png", yScale: 0.1, xScale: 0.6 },
         },
       }),
       // Bodies.rectangle(1180, canvasSize.y - 140, 100, 25, {
@@ -200,8 +200,8 @@ export const initializeStage1Objects = (
       render: {
         sprite: {
           texture: "/sprite/Ground4.png",
-          xScale: 0.9,
-          yScale: 1,
+          xScale: 0.7,
+          yScale: 0.3,
         },
       },
     });
@@ -244,7 +244,7 @@ export const initializeStage1Objects = (
       isStatic: true,
       angle: -Math.PI / 6, // 45도를 라디안으로 변환
       render: {
-        sprite: { texture: "/sprite/Ground4.png", yScale: 0.9, xScale: 1 },
+        sprite: { texture: "/sprite/Ground4.png", yScale: 0.4, xScale: 0.85 },
       },
     });
 
@@ -313,6 +313,8 @@ export const initializeStage1Objects = (
           texture: "/assets/Fire_0.png",
           xScale: 1.8,
           yScale: 1.8,
+          // x방향 오프셋
+          yOffset: 0.15,
         },
       },
     });
@@ -503,7 +505,7 @@ export const initializeStage1Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "#b67361",
+          fillStyle: "yellow",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -530,7 +532,7 @@ export const initializeStage1Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "#b67361",
+          fillStyle: "yellow",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -576,6 +578,7 @@ export const initializeStage1Objects = (
           texture: "/sprite/Cheese.png",
           xScale: 2,
           yScale: 2,
+          yOffset: 0.15,
         },
       },
     });
