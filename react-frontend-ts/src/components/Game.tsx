@@ -227,19 +227,26 @@ const Game: React.FC<GameProps> = ({ userName }) => {
       setResultState
     );
 
-  const { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint } =
-    useWebRTC(
-      nestjsSocketRef,
-      flaskSocketRef,
-      gameRoomID,
-      leftArmLeftRef,
-      rightArmRightRef,
-      { x: 1600, y: 600 },
-      canvasRef,
-      userName,
-      isTutorialImage2End,
-      isSimStarted
-    ) as WebRTCResult;
+  const {
+    userVideo,
+    peers,
+    indexRef,
+    sendLeftHandJoint,
+    sendRightHandJoint,
+    isSpeaking,
+    isPeerSpeaking,
+  } = useWebRTC(
+    nestjsSocketRef,
+    flaskSocketRef,
+    gameRoomID,
+    leftArmLeftRef,
+    rightArmRightRef,
+    { x: 1600, y: 600 },
+    canvasRef,
+    userName,
+    isTutorialImage2End,
+    isSimStarted
+  ) as WebRTCResult;
 
   let startCx = mousePos.x;
   let startCy = mousePos.y;
@@ -255,38 +262,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     joint1Start: { x: typeof startCx; y: typeof startCy };
     joint1End: { x: typeof endCx; y: typeof endCy };
   }
-  //--------------음성 인식 여부------------
-  // const [isSpeaking, setIsSpeaking] = useState(false);
-  // const { receiveVoiceData } = useWebRTC(
-  //   nestjsSocketRef,
-  //   flaskSocketRef,
-  //   gameRoomID,
-  //   leftArmLeftRef,
-  //   rightArmRightRef,
-  //   canvasSize,
-  //   canvasRef,
-  //   userName,
-  //   isTutorialImage2End,
-  //   isSimStarted
-  // );
-
-  // useEffect(() => {
-  //   // 음성 데이터 수신 시 실행되는 함수
-  //   const handleVoiceData = () => {
-  //     setIsSpeaking(true); // 사용자의 음성이 감지되면 상태 변경
-  //   };
-
-  //   // 음성 데이터 수신 시 실행되는 콜백 등록
-  //   receiveVoiceData(handleVoiceData);
-
-  //   // Clean-up 함수
-  //   return () => {
-  //     // 이벤트 리스너 등록 해제
-  //     receiveVoiceData(null);
-  //   };
-  // }, [receiveVoiceData]);
-
-  //---------------------------------------
   useEffect(() => {
     //-------------좌표넘겨주는 코드----------------
     const handleLeftsideBodyCoords = (data: BodyCoordsL) => {
@@ -356,8 +331,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
     }
-
   };
+
   const handleStart = () => {
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("start-request", { roomName: gameRoomID });
@@ -389,11 +364,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   // 클라이언트 측에서 reset-retry 요청 핸들링
   useEffect(() => {
     if (nestjsSocketRef.current) {
-      nestjsSocketRef.current.on("retry-response", {
-        roomName: gameRoomID,
-        accepted: true,
-      }, ()=>{
-        setCountdown(3)
+      nestjsSocketRef.current.on("start-response", () => {
+        console.log("start-response received");
+        setCountdown(1);
       });
 
       nestjsSocketRef.current.on("retry-request", () => {
@@ -480,7 +453,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             친구초대
           </button>
         </div>
-        
+
         {isModalOpen && (
           <div className="modal">
             <div className="modal-content">
@@ -504,8 +477,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   <div
                     id={
                       indexRef.current === 0
-                        ? "play-container-2"
-                        : "play-container-1"
+                        ? "video-container-1"
+                        : "video-container-2"
                     }
                     key={index}
                   ></div>
@@ -515,9 +488,14 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             <div
               id={
                 indexRef.current === 0
-                  ? "play-container-2"
-                  : "play-container-1"
+                  ? "video-container-1"
+                  : "video-container-2"
               }
+              // style={{
+              //   borderImage: `url('${process.env.PUBLIC_URL}/sprite/FireFrame.png') fill round`,
+              //   borderImageSlice: "30",
+              //   border: "20px solid transparent", // 이 부분을 조정하여 테두리의 크기를 설정
+              // }}
             ></div>
           )}
           {peers
@@ -529,8 +507,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   <div
                     id={
                       indexRef.current === 0
-                        ? "play-container-2"
-                        : "play-container-1"
+                        ? "video-container-1"
+                        : "video-container-2"
                     }
                     key={index}
                   ></div>
@@ -577,34 +555,32 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           !isTutorialImage1End &&
           countdown &&
           countdown > 0 && (
-          <div id="tutorial-image-1">
-            <div className="background"></div>
-            <div className="text">준비하시고..</div>
-          </div>
-        )}
+            <div id="tutorial-image-1">
+              <div className="background"></div>
+              <div className="text">준비하시고..</div>
+            </div>
+          )}
 
         {isTutorialImage1End &&
           !isTutorialImage2End &&
           countdown &&
           countdown > 0 && (
-          <div id="tutorial-image-2">
-            <div className="background"></div>
-            <div className="text">출발!</div>
-          </div>
-        )}
+            <div id="tutorial-image-2">
+              <div className="background"></div>
+              <div className="text">출발!</div>
+            </div>
+          )}
 
         {/* 작전 타임 */}
-        {isTutorialImage2End && countdown && countdown > 0 && (
+        {/* {isTutorialImage2End && countdown && countdown > 0 && (
           <div id="countdown-container">
             <div id="countdown-bar">
               <div id="countdown-stripes"></div>
             </div>
           </div>
-        )}
+        )} */}
         {isTutorialImage2End && countdown && countdown > 0 && (
-          <div id="loading-text">
-            드래그로 지형을 설치해주세요: {countdown}
-          </div>
+          <div id="loading-text">드래그로 지형을 설치해주세요: {countdown}</div>
         )}
 
         {!isPlayerReady &&
@@ -615,10 +591,10 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             </button>
           )}
 
-        {isTutorialImage2End && !isSimStarted &&
-           (<button onClick={handleStart} id="start-button">
-              바로시작
-            </button>
+        {isTutorialImage2End && !isSimStarted && (
+          <button onClick={handleStart} id="start-button">
+            바로시작
+          </button>
         )}
 
         {isMenuOpen && (
@@ -649,13 +625,36 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             </label>
           </div>
         )}
-        {/* <div className={isSpeaking ? 'speaking' : 'not-speaking'}>
-          나는 바보야...
-        </div> */}
         <footer className="footer">
           <div>
-          <span id="player0">WAITING</span>
-          <span id="player1">WAITING</span>
+            <span
+              id="player0"
+              className={indexRef.current === 0 && isSpeaking ? "speaking" : ""}
+            >
+              {peers[0]?.peerID || "WAITING"}
+            </span>
+            <span
+              id="player1"
+              className={indexRef.current === 1 && isSpeaking ? "speaking" : ""}
+            >
+              {peers[1]?.peerID || "WAITING"}
+            </span>
+            <span
+              id="player0"
+              className={
+                indexRef.current === 1 && isPeerSpeaking ? "speaking" : ""
+              }
+            >
+              {peers[0]?.peerID || "WAITING"}
+            </span>
+            <span
+              id="player1"
+              className={
+                indexRef.current === 0 && isPeerSpeaking ? "speaking" : ""
+              }
+            >
+              {peers[1]?.peerID || "WAITING"}
+            </span>
           </div>
         </footer>
 

@@ -47,10 +47,17 @@ const useWebRTC = (
   const [peers, setPeers] = useState<PeerObject[]>([]);
   const indexRef = useRef(0);
   const userVideo = useRef<HTMLVideoElement | null>(null);
+
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isPeerSpeaking, setIsPeerSpeaking] = useState(false);
+
   useEffect(() => {
+    const audioContext = new AudioContext();
+
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
+
         if (userVideo.current) {
           userVideo.current.srcObject = stream;
         }
@@ -119,11 +126,29 @@ const useWebRTC = (
               );
               const peerObj: PeerObject = { peer, peerID: payload.callerID };
               peer.on("data", handleIncomingData);
+              peer.on("stream", (stream) => {
+                const sourceNode = audioContext.createMediaStreamSource(stream);
+                const analyserNode = audioContext.createAnalyser();
+                sourceNode.connect(analyserNode);
+        
+                const detectSound = () => {
+                  const bufferLength = analyserNode.frequencyBinCount;
+                  const dataArray = new Uint8Array(bufferLength);
+                  analyserNode.getByteFrequencyData(dataArray);
+                  const volume = dataArray.reduce((a, b) => a + b) / bufferLength;
+                  setIsPeerSpeaking(volume > 50); // 적절한 임계값 설정
+                };
+        
+                const intervalId = setInterval(detectSound, 100);
+        
+                peer.on("close", () => {
+                  clearInterval(intervalId);
+                });
+              });
               peer.on("error", (err) => console.error("Peer error:", err));
               peersRef.current.push(peerObj);
               setPeers((users) => [...users, peerObj]);
-            }
-          );
+          });
 
           nestjsSocketRef.current.on(
             "receiving-returned-signal",
@@ -144,7 +169,35 @@ const useWebRTC = (
           });
         }
       });
+
+      return () => {
+        audioContext.close();
+      }
   }, [roomName]);
+
+  useEffect(() => {
+    if (userVideo.current && userVideo.current.srcObject instanceof MediaStream) {
+      const audioContext = new AudioContext();
+      const sourceNode = audioContext.createMediaStreamSource(userVideo.current.srcObject);
+      const analyserNode = audioContext.createAnalyser();
+      sourceNode.connect(analyserNode);
+
+      const detectSound = () => {
+        const bufferLength = analyserNode.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        analyserNode.getByteFrequencyData(dataArray);
+        const volume = dataArray.reduce((a, b) => a + b) / bufferLength;
+        setIsSpeaking(volume > 50); // 적절한 임계값 설정
+      };
+
+      const intervalId = setInterval(detectSound, 100);
+      
+      return () => {
+        clearInterval(intervalId);
+        audioContext.close().then(() => console.log('Audio context closed'));
+      };
+    }
+  }, [userVideo]);
 
   const createPeer = (
     userToSignal: string,
@@ -206,11 +259,11 @@ const useWebRTC = (
 
     if (parsedData.type === "left-hand-joint" && leftArmLeftRef.current) {
       const { joint1Start, joint1End } = parsedData.data;
-      leftArmLeftRef.current.render.fillStyle = "green";
+      leftArmLeftRef.current.render.fillStyle = "white";
       updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
     } else if (parsedData.type === "right-hand-joint" && rightArmRightRef.current) {
       const { joint1Start, joint1End } = parsedData.data;
-      rightArmRightRef.current.render.fillStyle = "green";
+      rightArmRightRef.current.render.fillStyle = "white";
       updateSkeleton(rightArmRightRef, joint1Start, joint1End);
     }
   };
@@ -241,7 +294,7 @@ const useWebRTC = (
     });
   };
 
-  return { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint };
+  return { userVideo, peers, indexRef, sendLeftHandJoint, sendRightHandJoint, isSpeaking, isPeerSpeaking };
 };
 
 export interface PeerObject {
@@ -255,7 +308,8 @@ export interface WebRTCResult {
   indexRef: MutableRefObject<number>;
   sendLeftHandJoint: (joint1Start: any, joint1End: any) => void;
   sendRightHandJoint: (joint1Start: any, joint1End: any) => void;
-  // receiveVoiceData: (callback: (() => void) | null) => void;
+  isSpeaking: boolean;
+  isPeerSpeaking: boolean;
 }
 
 export default useWebRTC;

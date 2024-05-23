@@ -337,18 +337,18 @@ const useStageStart = (
   }, [isTutorialImage2End, countdown, isSimStarted]);
 
   // =============== 카운트다운 바 처리 ===============
-  useEffect(() => {
-    if (isTutorialImage2End && countdown === chatTime) {
-      document.getElementById("countdown-bar")!.style.width = "100%";
-    }
-    if (countdown && countdown > 0) {
-      const countdownBar = document.getElementById("countdown-bar");
-      if (countdownBar) {
-        const percentage = ((countdown - 1) / chatTime) * 100;
-        countdownBar.style.width = `${percentage}%`;
-      }
-    }
-  }, [isTutorialImage2End, countdown]);
+  // useEffect(() => {
+  //   if (isTutorialImage2End && countdown === chatTime) {
+  //     document.getElementById("countdown-bar")!.style.width = "100%";
+  //   }
+  //   if (countdown && countdown > 0) {
+  //     const countdownBar = document.getElementById("countdown-bar");
+  //     if (countdownBar) {
+  //       const percentage = ((countdown - 1) / chatTime) * 100;
+  //       countdownBar.style.width = `${percentage}%`;
+  //     }
+  //   }
+  // }, [isTutorialImage2End, countdown]);
 
   return { readyGame };
 };

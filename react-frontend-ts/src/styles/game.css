@@ -80,6 +80,17 @@ body {
   justify-content: space-between; /* 공간을 고르게 분배 */
 }
 
+#play-container-1 {
+  border: 20px solid transparent;
+  border-image: url("./FireFrame.png");
+  /* border: 20px solid transparent; */
+  width: 50%; /* 전체 너비의 50% */
+  height: 100%;
+}
+
+#play-container-2 {
+}
+
 #video-container-1 {
   display: none;
   position: absolute; /* 부모 기준 위치 */
@@ -89,6 +100,8 @@ body {
   opacity: 0.3;
   transform: scaleX(-1);
   border-left: 10px dashed red;
+  /* border: 20px solid transparent; */
+  border-image: url("./FireFrame.png");
 }
 #video-container-2 {
   display: none;
@@ -106,7 +119,8 @@ canvas {
   height: 100%;
 }
 
-#ready-button {
+#ready-button,
+#start-button {
   position: absolute;
   left: 50%;
   bottom: 0%;
@@ -137,7 +151,8 @@ canvas {
   z-index: 4;
 }
 
-#tutorial-image-1, #tutorial-image-2 {
+#tutorial-image-1,
+#tutorial-image-2 {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -149,8 +164,9 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
-  }
-#tutorial-image-1 .background, #tutorial-image-2 .background {
+}
+#tutorial-image-1 .background,
+#tutorial-image-2 .background {
   position: absolute;
   top: 0;
   left: 0;
@@ -160,7 +176,8 @@ canvas {
   opacity: 0.75;
   border-radius: 10px;
 }
-#tutorial-image-1 .text, #tutorial-image-2 .text {
+#tutorial-image-1 .text,
+#tutorial-image-2 .text {
   position: relative;
   font-family: "myFont";
   font-size: 64px;
@@ -226,7 +243,7 @@ canvas {
   font-family: "MyFont";
   color: #ede7f6;
   text-transform: uppercase;
-  background:#e84545;
+  background: #e84545;
   border: 2px solid #e84545;
   border-radius: 0.25em;
   transform-style: preserve-3d;
@@ -259,24 +276,24 @@ canvas {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  }
+}
 
-  #player0 {
+#player0 {
   font-family: "myFont";
   font-size: 70px;
   border-radius: 10px;
   background-color: aliceblue;
   padding: 20px;
   margin-left: 12.5%; /* footer의 1/4 위치 */
-  }
-  #player1 {
+}
+#player1 {
   font-family: "myFont";
   font-size: 70px;
   border-radius: 10px;
   background-color: aliceblue;
   padding: 20px;
   margin-right: 12.5%; /* footer의 3/4 위치 */
-  }
+}
 
 .modal {
   position: absolute;
@@ -476,6 +493,24 @@ textarea {
   z-index: 12;
   color: #efac28; /* 적당한 색상으로 조정 */
   pointer-events: none;
+}
+
+#player0.speaking,
+#player1.speaking {
+  border: 5px solid green;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(0, 255, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+  }
 }
 
 @keyframes zoomInBounce {

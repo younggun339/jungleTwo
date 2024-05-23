@@ -232,16 +232,17 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('start-response')
+  @SubscribeMessage('start-request')
     handleStartResponse(
       client: Socket,
       payload: { roomName: string },
     ) {
       const roomName = payload.roomName;
+      console.log("start-request received");
   
     if (this.room_user[roomName]) {
       this.room_user[roomName].forEach((user) => {
-        this.server.to(user[0]).emit('start-response', roomName);
+        this.server.to(user[0]).emit('start-response');
       });
     }
   }
