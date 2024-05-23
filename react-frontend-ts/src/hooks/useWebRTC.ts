@@ -126,6 +126,7 @@ const useWebRTC = (
               );
               const peerObj: PeerObject = { peer, peerID: payload.callerID };
               peer.on("data", handleIncomingData);
+              // ============ 음성 감지 ==================
               peer.on("stream", (stream) => {
                 const sourceNode = audioContext.createMediaStreamSource(stream);
                 const analyserNode = audioContext.createAnalyser();
@@ -136,7 +137,7 @@ const useWebRTC = (
                   const dataArray = new Uint8Array(bufferLength);
                   analyserNode.getByteFrequencyData(dataArray);
                   const volume = dataArray.reduce((a, b) => a + b) / bufferLength;
-                  setIsPeerSpeaking(volume > 50); // 적절한 임계값 설정
+                  setIsPeerSpeaking(volume > 5);
                 };
         
                 const intervalId = setInterval(detectSound, 100);
@@ -145,6 +146,7 @@ const useWebRTC = (
                   clearInterval(intervalId);
                 });
               });
+              // ========================================
               peer.on("error", (err) => console.error("Peer error:", err));
               peersRef.current.push(peerObj);
               setPeers((users) => [...users, peerObj]);
@@ -175,6 +177,7 @@ const useWebRTC = (
       }
   }, [roomName]);
 
+  // ============ 음성 감지 ==================
   useEffect(() => {
     if (userVideo.current && userVideo.current.srcObject instanceof MediaStream) {
       const audioContext = new AudioContext();
@@ -187,7 +190,7 @@ const useWebRTC = (
         const dataArray = new Uint8Array(bufferLength);
         analyserNode.getByteFrequencyData(dataArray);
         const volume = dataArray.reduce((a, b) => a + b) / bufferLength;
-        setIsSpeaking(volume > 50); // 적절한 임계값 설정
+        setIsSpeaking(volume > 5); // 적절한 임계값 설정
       };
 
       const intervalId = setInterval(detectSound, 100);
@@ -197,7 +200,8 @@ const useWebRTC = (
         audioContext.close().then(() => console.log('Audio context closed'));
       };
     }
-  }, [userVideo]);
+  }, [roomName]);
+  // ========================================
 
   const createPeer = (
     userToSignal: string,

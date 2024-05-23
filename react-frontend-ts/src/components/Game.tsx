@@ -491,9 +491,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   ? "video-container-1"
                   : "video-container-2"
               }
-              style={{
-                border: "20px solid floralwhite",
-              }}
+              style={{ border: "20px solid floralwhite" }}
             ></div>
           )}
           {peers
@@ -624,10 +622,26 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           </div>
         )}
         <footer className="footer">
-          <div>
-            <span id="player0">WAITING</span>
-            <span id="player1">WAITING</span>
-          </div>
+          {indexRef.current === 0 && (
+            <div>
+              <span id="player0" className={isSpeaking ? "speaking" : ""}>
+                WAITING
+              </span>
+              <span id="player1" className={isPeerSpeaking ? "speaking" : ""}>
+                WAITING
+              </span>
+            </div>
+          )}
+          {indexRef.current === 1 && (
+            <div>
+              <span id="player1" className={isSpeaking ? "speaking" : ""}>
+                WAITING
+              </span>
+              <span id="player0" className={isPeerSpeaking ? "speaking" : ""}>
+                WAITING
+              </span>
+            </div>
+          )}
         </footer>
 
         {showRetryRequest && (
