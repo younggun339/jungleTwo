@@ -356,17 +356,12 @@ const Game: React.FC<GameProps> = ({ userName }) => {
     if (nestjsSocketRef.current) {
       nestjsSocketRef.current.emit("retry-request", { roomName: gameRoomID });
     }
-    clearStageObjects[currentStage - 1](
-      { x: 1600, y: 600 },
-      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
-      setIsTutorialImage1End,
-      setIsTutorialImage2End,
-      setIsSimStarted,
-      setShowModal,
-      setResultState,
-      setCountdown
-    );
-    play();
+
+  };
+  const handleStart = () => {
+    if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.emit("start-request", { roomName: gameRoomID });
+    }
   };
 
   const handleAcceptRetry = () => {
@@ -378,17 +373,6 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         accepted: true,
       });
     }
-    clearStageObjects[currentStage - 1](
-      { x: 1600, y: 600 },
-      { mouseRef, bombRef, leftArmLeftRef, rightArmRightRef },
-      setIsTutorialImage1End,
-      setIsTutorialImage2End,
-      setIsSimStarted,
-      setShowModal,
-      setResultState,
-      setCountdown
-    );
-    play();
   };
 
   const handleRejectRetry = () => {
@@ -405,6 +389,13 @@ const Game: React.FC<GameProps> = ({ userName }) => {
   // 클라이언트 측에서 reset-retry 요청 핸들링
   useEffect(() => {
     if (nestjsSocketRef.current) {
+      nestjsSocketRef.current.on("retry-response", {
+        roomName: gameRoomID,
+        accepted: true,
+      }, ()=>{
+        setCountdown(3)
+      });
+
       nestjsSocketRef.current.on("retry-request", () => {
         setShowRetryRequest(true);
       });
@@ -513,8 +504,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   <div
                     id={
                       indexRef.current === 0
-                        ? "video-container-1"
-                        : "video-container-2"
+                        ? "play-container-2"
+                        : "play-container-1"
                     }
                     key={index}
                   ></div>
@@ -524,14 +515,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             <div
               id={
                 indexRef.current === 0
-                  ? "video-container-1"
-                  : "video-container-2"
+                  ? "play-container-2"
+                  : "play-container-1"
               }
-              // style={{
-              //   backgroundColor: !isSimStarted
-              //     ? "rgba(255, 255, 0, 0.15)"
-              //     : "transparent",
-              // }}
             ></div>
           )}
           {peers
@@ -543,8 +529,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   <div
                     id={
                       indexRef.current === 0
-                        ? "video-container-1"
-                        : "video-container-2"
+                        ? "play-container-2"
+                        : "play-container-1"
                     }
                     key={index}
                   ></div>
@@ -591,19 +577,21 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           !isTutorialImage1End &&
           countdown &&
           countdown > 0 && (
-            <div id="tutorial-image-1">
-              <img src="/images/ingame_ready.png" alt="tutorial1" />
-            </div>
-          )}
+          <div id="tutorial-image-1">
+            <div className="background"></div>
+            <div className="text">준비하시고..</div>
+          </div>
+        )}
 
         {isTutorialImage1End &&
           !isTutorialImage2End &&
           countdown &&
           countdown > 0 && (
-            <div id="tutorial-image-2">
-              <img src="/images/ingame_go.png" alt="tutorial2" />
-            </div>
-          )}
+          <div id="tutorial-image-2">
+            <div className="background"></div>
+            <div className="text">출발!</div>
+          </div>
+        )}
 
         {/* 작전 타임 */}
         {isTutorialImage2End && countdown && countdown > 0 && (
@@ -611,9 +599,11 @@ const Game: React.FC<GameProps> = ({ userName }) => {
             <div id="countdown-bar">
               <div id="countdown-stripes"></div>
             </div>
-            <div id="loading-text">
-              드래그로 지형을 설치해주세요: {countdown}
-            </div>
+          </div>
+        )}
+        {isTutorialImage2End && countdown && countdown > 0 && (
+          <div id="loading-text">
+            드래그로 지형을 설치해주세요: {countdown}
           </div>
         )}
 
@@ -624,6 +614,12 @@ const Game: React.FC<GameProps> = ({ userName }) => {
               READY
             </button>
           )}
+
+        {isTutorialImage2End && !isSimStarted &&
+           (<button onClick={handleStart} id="start-button">
+              바로시작
+            </button>
+        )}
 
         {isMenuOpen && (
           <div className="menu-popup">
@@ -739,7 +735,18 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                 {/* <button onClick={handleNextStage}>다음스테이지</button> */}
               </div>
             )}
-            {/* 데드씬 추가 예정 */}
+            {resultState === 7 && (
+              <div>
+                <h1>GAME COMPLETE!</h1>
+                <h2>현재 스테이지: {currentStage} </h2>
+                {elapsedTime !== null && (
+                  <h2>걸린 시간: {elapsedTime.toFixed(2)}초</h2>
+                )}
+                {/* <h1> 치즈를 찾았습니다! </h1> */}
+                {/* <img src="/images/resultState_clear.png" alt="Victory" /> */}
+                {/* <button onClick={handleRetry}>다시하기</button> */}
+              </div>
+            )}
           </div>
         )}
       </div>

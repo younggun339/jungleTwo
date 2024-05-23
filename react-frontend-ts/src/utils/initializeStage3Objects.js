@@ -210,7 +210,7 @@ export const initializeStage3Objects = (
 
     //----------------------------region 아이템----------------------------
     //폭탄
-    bombRef.current = Bodies.circle(478, 250, 20, {
+    bombRef.current = Bodies.circle(478, 260, 20, {
       frictionAir: Number.MIN_VALUE,
       isStatic: true,
       render: {
@@ -548,7 +548,7 @@ export const initializeStage3Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "blue",
+          fillStyle: "yellow",
           strokeStyle: "black",
           lineWidth: 1,
         },
@@ -575,7 +575,7 @@ export const initializeStage3Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "blue",
+          fillStyle: "yellow",
           strokeStyle: "black",
           lineWidth: 1,
         },

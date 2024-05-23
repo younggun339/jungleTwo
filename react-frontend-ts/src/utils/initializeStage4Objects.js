@@ -220,7 +220,7 @@ export const initializeStage4Objects = (
         },
       }),
 
-      Bodies.rectangle(1350, canvasSize.y - 110, 300, 25, {
+      Bodies.rectangle(1300, canvasSize.y - 110, 350, 25, {
         label: "load",
         isStatic: true,
         render: {
@@ -781,7 +781,7 @@ export const initializeStage4Objects = (
           // mouse를 멈추고 게임 클리어를 알립니다.
           playSound("/sound/GameClear.wav");
           mouseRef.current.isStatic = true;
-          setResultState(0);
+          setResultState(7);
         }
         //------------cheese--------------
         //------------leftArm------------

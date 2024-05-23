@@ -48,7 +48,7 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
       if (users.length === 0) {
         console.log(this.room_user);
         let retryCount = 0;
-        const maxRetryCount = 30; // 최대 재시도 횟수
+        const maxRetryCount = 5; // 최대 재시도 횟수
         const emitDeleteEvent = () => {
           this.server.emit('delete', roomName, (error) => {
             if (error) {
@@ -159,9 +159,9 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     setTimeout(() => {
       this.room_user[gameRoomID].forEach((user) => {
-        this.server.to(user[0]).emit('user', this.room_user[gameRoomID]);
+          this.server.to(user[0]).emit('user', this.room_user[gameRoomID]);
       });
-    }, 2000);
+    }, 3000);
   }
 
   @SubscribeMessage('ready-game')
@@ -228,6 +228,20 @@ export class WebRTCGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (this.room_user[roomName]) {
       this.room_user[roomName].forEach((user) => {
         this.server.to(user[0]).emit('retry-response', payload.accepted);
+      });
+    }
+  }
+
+  @SubscribeMessage('start-response')
+    handleStartResponse(
+      client: Socket,
+      payload: { roomName: string },
+    ) {
+      const roomName = payload.roomName;
+  
+    if (this.room_user[roomName]) {
+      this.room_user[roomName].forEach((user) => {
+        this.server.to(user[0]).emit('start-response', roomName);
       });
     }
   }

@@ -204,11 +204,13 @@ const useWebRTC = (
   const handleIncomingData = (data: any) => {
     const parsedData = JSON.parse(data);
 
-    if (parsedData.type === "left-hand-joint") {
+    if (parsedData.type === "left-hand-joint" && leftArmLeftRef.current) {
       const { joint1Start, joint1End } = parsedData.data;
+      leftArmLeftRef.current.render.fillStyle = "green";
       updateSkeleton(leftArmLeftRef, joint1Start, joint1End);
-    } else if (parsedData.type === "right-hand-joint") {
+    } else if (parsedData.type === "right-hand-joint" && rightArmRightRef.current) {
       const { joint1Start, joint1End } = parsedData.data;
+      rightArmRightRef.current.render.fillStyle = "green";
       updateSkeleton(rightArmRightRef, joint1Start, joint1End);
     }
   };

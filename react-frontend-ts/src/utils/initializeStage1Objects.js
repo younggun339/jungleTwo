@@ -505,7 +505,7 @@ export const initializeStage1Objects = (
         angle: 0,
         collisionFilter: { mask: 0 },
         render: {
-          fillStyle: "red",
+          fillStyle: "blue",
           strokeStyle: "black",
           lineWidth: 1,
         },
