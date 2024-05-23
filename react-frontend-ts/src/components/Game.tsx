@@ -634,10 +634,10 @@ const Game: React.FC<GameProps> = ({ userName }) => {
           )}
           {indexRef.current === 1 && (
             <div>
-              <span id="player1" className={isSpeaking ? "speaking" : ""}>
+              <span id="player0" className={isPeerSpeaking ? "speaking" : ""}>
                 WAITING
               </span>
-              <span id="player0" className={isPeerSpeaking ? "speaking" : ""}>
+              <span id="player1" className={isSpeaking ? "speaking" : ""}>
                 WAITING
               </span>
             </div>

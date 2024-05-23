@@ -241,44 +241,6 @@ canvas {
   height: 5.5rem;
 }
 
-.footer {
-  z-index: 5;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: transparent;
-  color: black;
-  padding: 20px 0;
-  text-align: center;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.footer div {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-#player0 {
-  font-family: "myFont";
-  font-size: 70px;
-  border-radius: 10px;
-  background-color: aliceblue;
-  padding: 20px;
-  margin-left: 12.5%; /* footer의 1/4 위치 */
-}
-#player1 {
-  font-family: "myFont";
-  font-size: 70px;
-  border-radius: 10px;
-  background-color: aliceblue;
-  padding: 20px;
-  margin-right: 12.5%; /* footer의 3/4 위치 */
-}
-
 .modal {
   position: absolute;
   top: 50%;
@@ -479,8 +441,47 @@ textarea {
   pointer-events: none;
 }
 
+.footer {
+  z-index: 5;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  color: black;
+  padding: 20px 0;
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#player0 {
+  font-family: "myFont";
+  font-size: 70px;
+  border-radius: 10px;
+  background-color: aliceblue;
+  padding: 20px;
+  margin-left: 12.5%; /* footer의 1/4 위치 */
+}
+#player1 {
+  font-family: "myFont";
+  font-size: 70px;
+  border-radius: 10px;
+  background-color: aliceblue;
+  padding: 20px;
+  margin-right: 12.5%; /* footer의 3/4 위치 */
+}
+
 #player0.speaking,
 #player1.speaking {
+  padding: 20px;
   border: 5px solid green;
   color: black;
   animation: pulse 1s infinite;
