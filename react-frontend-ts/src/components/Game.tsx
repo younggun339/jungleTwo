@@ -491,11 +491,9 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                   ? "video-container-1"
                   : "video-container-2"
               }
-              // style={{
-              //   borderImage: `url('${process.env.PUBLIC_URL}/sprite/FireFrame.png') fill round`,
-              //   borderImageSlice: "30",
-              //   border: "20px solid transparent", // 이 부분을 조정하여 테두리의 크기를 설정
-              // }}
+              style={{
+                border: "20px solid floralwhite",
+              }}
             ></div>
           )}
           {peers
@@ -627,34 +625,8 @@ const Game: React.FC<GameProps> = ({ userName }) => {
         )}
         <footer className="footer">
           <div>
-            <span
-              id="player0"
-              className={indexRef.current === 0 && isSpeaking ? "speaking" : ""}
-            >
-              {peers[0]?.peerID || "WAITING"}
-            </span>
-            <span
-              id="player1"
-              className={indexRef.current === 1 && isSpeaking ? "speaking" : ""}
-            >
-              {peers[1]?.peerID || "WAITING"}
-            </span>
-            <span
-              id="player0"
-              className={
-                indexRef.current === 1 && isPeerSpeaking ? "speaking" : ""
-              }
-            >
-              {peers[0]?.peerID || "WAITING"}
-            </span>
-            <span
-              id="player1"
-              className={
-                indexRef.current === 0 && isPeerSpeaking ? "speaking" : ""
-              }
-            >
-              {peers[1]?.peerID || "WAITING"}
-            </span>
+            <span id="player0">WAITING</span>
+            <span id="player1">WAITING</span>
           </div>
         </footer>
 
