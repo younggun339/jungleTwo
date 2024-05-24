@@ -754,7 +754,28 @@ export const initializeStage3Objects = (
           onPanel = true;
         }
         //------------panel------------
-
+        // -----fire-------------
+        if (
+          (bodyA === mouseRef.current && bodyB === fire) ||
+          (bodyA === fire && bodyB === mouseRef.current)
+        ) {
+          // setStatic(mouseRef.current, true);
+          mouseIsDead = true; // 쥐의 상태를 죽음으로 설정
+          currentImageIndex = 0; // 죽은 쥐 이미지 배열의 시작으로 인덱스 초기화
+          Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
+          setResultState(2);
+        }
+        if (
+          (bodyA === mouseRef.current && bodyB === fire1) ||
+          (bodyA === fire1 && bodyB === mouseRef.current)
+        ) {
+          // setStatic(mouseRef.current, true);
+          mouseIsDead = true; // 쥐의 상태를 죽음으로 설정
+          currentImageIndex = 0; // 죽은 쥐 이미지 배열의 시작으로 인덱스 초기화
+          Body.setVelocity(mouseRef.current, { x: 0, y: 0 });
+          setResultState(2);
+        }
+        // ----fire
         //--------bomb--------------
         if (
           (bodyA === bombRef.current && bodyB === bombGround) ||
