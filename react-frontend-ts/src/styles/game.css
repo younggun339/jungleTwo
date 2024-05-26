@@ -482,7 +482,7 @@ textarea {
 #player0.speaking,
 #player1.speaking {
   padding: 20px;
-  border: 5px solid green;
+  border: 15px solid green;
   color: black;
   animation: pulse 1s infinite;
 }

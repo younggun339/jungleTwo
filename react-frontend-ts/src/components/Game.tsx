@@ -604,7 +604,7 @@ const Game: React.FC<GameProps> = ({ userName }) => {
                 min="0"
                 max="1"
                 step="0.01"
-                defaultValue="0.1"
+                defaultValue="0.25"
                 onChange={handleVolumeChange}
               />
             </label>

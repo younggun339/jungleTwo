@@ -32,7 +32,7 @@ export const useStage1Start = (
     countdown,
     2, // firstImageTime
     2, // secondImageTime
-    18, // chatTime
+    30, // chatTime
     20, // simTime
     resultState,
     setIsPlayerReady,
